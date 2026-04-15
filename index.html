@@ -366,9 +366,39 @@
     border: 2px solid rgba(0,200,168,.25); border-top-color: var(--teal);
     animation: spin .8s linear infinite; flex-shrink: 0;
   }
-  .modal-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 18px; line-height: 1.4; }
+  .modal-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
+  .modal-sub { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 18px; line-height: 1.5; }
   .modal-qs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
   .modal-note { font-size: 11.5px; color: rgba(255,255,255,.3); text-align: center; margin-top: 10px; }
+
+  /* awareness cards shown while Papaya scans */
+  .modal-awareness {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;
+  }
+  .awareness-card {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-sm); padding: 12px 13px;
+  }
+  .awareness-card .aw-stat {
+    font-size: 22px; font-weight: 900; line-height: 1;
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 4px;
+  }
+  .awareness-card .aw-label { font-size: 11px; color: rgba(255,255,255,.45); line-height: 1.4; }
+
+  /* sneak peek strip */
+  .modal-sneak {
+    background: rgba(139,92,246,.08); border: 1px solid rgba(139,92,246,.2);
+    border-radius: var(--r-sm); padding: 12px 14px; margin-bottom: 16px;
+  }
+  .modal-sneak-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: #A78BFA; margin-bottom: 6px;
+  }
+  .modal-sneak ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .modal-sneak ul li { font-size: 12px; color: rgba(255,255,255,.55); display: flex; align-items: flex-start; gap: 6px; }
+  .modal-sneak ul li::before { content: "→"; color: #A78BFA; flex-shrink: 0; font-weight: 700; }
 
   /* step back link */
   .step-back {
@@ -1081,37 +1111,37 @@
     <div class="nav-inner">
 
       <a href="/" class="logo">
-        <!-- Logo mark SVG (original) -->
-        <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <!-- Logo mark SVG — matching original: white face, circular eyes, open friendly -->
+        <svg width="38" height="38" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
           <defs>
-            <linearGradient id="nav-lg" x1="20" y1="20" x2="180" y2="185" gradientUnits="userSpaceOnUse">
+            <linearGradient id="nav-lg" x1="10" y1="10" x2="190" y2="190" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stop-color="#00F59D"/>
-              <stop offset="50%" stop-color="#00C8B4"/>
-              <stop offset="100%" stop-color="#0085FF"/>
+              <stop offset="45%" stop-color="#00D4B8"/>
+              <stop offset="100%" stop-color="#00AAFF"/>
             </linearGradient>
           </defs>
+          <!-- Optional soft background circle (light, friendly) -->
+          <circle cx="100" cy="100" r="99" fill="rgba(255,255,255,0.07)"/>
           <!-- Headset arc over top -->
-          <path d="M 30 98 A 72 72 0 0 1 170 98" stroke="url(#nav-lg)" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M 22 95 A 78 78 0 0 1 178 95" stroke="url(#nav-lg)" stroke-width="14" stroke-linecap="round" fill="none"/>
           <!-- Left ear cup -->
-          <rect x="8" y="83" width="22" height="38" rx="8" fill="url(#nav-lg)"/>
+          <rect x="4" y="78" width="26" height="44" rx="10" fill="url(#nav-lg)"/>
           <!-- Right ear cup -->
-          <rect x="170" y="83" width="22" height="38" rx="8" fill="url(#nav-lg)"/>
-          <!-- Main helmet circle — dark fill + gradient ring -->
-          <circle cx="100" cy="105" r="72" fill="#0B1929"/>
-          <circle cx="100" cy="105" r="72" stroke="url(#nav-lg)" stroke-width="5" fill="none"/>
-          <!-- Face panel (slightly lighter) -->
-          <rect x="52" y="54" width="96" height="82" rx="14" fill="#112238"/>
+          <rect x="170" y="78" width="26" height="44" rx="10" fill="url(#nav-lg)"/>
+          <!-- Helmet ring -->
+          <circle cx="100" cy="108" r="76" stroke="url(#nav-lg)" stroke-width="10" fill="white"/>
+          <!-- Face panel (white, open, friendly) -->
+          <rect x="46" y="52" width="108" height="92" rx="20" fill="white"/>
           <!-- Left eye -->
-          <rect x="62" y="72" width="28" height="22" rx="5" fill="url(#nav-lg)"/>
+          <circle cx="78" cy="88" r="14" fill="url(#nav-lg)"/>
           <!-- Right eye -->
-          <rect x="110" y="72" width="28" height="22" rx="5" fill="url(#nav-lg)"/>
-          <!-- Mouth grill -->
-          <rect x="66" y="108" width="68" height="5" rx="2.5" fill="url(#nav-lg)" opacity="0.5"/>
-          <rect x="66" y="117" width="50" height="5" rx="2.5" fill="url(#nav-lg)" opacity="0.3"/>
-          <!-- Mic arm from right side -->
-          <path d="M 164 122 Q 158 148 145 158" stroke="url(#nav-lg)" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="122" cy="88" r="14" fill="url(#nav-lg)"/>
+          <!-- Mouth bar -->
+          <rect x="64" y="120" width="72" height="12" rx="6" fill="url(#nav-lg)"/>
+          <!-- Mic arm -->
+          <path d="M 168 130 Q 162 155 146 162" stroke="url(#nav-lg)" stroke-width="8" stroke-linecap="round" fill="none"/>
           <!-- Mic capsule -->
-          <rect x="130" y="156" width="22" height="12" rx="6" fill="url(#nav-lg)"/>
+          <rect x="128" y="158" width="26" height="14" rx="7" fill="url(#nav-lg)"/>
         </svg>
         <div class="logo-wordmark">DATA <span>PILOTS</span></div>
       </a>
@@ -1250,38 +1280,77 @@
         </div>
       </div>
 
-      <!-- Step 3 modal — deeper questions while scan runs -->
+      <!-- Step 3 modal — while Papaya AI scans in background -->
       <div id="scan-modal" class="scan-modal" style="display:none;">
         <div class="scan-modal-inner">
+
+          <!-- Scan progress bar -->
           <div class="modal-scanning" id="modalScanStatus">
             <div class="modal-spinner"></div>
-            <span>Scanning your website in the background…</span>
+            <span id="modalScanMsg">AI consent audit running in background — usually takes 60–90 seconds</span>
           </div>
-          <div class="scan-step">Step 3 — While we scan</div>
-          <div class="modal-title">A few more questions to personalise your report</div>
-          <div class="modal-qs">
+
+          <div class="scan-step" style="margin-top:18px;">Step 3 — Two minutes well spent</div>
+          <div class="modal-title">While we scan, here's what we already know about businesses like yours</div>
+          <div class="modal-sub">Based on 500+ L&D website audits — how does your situation compare?</div>
+
+          <!-- Awareness stats -->
+          <div class="modal-awareness">
+            <div class="awareness-card">
+              <div class="aw-stat">73%</div>
+              <div class="aw-label">of L&D sites we check have no privacy page visible to buyers</div>
+            </div>
+            <div class="awareness-card">
+              <div class="aw-stat">61%</div>
+              <div class="aw-label">have trackers firing before any consent is given</div>
+            </div>
+            <div class="awareness-card">
+              <div class="aw-stat">4 in 5</div>
+              <div class="aw-label">enterprise buyers check your site before responding to outreach</div>
+            </div>
+            <div class="awareness-card">
+              <div class="aw-stat">2 days</div>
+              <div class="aw-label">average time to fix the top 3 issues once you know what they are</div>
+            </div>
+          </div>
+
+          <!-- Deeper questions -->
+          <div class="scan-step">Help us personalise your report</div>
+          <div class="modal-qs" style="margin-top:8px;">
             <div class="q-item">
               <input type="checkbox" id="mq1"/>
-              <label for="mq1">I have a learning portal, LMS, or online platform</label>
+              <label for="mq1">I sell to or pitch corporate L&amp;D or HR teams</label>
             </div>
             <div class="q-item">
               <input type="checkbox" id="mq2"/>
-              <label for="mq2">I work with enterprise or public sector clients</label>
+              <label for="mq2">I have a learning portal, LMS, or client-facing platform</label>
             </div>
             <div class="q-item">
               <input type="checkbox" id="mq3"/>
-              <label for="mq3">A prospect has asked to see my security or compliance docs</label>
+              <label for="mq3">A buyer has ever asked me for compliance or security documentation</label>
             </div>
             <div class="q-item">
               <input type="checkbox" id="mq4"/>
-              <label for="mq4">I use AI tools as part of my service or content delivery</label>
+              <label for="mq4">I use AI tools in how I design, deliver, or market my services</label>
             </div>
           </div>
+
+          <!-- Sneak peek on next steps -->
+          <div class="modal-sneak">
+            <div class="modal-sneak-label">✦ What happens after your report</div>
+            <ul>
+              <li>Each finding is tagged: Fix This Week, Quick Win, or Review</li>
+              <li>You get plain-language guidance — no developer needed for most fixes</li>
+              <li>Upgrade to get portal/platform checks + a trust proof PDF for proposals</li>
+            </ul>
+          </div>
+
           <button class="scan-go" id="modalBtn" onclick="submitModal()">
             <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
             View My Results →
           </button>
-          <p class="modal-note">Step 4 is your report · Step 5 is what to do next</p>
+          <p class="modal-note">Your AI consent audit will be added to your report automatically when ready</p>
+
         </div>
       </div>
 
@@ -2016,24 +2085,22 @@
           <a href="/" class="footer-logo">
             <svg width="30" height="30" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="ft-lg" x1="20" y1="20" x2="180" y2="185" gradientUnits="userSpaceOnUse">
+                <linearGradient id="ft-lg" x1="10" y1="10" x2="190" y2="190" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stop-color="#00F59D"/>
-                  <stop offset="50%" stop-color="#00C8B4"/>
-                  <stop offset="100%" stop-color="#0085FF"/>
+                  <stop offset="45%" stop-color="#00D4B8"/>
+                  <stop offset="100%" stop-color="#00AAFF"/>
                 </linearGradient>
               </defs>
-              <path d="M 30 98 A 72 72 0 0 1 170 98" stroke="url(#ft-lg)" stroke-width="7" stroke-linecap="round" fill="none"/>
-              <rect x="8" y="83" width="22" height="38" rx="8" fill="url(#ft-lg)"/>
-              <rect x="170" y="83" width="22" height="38" rx="8" fill="url(#ft-lg)"/>
-              <circle cx="100" cy="105" r="72" fill="#0B1929"/>
-              <circle cx="100" cy="105" r="72" stroke="url(#ft-lg)" stroke-width="5" fill="none"/>
-              <rect x="52" y="54" width="96" height="82" rx="14" fill="#112238"/>
-              <rect x="62" y="72" width="28" height="22" rx="5" fill="url(#ft-lg)"/>
-              <rect x="110" y="72" width="28" height="22" rx="5" fill="url(#ft-lg)"/>
-              <rect x="66" y="108" width="68" height="5" rx="2.5" fill="url(#ft-lg)" opacity="0.5"/>
-              <rect x="66" y="117" width="50" height="5" rx="2.5" fill="url(#ft-lg)" opacity="0.3"/>
-              <path d="M 164 122 Q 158 148 145 158" stroke="url(#ft-lg)" stroke-width="5" stroke-linecap="round" fill="none"/>
-              <rect x="130" y="156" width="22" height="12" rx="6" fill="url(#ft-lg)"/>
+              <path d="M 22 95 A 78 78 0 0 1 178 95" stroke="url(#ft-lg)" stroke-width="14" stroke-linecap="round" fill="none"/>
+              <rect x="4" y="78" width="26" height="44" rx="10" fill="url(#ft-lg)"/>
+              <rect x="170" y="78" width="26" height="44" rx="10" fill="url(#ft-lg)"/>
+              <circle cx="100" cy="108" r="76" stroke="url(#ft-lg)" stroke-width="10" fill="white"/>
+              <rect x="46" y="52" width="108" height="92" rx="20" fill="white"/>
+              <circle cx="78" cy="88" r="14" fill="url(#ft-lg)"/>
+              <circle cx="122" cy="88" r="14" fill="url(#ft-lg)"/>
+              <rect x="64" y="120" width="72" height="12" rx="6" fill="url(#ft-lg)"/>
+              <path d="M 168 130 Q 162 155 146 162" stroke="url(#ft-lg)" stroke-width="8" stroke-linecap="round" fill="none"/>
+              <rect x="128" y="158" width="26" height="14" rx="7" fill="url(#ft-lg)"/>
             </svg>
             <div class="logo-wordmark" style="font-size:14px;">DATA <span>PILOTS</span></div>
           </a>
