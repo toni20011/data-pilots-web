@@ -1001,6 +1001,77 @@
     .pain-grid { grid-template-columns: 1fr; }
     .diff-grid { grid-template-columns: 1fr; }
   }
+
+  /* ───────────────────────────────────────────
+     FAQ SECTION
+  ─────────────────────────────────────────── */
+  .faq-section {
+    padding: 96px 0 80px;
+    background: var(--white);
+  }
+  .faq-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 56px;
+  }
+  .faq-kicker {
+    font-size: 12px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 12px;
+  }
+  .faq-h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800; color: var(--navy);
+    line-height: 1.2; margin-bottom: 14px;
+  }
+  .faq-sub {
+    color: var(--slate-600); font-size: 1.05rem;
+  }
+  .faq-grid {
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .faq-item[open] {
+    border-color: var(--teal-border);
+    box-shadow: 0 4px 20px rgba(0,200,168,.08);
+  }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 20px 24px;
+    font-weight: 700; font-size: .95rem; color: var(--navy);
+    cursor: pointer; list-style: none; user-select: none;
+    transition: color .15s;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::after {
+    content: "+";
+    font-size: 1.3rem; font-weight: 400; color: var(--teal);
+    flex-shrink: 0; transition: transform .2s var(--ease);
+  }
+  .faq-item[open] .faq-q::after {
+    transform: rotate(45deg);
+  }
+  .faq-item[open] .faq-q { color: var(--teal); }
+  .faq-a {
+    padding: 0 24px 20px;
+    border-top: 1px solid var(--slate-200);
+  }
+  .faq-a p {
+    color: var(--slate-600); font-size: .92rem; line-height: 1.7;
+    margin-top: 14px;
+  }
+  .faq-a p:first-child { margin-top: 12px; }
+  .faq-a strong { color: var(--slate-800); }
   </style>
 </head>
 <body>
@@ -1112,36 +1183,34 @@
 
       <a href="/" class="logo">
         <!-- Logo mark SVG — matching original: white face, circular eyes, open friendly -->
-        <svg width="38" height="38" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <svg width="38" height="38" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
           <defs>
-            <linearGradient id="nav-lg" x1="10" y1="10" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+            <linearGradient id="nav-lg" x1="10" y1="10" x2="190" y2="200" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stop-color="#00F59D"/>
-              <stop offset="45%" stop-color="#00D4B8"/>
+              <stop offset="50%" stop-color="#00D4C0"/>
               <stop offset="100%" stop-color="#00AAFF"/>
             </linearGradient>
           </defs>
-          <!-- Optional soft background circle (light, friendly) -->
-          <circle cx="100" cy="100" r="99" fill="rgba(255,255,255,0.07)"/>
-          <!-- Headset arc over top -->
-          <path d="M 22 95 A 78 78 0 0 1 178 95" stroke="url(#nav-lg)" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <!-- Headset band arc (over the top, outside circle) -->
+          <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#nav-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
           <!-- Left ear cup -->
-          <rect x="4" y="78" width="26" height="44" rx="10" fill="url(#nav-lg)"/>
+          <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
           <!-- Right ear cup -->
-          <rect x="170" y="78" width="26" height="44" rx="10" fill="url(#nav-lg)"/>
-          <!-- Helmet ring -->
-          <circle cx="100" cy="108" r="76" stroke="url(#nav-lg)" stroke-width="10" fill="white"/>
-          <!-- Face panel (white, open, friendly) -->
-          <rect x="46" y="52" width="108" height="92" rx="20" fill="white"/>
+          <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
+          <!-- Gradient ring (stroke only, no fill — transparent centre) -->
+          <circle cx="100" cy="112" r="76" stroke="url(#nav-lg)" stroke-width="12" fill="none"/>
+          <!-- White face panel (inside ring, not filling whole circle) -->
+          <rect x="42" y="52" width="116" height="100" rx="22" fill="white"/>
           <!-- Left eye -->
-          <circle cx="78" cy="88" r="14" fill="url(#nav-lg)"/>
+          <circle cx="76" cy="90" r="14" fill="url(#nav-lg)"/>
           <!-- Right eye -->
-          <circle cx="122" cy="88" r="14" fill="url(#nav-lg)"/>
+          <circle cx="124" cy="90" r="14" fill="url(#nav-lg)"/>
           <!-- Mouth bar -->
-          <rect x="64" y="120" width="72" height="12" rx="6" fill="url(#nav-lg)"/>
-          <!-- Mic arm -->
-          <path d="M 168 130 Q 162 155 146 162" stroke="url(#nav-lg)" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#nav-lg)"/>
+          <!-- Mic arm from right ear cup -->
+          <path d="M 170 135 Q 163 158 148 166" stroke="url(#nav-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
           <!-- Mic capsule -->
-          <rect x="128" y="158" width="26" height="14" rx="7" fill="url(#nav-lg)"/>
+          <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#nav-lg)"/>
         </svg>
         <div class="logo-wordmark">DATA <span>PILOTS</span></div>
       </a>
@@ -1152,6 +1221,7 @@
         <li><a href="#journey">About</a></li>
         <li><a href="framework.html">Our Framework</a></li>
         <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -1873,9 +1943,9 @@
     <div class="fw-inner reveal">
 
       <div>
-        <div class="fw-kicker">How We Think</div>
-        <h2 class="fw-h2">One framework. Every stakeholder speaks the same language.</h2>
-        <p class="fw-sub">Most L&D businesses have a legal team, a developer, and a business owner — each seeing a different slice of the trust picture. Our framework gives everyone a shared view: executive visibility at the top, coordination between roles in the middle, and mapping to the specialist tools each team already uses at the bottom. No new tools to buy. No expertise required on your end.</p>
+        <div class="fw-kicker">Built for Business</div>
+        <h2 class="fw-h2">Not for experts. Built by experts.</h2>
+        <p class="fw-sub">Most L&D businesses have a legal team, a developer, and a business owner — each seeing a different slice of the trust picture. Our framework translates between the business and each expert stakeholder, turning insights into actions that drive growth. One shared view. No new tools to buy. No expertise required on your end.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
           <a href="framework.html" class="btn btn-teal" style="padding:13px 24px;font-size:14.5px;">
             See how our checks work
@@ -1913,6 +1983,99 @@
           </div>
         </div>
       </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FAQ SECTION
+═══════════════════════════════════════════ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-header">
+      <div class="faq-kicker">Got questions?</div>
+      <h2 class="faq-h2">Why Data Pilots — and not just ChatGPT or a free scanner?</h2>
+      <p class="faq-sub">Fair question. Here's the honest answer.</p>
+    </div>
+
+    <div class="faq-grid">
+
+      <details class="faq-item" open>
+        <summary class="faq-q">Can't I just ask ChatGPT to check my website?</summary>
+        <div class="faq-a">
+          <p>You can — and you'll get a generic checklist back. What you won't get is a real browser agent that actually visits your site, fires cookies, clicks "Decline All," and checks whether tracking actually stops. ChatGPT doesn't visit URLs. It guesses based on training data.</p>
+          <p>Our Trust Check uses a live AI browser agent (powered by Papaya) that behaves exactly like a real buyer or a GDPR auditor would. Then it translates what it finds into plain-English actions prioritised for your business — not a wall of technical jargon you have to decode yourself.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">There are free cookie scanners out there. Why pay?</summary>
+        <div class="faq-a">
+          <p>Free scanners check one thing: cookies. We check your whole trust picture — security headers, privacy policy quality, GDPR language, AI disclosure, footer policy links, consent banner behaviour, and how all of it lands with the specific type of buyer you're trying to win.</p>
+          <p>More importantly: free tools give you a list. We give you a prioritised action plan in plain English, with the context of why each issue matters to an L&amp;D procurement team. That's the bit that turns findings into revenue.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Why do I need this specific to L&amp;D? Trust is trust, isn't it?</summary>
+        <div class="faq-a">
+          <p>Not quite. Enterprise L&amp;D procurement has its own patterns: HR and L&amp;D buyers care about data handling for learner records; legal teams ask about DPAs and GDPR compliance; IT security checks your headers and cookie consent. A generic trust tool won't know that "no AI disclosure" is a bigger deal for an L&amp;D buyer than for a florist.</p>
+          <p>We've built the scoring and action guidance around what actually blocks or accelerates L&amp;D deals — so your results are relevant, not just technically accurate.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What do I actually get that I couldn't piece together myself?</summary>
+        <div class="faq-a">
+          <p>Three things that are hard to replicate solo: <strong>(1) Real behavioural testing</strong> — an AI agent that visits your site like a buyer does, not just an HTML check. <strong>(2) Translation</strong> — findings framed in business terms (lost deals, compliance risk) not technical terms. <strong>(3) Prioritisation</strong> — we don't give you a list of 40 issues; we tell you the 3 things to fix this week that have the biggest impact on buyer trust.</p>
+          <p>You could spend 3–4 hours pulling this together across different tools and trying to make sense of the output. Or you can have it in 5 minutes, in language you can act on today.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What's the difference between the free check and the paid Co-Pilot?</summary>
+        <div class="faq-a">
+          <p>The free Trust Check scans your <em>public website</em> — the face you show to buyers before they even speak to you. It covers the basics that get flagged in procurement: security, privacy docs, consent behaviour, transparency signals.</p>
+          <p>The paid Co-Pilot goes deeper: your learning portal, your platform integrations, your contracts and DPAs. It also includes human-led guidance, ongoing monitoring, and a Trust Check-In call where we walk through findings with your team and give you a clear action roadmap. It's the difference between a self-test and having an expert on your side.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">How is this different from hiring a lawyer or a data consultant?</summary>
+        <div class="faq-a">
+          <p>Lawyers and data consultants are essential for complex compliance work — we're not replacing them. What we do is surface the practical, fixable issues that stop deals before they even get to a legal review. Most of our top findings take 1–2 days to fix without any specialist help.</p>
+          <p>Think of it as triage: we tell you what's broken and how to fix it in plain English. If something needs a lawyer, we'll say so — but the majority of trust issues on L&amp;D websites don't.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">I'm not technical — will I understand the results?</summary>
+        <div class="faq-a">
+          <p>That's exactly who we built this for. Every finding is written in plain language with a real-world example. If it says "Missing privacy page," we tell you what that means to a buyer, why it matters, and how to fix it — without needing a developer or a lawyer.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What happens to my data when I run a scan?</summary>
+        <div class="faq-a">
+          <p>Nothing is stored unless you choose to save your results. We scan your public-facing website and return a score. No account needed for the free check. You are always in control of what gets saved.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Who is this built for?</summary>
+        <div class="faq-a">
+          <p>L&amp;D coaches, consultants, and small training firms selling to enterprise clients or navigating procurement processes. If your buyers check your website before agreeing to meet, this is for you. No technical background needed.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Can I share my trust report with prospects?</summary>
+        <div class="faq-a">
+          <p>Yes — that's one of the most popular uses. Co-Pilot includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
+        </div>
+      </details>
 
     </div>
   </div>
@@ -1987,81 +2150,6 @@
   </div>
 </section>
 
-<!-- ════════════ FAQ ════════════ -->
-<section id="faq">
-  <div class="container">
-
-    <div class="faq-header reveal">
-      <div class="faq-kicker">FAQ</div>
-      <h2 class="faq-h2">Questions? We've Got Answers.</h2>
-    </div>
-
-    <div class="faq-list reveal">
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>Is this just another website audit tool?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>No. Think of it as a risk assessment, not an audit. Most audit tools are built for developers and flag technical issues in jargon. The Trust Check is built for L&amp;D business owners — it surfaces where you could be breaking trust or creating compliance issues, in plain language, ranked by what matters most to your buyers. You get clarity, not a 50-page report.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>What happens to my data?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>Nothing is stored unless you choose to save your results. We scan your public-facing website and return a score. No account needed for the free check. You are always in control of what gets saved.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>I'm not technical — will I understand the results?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>That's exactly who we built this for. Every finding is written in plain language with a real-world example. If it says "Missing privacy page," we tell you what that means to a buyer, why it matters, and how to fix it — without needing a developer or a lawyer.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>How is the free scan different from the paid roadmap?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>The free scan gives you your trust score and a high-level view across four pillars: UX, Transparency, Safety, and AI Trust. The paid Co-Pilot plan adds specific findings with step-by-step fix guides, a trust proof PDF you can share in proposals, team task delegation, and monthly re-scans to track progress over time.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>Who is this built for?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>L&amp;D coaches, consultants, and small training firms selling to enterprise clients or navigating procurement processes. If your buyers check your website before agreeing to meet, this is for you. No technical background needed.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
-          <span>Can I share my trust report with prospects?</span>
-          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
-        </button>
-        <div class="faq-a">
-          <p>Yes — that's one of the most popular uses. Co-Pilot includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- ════════════ FOOTER ════════════ -->
 <footer>
 
@@ -2083,24 +2171,24 @@
 
         <div>
           <a href="/" class="footer-logo">
-            <svg width="30" height="30" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="30" height="30" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="ft-lg" x1="10" y1="10" x2="190" y2="190" gradientUnits="userSpaceOnUse">
+                <linearGradient id="ft-lg" x1="10" y1="10" x2="190" y2="200" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stop-color="#00F59D"/>
-                  <stop offset="45%" stop-color="#00D4B8"/>
+                  <stop offset="50%" stop-color="#00D4C0"/>
                   <stop offset="100%" stop-color="#00AAFF"/>
                 </linearGradient>
               </defs>
-              <path d="M 22 95 A 78 78 0 0 1 178 95" stroke="url(#ft-lg)" stroke-width="14" stroke-linecap="round" fill="none"/>
-              <rect x="4" y="78" width="26" height="44" rx="10" fill="url(#ft-lg)"/>
-              <rect x="170" y="78" width="26" height="44" rx="10" fill="url(#ft-lg)"/>
-              <circle cx="100" cy="108" r="76" stroke="url(#ft-lg)" stroke-width="10" fill="white"/>
-              <rect x="46" y="52" width="108" height="92" rx="20" fill="white"/>
-              <circle cx="78" cy="88" r="14" fill="url(#ft-lg)"/>
-              <circle cx="122" cy="88" r="14" fill="url(#ft-lg)"/>
-              <rect x="64" y="120" width="72" height="12" rx="6" fill="url(#ft-lg)"/>
-              <path d="M 168 130 Q 162 155 146 162" stroke="url(#ft-lg)" stroke-width="8" stroke-linecap="round" fill="none"/>
-              <rect x="128" y="158" width="26" height="14" rx="7" fill="url(#ft-lg)"/>
+              <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#ft-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
+              <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
+              <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
+              <circle cx="100" cy="112" r="76" stroke="url(#ft-lg)" stroke-width="12" fill="none"/>
+              <rect x="42" y="52" width="116" height="100" rx="22" fill="white"/>
+              <circle cx="76" cy="90" r="14" fill="url(#ft-lg)"/>
+              <circle cx="124" cy="90" r="14" fill="url(#ft-lg)"/>
+              <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#ft-lg)"/>
+              <path d="M 170 135 Q 163 158 148 166" stroke="url(#ft-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#ft-lg)"/>
             </svg>
             <div class="logo-wordmark" style="font-size:14px;">DATA <span>PILOTS</span></div>
           </a>

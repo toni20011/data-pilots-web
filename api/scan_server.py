@@ -53,6 +53,27 @@ COOKIE_KEYWORDS = [
     "cookie", "gdpr", "ccpa", "consent", "data protection",
     "we use cookies", "privacy preference",
 ]
+GDPR_KEYWORDS = [
+    "gdpr", "general data protection regulation", "data controller",
+    "data processor", "right to access", "right to erasure", "right to be forgotten",
+    "lawful basis", "legitimate interest", "data subject rights", "supervisory authority",
+]
+CCPA_KEYWORDS = [
+    "ccpa", "california consumer privacy", "do not sell my",
+    "right to know", "right to delete", "opt-out of sale",
+]
+DPA_KEYWORDS = [
+    "data processing agreement", " dpa ", "data processor agreement",
+    "sub-processor", "standard contractual clauses", "model clauses",
+]
+POLICY_REQUIRED_TOPICS = {
+    "what is collected": ["we collect", "information we collect", "data we collect", "personal data we collect", "personal information we collect"],
+    "why it is collected": ["we use your", "purposes", "why we collect", "legal basis", "how we use"],
+    "third-party sharing": ["third party", "third-party", "share your data", "we share", "disclose to", "our partners"],
+    "your rights":         ["your rights", "right to access", "right to delete", "right to object", "opt out", "opt-out"],
+    "contact details":     ["contact us", "data controller", "data protection officer", "dpo@", "privacy@", "info@"],
+}
+COOKIE_POLICY_PATHS = ["/cookie-policy", "/cookie-notice", "/cookies", "/cookie-disclosure"]
 
 # In-memory cache: session_id → { status, findings, error, started_at }
 _papaya_cache = {}
@@ -221,6 +242,42 @@ def _extract_tracking_companies(text: str) -> list:
     return result
 
 
+def _extract_cmp_name(text: str) -> str:
+    """Try to identify the Consent Management Platform from the Papaya report."""
+    cmp_map = {
+        "OneTrust":    r"onetrust",
+        "Cookiebot":   r"cookiebot|cybot",
+        "Quantcast":   r"quantcast",
+        "TrustArc":    r"trustarc",
+        "Didomi":      r"didomi",
+        "Usercentrics":r"usercentrics",
+        "Osano":       r"osano",
+        "CookieYes":   r"cookieyes",
+        "Borlabs":     r"borlabs",
+        "CookiePro":   r"cookiepro",
+    }
+    lower = text.lower()
+    for name, pattern in cmp_map.items():
+        if re.search(pattern, lower):
+            return name
+    return ""
+
+
+def _extract_consent_categories(text: str) -> list:
+    """Extract consent category names offered in the consent banner."""
+    lower = text.lower()
+    # Common consent category names
+    standard = [
+        "necessary", "essential", "strictly necessary",
+        "analytics", "performance", "statistics",
+        "marketing", "advertising", "targeting",
+        "preferences", "functional",
+        "social media",
+    ]
+    found = [c for c in standard if c in lower]
+    return found[:6]
+
+
 def parse_papaya_report(report_md: str, analysis_html: str = "") -> list:
     """
     Convert a Papaya markdown report into Data Pilots trust findings.
@@ -326,6 +383,56 @@ def parse_papaya_report(report_md: str, analysis_html: str = "") -> list:
             "title": "No trackers active before consent (Papaya)",
             "detail": "Papaya found no third-party tracking firing before a visitor gives consent. Good privacy practice.",
             "tag": None, "source": "papaya",
+        })
+
+    # ── 4. CMP identification ─────────────────
+    cmp = _extract_cmp_name(text)
+    if cmp:
+        findings.append({
+            "id": "papaya_cmp", "pillar": "transparency", "status": "pass",
+            "title": f"Consent managed via {cmp} (Papaya)",
+            "detail": (
+                f"Papaya identified {cmp} as your Consent Management Platform. "
+                f"Using a recognised CMP signals mature data governance — enterprise "
+                f"procurement teams often verify this."
+            ),
+            "tag": None, "source": "papaya",
+        })
+    else:
+        findings.append({
+            "id": "papaya_cmp", "pillar": "transparency", "status": "info",
+            "title": "Consent platform vendor not identified (Papaya)",
+            "detail": (
+                "Papaya could not identify a standard CMP on your site. "
+                "If you are self-building consent logic, make sure it meets GDPR requirements "
+                "for explicit, granular, withdrawable consent."
+            ),
+            "tag": None, "source": "papaya",
+        })
+
+    # ── 5. Consent categories ─────────────────
+    categories = _extract_consent_categories(text)
+    if categories:
+        findings.append({
+            "id": "papaya_categories", "pillar": "transparency", "status": "pass",
+            "title": f"{len(categories)} consent categories detected in banner (Papaya)",
+            "detail": (
+                f"Categories offered: {', '.join(c.title() for c in categories)}. "
+                f"Granular consent categories are required under GDPR and signal to "
+                f"enterprise clients that your consent framework is properly structured."
+            ),
+            "tag": None, "source": "papaya",
+        })
+    elif has_banner:
+        findings.append({
+            "id": "papaya_categories", "pillar": "transparency", "status": "warn",
+            "title": "Consent banner found but no granular categories detected (Papaya)",
+            "detail": (
+                "Your consent banner exists but may not offer category-level choice. "
+                "GDPR requires separate consent for analytics, marketing, and functional cookies "
+                "— a blanket accept/reject may not be sufficient."
+            ),
+            "tag": "REVIEW", "source": "papaya",
         })
 
     return findings
@@ -509,6 +616,208 @@ def check_cookie_consent(html: str) -> dict:
             "tag": "REVIEW"}
 
 
+def check_footer_policy_links(html: str) -> list:
+    """Check whether Privacy, Terms, and Cookie policy links appear in the footer."""
+    findings = []
+    lower = html.lower()
+
+    # Prefer footer section; fall back to last 6000 chars
+    footer_start = lower.rfind("<footer")
+    footer_text  = lower[footer_start:] if footer_start != -1 else lower[-6000:]
+
+    has_privacy = bool(re.search(r'href=["\'][^"\']*privac[^"\']*["\']', footer_text))
+    has_terms   = bool(re.search(r'href=["\'][^"\']*term[^"\']*["\']',   footer_text))
+    has_cookie  = bool(re.search(r'href=["\'][^"\']*cook[^"\']*["\']',   footer_text))
+
+    if has_privacy and has_terms:
+        findings.append({
+            "id": "footer_links", "pillar": "ux", "status": "pass",
+            "title": "Privacy Policy and Terms links found in footer",
+            "detail": "Policy links are where buyers expect them. This passes the basic procurement page-check.",
+            "tag": None,
+        })
+    elif has_privacy:
+        findings.append({
+            "id": "footer_links", "pillar": "ux", "status": "warn",
+            "title": "Privacy link in footer — Terms link missing",
+            "detail": "Enterprise procurement teams look for both. Adding a Terms link is a quick win.",
+            "tag": "QUICK WIN",
+        })
+    else:
+        findings.append({
+            "id": "footer_links", "pillar": "ux", "status": "fail",
+            "title": "Policy links not found in footer",
+            "detail": (
+                "Buyers scan the footer for Privacy Policy and Terms before any meeting. "
+                "Not finding them is one of the most common reasons trust drops silently."
+            ),
+            "tag": "FIX THIS WEEK",
+        })
+
+    if has_cookie:
+        findings.append({
+            "id": "cookie_policy_link", "pillar": "transparency", "status": "pass",
+            "title": "Cookie policy/disclosure link found in footer",
+            "detail": "A visible cookie disclosure link is good practice and increasingly expected by privacy-aware buyers.",
+            "tag": None,
+        })
+
+    return findings
+
+
+def check_policy_content(base: str) -> list:
+    """
+    Fetch the privacy policy page and analyse its content for:
+    - GDPR/CCPA language
+    - Coverage of required topics (what, why, sharing, rights, contact)
+    - Data Processing Agreement language
+    - Cookie policy existence
+    - Last-updated date
+    """
+    findings = []
+
+    # Find the privacy policy URL
+    privacy_url = None
+    for path in PRIVACY_PATHS:
+        r = fetch(base + path, method="HEAD")
+        if r["ok"] and r["status"] and r["status"] < 400:
+            privacy_url = base + path
+            break
+    if not privacy_url:
+        return findings  # check_privacy_page already reports this
+
+    # Fetch full content (larger limit for policy pages)
+    r    = fetch(privacy_url, method="GET", max_bytes=200_000)
+    text = r.get("text", "").lower()
+    if not text:
+        return findings
+
+    # ── GDPR language ──
+    has_gdpr = any(kw in text for kw in GDPR_KEYWORDS)
+    has_ccpa = any(kw in text for kw in CCPA_KEYWORDS)
+
+    if has_gdpr:
+        findings.append({
+            "id": "policy_gdpr", "pillar": "transparency", "status": "pass",
+            "title": "Privacy policy includes GDPR-aligned language",
+            "detail": (
+                "Your policy references GDPR concepts (data subject rights, lawful basis, etc.). "
+                "This is what EU clients and enterprise procurement teams need to see."
+            ),
+            "tag": None,
+        })
+    else:
+        findings.append({
+            "id": "policy_gdpr", "pillar": "transparency", "status": "warn",
+            "title": "Privacy policy doesn't reference GDPR",
+            "detail": (
+                "If any of your clients are EU-based, your privacy policy should explicitly "
+                "address GDPR rights. Enterprise procurement in the UK and Europe will check this."
+            ),
+            "tag": "REVIEW",
+        })
+
+    if has_ccpa:
+        findings.append({
+            "id": "policy_ccpa", "pillar": "transparency", "status": "pass",
+            "title": "Privacy policy addresses CCPA / California consumer rights",
+            "detail": "Your policy covers California privacy rights. Good for US enterprise clients.",
+            "tag": None,
+        })
+
+    # ── Required topic coverage ──
+    missing = []
+    for topic, keywords in POLICY_REQUIRED_TOPICS.items():
+        if not any(kw in text for kw in keywords):
+            missing.append(topic)
+
+    if not missing:
+        findings.append({
+            "id": "policy_coverage", "pillar": "transparency", "status": "pass",
+            "title": "Privacy policy covers all required topics",
+            "detail": (
+                "Your policy explains what data is collected, why, third-party sharing, "
+                "visitor rights, and how to get in touch. Strong foundation."
+            ),
+            "tag": None,
+        })
+    elif len(missing) <= 2:
+        findings.append({
+            "id": "policy_coverage", "pillar": "transparency", "status": "warn",
+            "title": f"Privacy policy may be missing {len(missing)} required section(s)",
+            "detail": (
+                f"We couldn't find clear coverage of: {'; '.join(missing)}. "
+                f"GDPR Article 13/14 requires these topics to be addressed."
+            ),
+            "tag": "REVIEW",
+        })
+    else:
+        findings.append({
+            "id": "policy_coverage", "pillar": "transparency", "status": "fail",
+            "title": f"Privacy policy is missing {len(missing)} required sections",
+            "detail": (
+                f"Missing: {'; '.join(missing)}. "
+                f"A privacy policy that doesn't explain what's collected, why, and how to exercise rights "
+                f"is unlikely to satisfy enterprise procurement requirements."
+            ),
+            "tag": "FIX THIS WEEK",
+        })
+
+    # ── DPA language ──
+    has_dpa = any(kw in text for kw in DPA_KEYWORDS)
+    if has_dpa:
+        findings.append({
+            "id": "policy_dpa", "pillar": "transparency", "status": "pass",
+            "title": "Data Processing Agreement language present",
+            "detail": (
+                "Your policy references data processing agreements or standard contractual clauses. "
+                "Enterprise clients in regulated sectors will often ask for a signed DPA — "
+                "having the language in your policy is a good first step."
+            ),
+            "tag": None,
+        })
+    else:
+        findings.append({
+            "id": "policy_dpa", "pillar": "transparency", "status": "info",
+            "title": "No Data Processing Agreement language found",
+            "detail": (
+                "Many enterprise and public sector L&D clients require a Data Processing Agreement "
+                "before signing. Adding DPA language to your privacy policy (or offering a separate DPA) "
+                "removes a common procurement blocker."
+            ),
+            "tag": None,
+        })
+
+    # ── Last updated date ──
+    has_date = bool(re.search(
+        r"(last updated|last revised|effective date|updated:)\s*[:\-]?\s*\w+\s+\d{4}",
+        text, re.IGNORECASE
+    ))
+    if not has_date:
+        findings.append({
+            "id": "policy_date", "pillar": "transparency", "status": "warn",
+            "title": "Privacy policy has no 'last updated' date",
+            "detail": (
+                "Policies without a visible update date look stale. "
+                "A dated policy signals active governance — buyers notice when a policy "
+                "looks like it hasn't been reviewed in years."
+            ),
+            "tag": "QUICK WIN",
+        })
+
+    # ── Separate cookie policy ──
+    found_cookie_policy, _ = page_exists(base, COOKIE_POLICY_PATHS)
+    if found_cookie_policy:
+        findings.append({
+            "id": "cookie_policy_page", "pillar": "transparency", "status": "pass",
+            "title": "Separate cookie policy/disclosure page found",
+            "detail": "A dedicated cookie disclosure page shows buyers and regulators you take data governance seriously.",
+            "tag": None,
+        })
+
+    return findings
+
+
 def check_sitemap(base: str) -> dict:
     r = fetch(base + "/sitemap.xml", method="HEAD")
     if r["ok"] and r["status"] and r["status"] < 400:
@@ -582,6 +891,8 @@ def run_scan(raw_url: str) -> dict:
             ex.submit(check_ai_disclosure,  html):       "ai",
             ex.submit(check_cookie_consent, html):       "cookies",
             ex.submit(check_sitemap,        base):       "sitemap",
+            ex.submit(check_footer_policy_links, html): "footer_links",
+            ex.submit(check_policy_content,      base): "policy_content",
         }
         for future in as_completed(futures, timeout=TIMEOUT + 4):
             try:
