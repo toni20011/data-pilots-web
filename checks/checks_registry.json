@@ -1,0 +1,635 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "last_updated": "2026-04-15",
+    "description": "Data Pilots Trust Check — canonical registry of all checks, tiers, focus areas, and follow-up questions.",
+    "tiers": {
+      "free":       "Public website scan. No account required. No data saved unless user opts in.",
+      "paid":       "Deeper scan. User selects focus areas. Requires account. Results saved and trackable.",
+      "paid_plus":  "Portal/platform scan, contract & DPA review, human-in-the-loop guidance."
+    },
+    "pillars": {
+      "transparency": "Do you clearly tell buyers and users what you do with their data?",
+      "safety":       "Is your site technically secure and protected against known vulnerabilities?",
+      "ux":           "Can buyers find what they need to feel confident before saying yes?",
+      "ai_trust":     "Are you transparent about how you use AI tools — for buyers and learners?"
+    },
+    "focus_areas": {
+      "gdpr_eu":            "GDPR & EU/UK Data Protection",
+      "ccpa_us":            "CCPA & US Privacy Regulations",
+      "enterprise_procurement": "Enterprise Procurement Readiness",
+      "learner_data":       "Learner Data Protection & LMS Trust",
+      "ai_transparency":    "AI Disclosure & Governance",
+      "cookie_consent":     "Cookie & Consent Compliance",
+      "contracts_dpa":      "Terms, Contracts & Data Processing Agreements",
+      "security_posture":   "Technical Security & Headers",
+      "brand_trust":        "First Impressions & Buyer-Facing Trust Signals"
+    }
+  },
+
+  "checks": [
+
+    {
+      "id": "https",
+      "name": "HTTPS / Secure Connection",
+      "pillar": "safety",
+      "tier": "free",
+      "category": "security",
+      "focus_areas": ["security_posture", "enterprise_procurement"],
+      "severity": "critical",
+      "what_we_check": "Whether the site loads over HTTPS (not HTTP)",
+      "why_it_matters": "Browsers mark HTTP sites as 'Not Secure'. Any buyer who sees that padlock missing will have immediate doubt before the conversation even starts.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer", "it_security"],
+      "fix_guide": "Contact your hosting provider and enable an SSL certificate. Most modern hosts (Squarespace, Wix, WordPress) do this for free in one click.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "hsts",
+      "name": "HSTS (HTTP Strict Transport Security)",
+      "pillar": "safety",
+      "tier": "free",
+      "category": "security",
+      "focus_areas": ["security_posture", "enterprise_procurement"],
+      "severity": "important",
+      "what_we_check": "Whether the Strict-Transport-Security header is present",
+      "why_it_matters": "HSTS tells browsers to always use HTTPS — even on the first connection. Without it, a sophisticated attacker can intercept that first load.",
+      "buyer_impact": ["it_security"],
+      "fix_guide": "Add `Strict-Transport-Security: max-age=31536000; includeSubDomains` to your server or CDN headers. Many hosting dashboards have a one-click option.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "csp",
+      "name": "Content Security Policy (CSP)",
+      "pillar": "safety",
+      "tier": "free",
+      "category": "security",
+      "focus_areas": ["security_posture", "enterprise_procurement"],
+      "severity": "important",
+      "what_we_check": "Whether a Content-Security-Policy header is set",
+      "why_it_matters": "CSP prevents malicious scripts being injected into your site. Procurement security questionnaires explicitly ask about this.",
+      "buyer_impact": ["it_security", "legal_procurement"],
+      "fix_guide": "Start with a basic policy via your CDN (Cloudflare, Netlify) or hosting headers. A developer can set a starter policy in under an hour.",
+      "effort": "medium",
+      "time_to_fix": "2–4 hours",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Do you have a developer who manages your hosting and server config?",
+        "Are you on a CDN like Cloudflare that allows header rules without code changes?"
+      ]
+    },
+
+    {
+      "id": "xfo",
+      "name": "Clickjacking Protection",
+      "pillar": "safety",
+      "tier": "free",
+      "category": "security",
+      "focus_areas": ["security_posture"],
+      "severity": "important",
+      "what_we_check": "X-Frame-Options or CSP frame-ancestors directive",
+      "why_it_matters": "Prevents your site being embedded invisibly inside a malicious page to trick users.",
+      "buyer_impact": ["it_security"],
+      "fix_guide": "Add `X-Frame-Options: SAMEORIGIN` header, or use `frame-ancestors 'self'` in your CSP.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "privacy_page",
+      "name": "Privacy Policy Page",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "ccpa_us", "enterprise_procurement", "brand_trust"],
+      "severity": "critical",
+      "what_we_check": "Whether a privacy policy page exists at a standard path",
+      "why_it_matters": "73% of L&D buyers check for a privacy policy before signing. Missing = immediate red flag in procurement.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer", "legal_procurement"],
+      "fix_guide": "Create a /privacy-policy page. If you're not sure what to include, use a GDPR-compliant generator (e.g. iubenda, Termly) as a starting point — then customise to reflect how you actually use data.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Have you had your privacy policy reviewed by a solicitor or data protection advisor?",
+        "Is your privacy policy the same for your website visitors and your learners/clients?",
+        "When was your privacy policy last reviewed or updated?"
+      ]
+    },
+
+    {
+      "id": "policy_gdpr",
+      "name": "GDPR Language in Privacy Policy",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "enterprise_procurement"],
+      "severity": "important",
+      "what_we_check": "Whether the privacy policy includes GDPR-specific concepts: lawful basis, data subject rights, data controller, etc.",
+      "why_it_matters": "UK and EU enterprise procurement teams will reject suppliers whose privacy policy doesn't reference GDPR. It signals you haven't taken data protection seriously.",
+      "buyer_impact": ["legal_procurement", "hr_buyer"],
+      "fix_guide": "Update your privacy policy to explicitly name: your lawful basis for processing, data subject rights (access, erasure, portability, objection), and supervisory authority contact.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Are all your clients UK or EU-based, or do you have US/global clients too?",
+        "Have you registered with the ICO (UK) as a data controller?",
+        "Do you have a named Data Protection Officer or responsible person?"
+      ]
+    },
+
+    {
+      "id": "policy_ccpa",
+      "name": "CCPA / US Privacy Language",
+      "pillar": "transparency",
+      "tier": "paid",
+      "category": "legal_docs",
+      "focus_areas": ["ccpa_us"],
+      "severity": "important",
+      "what_we_check": "Whether the privacy policy addresses CCPA rights: do not sell, right to know, right to delete",
+      "why_it_matters": "If you have US-based clients (especially California), CCPA compliance is legally required and increasingly expected in enterprise procurement.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Add a CCPA section to your privacy policy. Include the right to know, right to delete, and opt-out of sale. Link it from your footer.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Do you have clients or learners based in California or other US states?",
+        "Do you sell or share personal data with third parties for advertising purposes?"
+      ]
+    },
+
+    {
+      "id": "policy_coverage",
+      "name": "Privacy Policy Topic Coverage",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "enterprise_procurement"],
+      "severity": "important",
+      "what_we_check": "Whether the privacy policy covers: what is collected, why, third-party sharing, visitor rights, and contact details",
+      "why_it_matters": "GDPR Articles 13 & 14 require all five topics. A policy that skips any of these isn't just incomplete — it's potentially non-compliant.",
+      "buyer_impact": ["legal_procurement", "hr_buyer"],
+      "fix_guide": "Review your policy against each topic. Add a section for any that are missing. Keep language plain — regulatory bodies and buyers both respond better to clear, honest wording than legal boilerplate.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "policy_dpa",
+      "name": "Data Processing Agreement (DPA) Language",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "contracts_dpa", "enterprise_procurement", "learner_data"],
+      "severity": "important",
+      "what_we_check": "Whether the privacy policy or site references Data Processing Agreements, sub-processors, or standard contractual clauses",
+      "why_it_matters": "Enterprise and public sector clients almost always require a signed DPA before a contract is issued. If it's not on your radar, deals get stuck at the legal sign-off stage.",
+      "buyer_impact": ["legal_procurement", "enterprise_l&d"],
+      "fix_guide": "Draft a standard DPA template you can offer to enterprise clients. List your sub-processors (tools you use that process personal data: e.g. Mailchimp, Zoom, your LMS). A data consultant or solicitor can help draft this in a day.",
+      "effort": "high",
+      "time_to_fix": "3–5 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Have you ever been asked to sign a Data Processing Agreement by a client?",
+        "Do you have a standard DPA template you can share with clients?",
+        "What tools do you use that process learner or client personal data (LMS, video platform, email tool)?",
+        "Are any of your tools US-based? (relevant for international data transfer rules)"
+      ]
+    },
+
+    {
+      "id": "policy_date",
+      "name": "Privacy Policy Last-Updated Date",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "brand_trust"],
+      "severity": "low",
+      "what_we_check": "Whether the privacy policy shows a visible 'last updated' or 'effective date'",
+      "why_it_matters": "Policies without a date look stale. Buyers notice — it signals your data governance hasn't been reviewed recently.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Add 'Last updated: [date]' to the top of your privacy policy. Review and re-date it at least annually.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "terms_page",
+      "name": "Terms of Service / Use Page",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["enterprise_procurement", "contracts_dpa", "brand_trust"],
+      "severity": "important",
+      "what_we_check": "Whether a terms of service or terms and conditions page exists",
+      "why_it_matters": "Enterprise procurement requires clear terms before signing. A missing terms page can stall a deal at the contract stage.",
+      "buyer_impact": ["legal_procurement", "enterprise_l&d"],
+      "fix_guide": "Create a /terms or /terms-of-service page. Include: what the service covers, payment terms, IP ownership, liability limits, and cancellation policy.",
+      "effort": "medium",
+      "time_to_fix": "2–3 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Do you have standard terms you send clients, or do you negotiate bespoke contracts?",
+        "Are your terms different for individual buyers vs enterprise/public sector?",
+        "Do your terms reference GDPR obligations or data handling?"
+      ]
+    },
+
+    {
+      "id": "cookie_policy_page",
+      "name": "Dedicated Cookie Policy / Disclosure Page",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "legal_docs",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "important",
+      "what_we_check": "Whether a dedicated cookie policy or cookie disclosure page exists",
+      "why_it_matters": "GDPR requires you to clearly explain what cookies you use, why, and how visitors can control them. Many privacy-aware buyers check for this specifically.",
+      "buyer_impact": ["legal_procurement", "hr_buyer"],
+      "fix_guide": "Create a /cookie-policy page listing each cookie category (strictly necessary, analytics, marketing), the specific cookies used, their purpose and duration, and how to opt out.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "footer_links",
+      "name": "Policy Links in Footer",
+      "pillar": "ux",
+      "tier": "free",
+      "category": "ux",
+      "focus_areas": ["brand_trust", "enterprise_procurement"],
+      "severity": "critical",
+      "what_we_check": "Whether Privacy Policy and Terms links are visible in the site footer",
+      "why_it_matters": "Buyers look in the footer first. Not finding policy links there creates doubt before they've even read anything.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer", "legal_procurement"],
+      "fix_guide": "Add Privacy Policy and Terms of Service links to your footer navigation. They should be visible on every page.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "cookie_policy_link",
+      "name": "Cookie Policy Link in Footer",
+      "pillar": "ux",
+      "tier": "free",
+      "category": "ux",
+      "focus_areas": ["cookie_consent", "gdpr_eu"],
+      "severity": "low",
+      "what_we_check": "Whether a cookie policy link is visible in the footer",
+      "why_it_matters": "Privacy-aware buyers and regulators expect cookie disclosures to be easy to find, not buried.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Add a 'Cookie Policy' link to your footer alongside your Privacy Policy.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "contact_page",
+      "name": "Contact Page",
+      "pillar": "ux",
+      "tier": "free",
+      "category": "ux",
+      "focus_areas": ["brand_trust"],
+      "severity": "important",
+      "what_we_check": "Whether a contact or about page exists",
+      "why_it_matters": "If buyers can't find how to contact you, they lose confidence. Visible contact details are a basic trust signal — and GDPR requires a way for data subjects to reach the data controller.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer"],
+      "fix_guide": "Make sure you have a /contact or /about page with a working email, phone number, or contact form. Including a physical or registered address adds additional credibility for enterprise buyers.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Do you include your registered business address on your site?",
+        "Do you have a named individual (not just info@) as a primary point of contact for data queries?"
+      ]
+    },
+
+    {
+      "id": "cookies",
+      "name": "Cookie Consent Language (HTML scan)",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "important",
+      "what_we_check": "Whether cookie, GDPR, consent, or data protection language appears in the page HTML",
+      "why_it_matters": "GDPR requires consent before non-essential cookies fire. No consent language is often a sign there's no consent mechanism at all.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Implement a consent management platform (CMP) such as Cookiebot, CookieYes, or OneTrust. Configure it to block non-essential cookies until the visitor explicitly accepts.",
+      "effort": "medium",
+      "time_to_fix": "2–4 hours",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "papaya_banner",
+      "name": "Cookie Consent Banner — Live Browser Check",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "critical",
+      "what_we_check": "Whether an AI browser agent (Papaya) visiting your site sees a consent banner with Accept, Decline, and Settings options",
+      "why_it_matters": "An HTML keyword scan can miss a banner loaded via JavaScript. Papaya's agent actually visits the site and sees what a real buyer sees.",
+      "buyer_impact": ["legal_procurement", "hr_buyer"],
+      "fix_guide": "Implement a consent management platform. Ensure the banner appears on first load, before any non-essential cookies fire.",
+      "effort": "medium",
+      "time_to_fix": "2–4 hours",
+      "source": "papaya",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "papaya_reject",
+      "name": "Reject-All Effectiveness — Live Browser Check",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "critical",
+      "what_we_check": "Whether Papaya's agent clicking 'Decline All' actually stops tracking — comparing tracker counts before and after",
+      "why_it_matters": "Many sites have a Decline All button that doesn't actually work. This is one of the most common GDPR enforcement findings and a serious liability.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Work with your CMP provider to ensure the Decline All action actually blocks cookie firing — not just hides the banner. Test it with a browser network inspector.",
+      "effort": "medium",
+      "time_to_fix": "2–5 hours",
+      "source": "papaya",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "papaya_preload",
+      "name": "Pre-Consent Tracking Volume — Live Browser Check",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "important",
+      "what_we_check": "Number of trackers firing on page load before any consent is given",
+      "why_it_matters": "Under GDPR, non-essential tracking must not start until the visitor actively consents. High pre-consent tracker counts are a direct compliance risk.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Configure your CMP to block all non-essential scripts from loading until consent is given. This usually means moving script tags from the page to the CMP's 'on-accept' category.",
+      "effort": "medium",
+      "time_to_fix": "2–5 hours",
+      "source": "papaya",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "papaya_cmp",
+      "name": "Consent Management Platform Identified",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["cookie_consent", "enterprise_procurement"],
+      "severity": "low",
+      "what_we_check": "Whether Papaya's report identifies a recognised CMP (OneTrust, Cookiebot, etc.)",
+      "why_it_matters": "Using a recognised CMP signals mature consent governance. Enterprise procurement teams often verify this.",
+      "buyer_impact": ["legal_procurement", "it_security"],
+      "fix_guide": "If you're not using a recognised CMP, consider Cookiebot, CookieYes, or OneTrust depending on your budget and scale.",
+      "effort": "medium",
+      "time_to_fix": "2–4 hours",
+      "source": "papaya",
+      "follow_up_questions_paid": [
+        "Which consent management platform are you currently using?",
+        "Have you configured your CMP to align with both GDPR and CCPA requirements?",
+        "Does your CMP log consent records so you can evidence compliance if audited?"
+      ]
+    },
+
+    {
+      "id": "papaya_categories",
+      "name": "Consent Category Granularity",
+      "pillar": "transparency",
+      "tier": "free",
+      "category": "consent",
+      "focus_areas": ["gdpr_eu", "cookie_consent"],
+      "severity": "important",
+      "what_we_check": "Whether the consent banner offers granular categories (analytics, marketing, functional, etc.) vs a single accept/reject",
+      "why_it_matters": "GDPR requires separate, specific consent for different purposes. A blanket 'Accept All / Decline All' without categories may not be legally sufficient.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Configure your CMP to offer separate consent toggles for at least: Strictly Necessary, Analytics/Performance, and Marketing/Advertising cookies.",
+      "effort": "low",
+      "time_to_fix": "1–2 hours",
+      "source": "papaya",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "ai_disclose",
+      "name": "AI Tool Disclosure",
+      "pillar": "ai_trust",
+      "tier": "free",
+      "category": "ai_trust",
+      "focus_areas": ["ai_transparency", "enterprise_procurement", "learner_data"],
+      "severity": "important",
+      "what_we_check": "Whether the site mentions AI tools, partners, or AI-powered features",
+      "why_it_matters": "Over half of enterprise L&D buyers now ask about AI use before signing. A proactive disclosure prevents the question from becoming a blocker in procurement.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer", "it_security"],
+      "fix_guide": "Add a short, plain-language note on your website (homepage, about page, or FAQ) describing how and where you use AI — and importantly, what data is involved.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Which AI tools do you use in your L&D delivery or content creation?",
+        "Does any AI tool you use process learner data (names, scores, chat history)?",
+        "Do your client contracts or terms mention AI use?",
+        "Have any of your clients asked you to complete an AI risk assessment or questionnaire?"
+      ]
+    },
+
+    {
+      "id": "sitemap",
+      "name": "Sitemap",
+      "pillar": "ux",
+      "tier": "free",
+      "category": "ux",
+      "focus_areas": ["brand_trust"],
+      "severity": "low",
+      "what_we_check": "Whether a sitemap.xml exists",
+      "why_it_matters": "A sitemap improves discoverability and is a minor signal of a well-maintained site.",
+      "buyer_impact": [],
+      "fix_guide": "Most website builders generate sitemaps automatically. Check your platform settings.",
+      "effort": "low",
+      "time_to_fix": "< 1 hour",
+      "source": "own",
+      "follow_up_questions_paid": []
+    },
+
+    {
+      "id": "lms_data_notice",
+      "name": "Learner Data Notice in LMS / Portal",
+      "pillar": "transparency",
+      "tier": "paid",
+      "category": "learner_data",
+      "focus_areas": ["learner_data", "gdpr_eu", "enterprise_procurement"],
+      "severity": "critical",
+      "what_we_check": "Whether your learning portal or platform shows learners a data notice explaining what is collected about them",
+      "why_it_matters": "GDPR requires data subjects (your learners) to be informed at the point of data collection. Learner completion records, quiz scores, and activity logs are personal data.",
+      "buyer_impact": ["hr_buyer", "enterprise_l&d", "legal_procurement"],
+      "fix_guide": "Add a learner-facing data notice to your LMS registration or onboarding flow. Explain what data is collected (progress, scores, activity), why, how long it's kept, and how learners can request access or deletion.",
+      "effort": "medium",
+      "time_to_fix": "2–3 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Which LMS or learning platform do you use to deliver training?",
+        "Do your learners have accounts in the platform, or do they access as guests?",
+        "How long do you retain learner completion and activity records?",
+        "Who has access to individual learner data — just the learner, their employer, or your team?"
+      ]
+    },
+
+    {
+      "id": "lms_data_retention",
+      "name": "Learner Data Retention Policy",
+      "pillar": "transparency",
+      "tier": "paid",
+      "category": "learner_data",
+      "focus_areas": ["learner_data", "gdpr_eu"],
+      "severity": "important",
+      "what_we_check": "Whether you have a documented retention period for learner data",
+      "why_it_matters": "GDPR requires data to be kept only as long as necessary. Enterprise clients will ask 'how long do you keep our employees' data?' — you need a clear answer.",
+      "buyer_impact": ["hr_buyer", "legal_procurement"],
+      "fix_guide": "Define and document your retention periods: e.g. completion records kept for 3 years, then deleted or anonymised. Include this in your privacy policy and DPA.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "How long do you currently keep learner completion and activity data?",
+        "Is there a process to delete or anonymise data on request from a client?",
+        "Do you have a data deletion schedule, or is it ad hoc?"
+      ]
+    },
+
+    {
+      "id": "lms_third_party",
+      "name": "Third-Party Tools in Learning Delivery",
+      "pillar": "transparency",
+      "tier": "paid",
+      "category": "learner_data",
+      "focus_areas": ["learner_data", "gdpr_eu", "contracts_dpa"],
+      "severity": "important",
+      "what_we_check": "What third-party tools process learner data (video platforms, LMS, email tools, analytics)",
+      "why_it_matters": "Every third-party tool that touches learner data is a sub-processor. You must disclose and document these in your DPA and privacy policy.",
+      "buyer_impact": ["legal_procurement", "hr_buyer"],
+      "fix_guide": "Make a list of every tool that processes learner or client personal data. Ensure each has a signed DPA with you. List them as sub-processors in your privacy policy.",
+      "effort": "medium",
+      "time_to_fix": "2–3 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Which video conferencing tool do you use for live learning? (Zoom, Teams, etc.)",
+        "Which LMS or platform hosts your content?",
+        "Do you use any AI-powered tools that learners interact with directly?",
+        "Do you use email marketing tools to communicate with learners or clients?"
+      ]
+    },
+
+    {
+      "id": "ai_learner_disclosure",
+      "name": "AI Disclosure to Learners",
+      "pillar": "ai_trust",
+      "tier": "paid",
+      "category": "ai_trust",
+      "focus_areas": ["ai_transparency", "learner_data"],
+      "severity": "important",
+      "what_we_check": "Whether learners are told when AI is involved in their learning experience (AI tutor, AI-generated content, AI-based scoring)",
+      "why_it_matters": "Learners have a right to know when they're interacting with or being assessed by AI. Enterprise clients are increasingly asking about this — and regulation is catching up.",
+      "buyer_impact": ["enterprise_l&d", "hr_buyer"],
+      "fix_guide": "Add an AI disclosure to your learner onboarding. Be specific: e.g. 'This course uses AI to personalise your learning path. Your responses may be used to improve recommendations.'",
+      "effort": "low",
+      "time_to_fix": "< 1 day",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Do any of your learning products use AI for personalisation, recommendation, or automated feedback?",
+        "Are learners ever assessed by an AI system (not a human)?",
+        "Is AI-generated content used in any of your courses? If so, is this disclosed to learners?"
+      ]
+    },
+
+    {
+      "id": "ai_governance_policy",
+      "name": "Internal AI Governance Policy",
+      "pillar": "ai_trust",
+      "tier": "paid_plus",
+      "category": "ai_trust",
+      "focus_areas": ["ai_transparency", "enterprise_procurement"],
+      "severity": "important",
+      "what_we_check": "Whether the business has a documented policy for responsible AI use",
+      "why_it_matters": "Enterprise clients — especially in regulated sectors — are now asking suppliers for evidence of AI governance. A one-page AI policy is often enough to pass initial procurement screening.",
+      "buyer_impact": ["legal_procurement", "enterprise_l&d"],
+      "fix_guide": "Draft a short AI use policy covering: which AI tools you use, what data they access, how outputs are quality-checked, and who is responsible for AI-related decisions. One page is fine.",
+      "effort": "medium",
+      "time_to_fix": "2–3 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Does your team have any formal guidance on which AI tools are approved for use?",
+        "Have any of your enterprise clients asked you to complete an AI risk assessment or supplier questionnaire?"
+      ]
+    },
+
+    {
+      "id": "dpa_contract",
+      "name": "Standard DPA Available for Clients",
+      "pillar": "transparency",
+      "tier": "paid_plus",
+      "category": "contracts_dpa",
+      "focus_areas": ["contracts_dpa", "gdpr_eu", "enterprise_procurement"],
+      "severity": "critical",
+      "what_we_check": "Whether the business has a signed or signable DPA template ready for enterprise clients",
+      "why_it_matters": "Enterprise and public sector clients almost universally require a signed DPA before awarding a contract. Not having one ready delays or kills deals.",
+      "buyer_impact": ["legal_procurement", "enterprise_l&d"],
+      "fix_guide": "Work with a data protection solicitor to create a standard DPA. It should name you as data processor, list sub-processors, define retention periods, and reference your security measures.",
+      "effort": "high",
+      "time_to_fix": "1–2 weeks",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Have you signed a DPA with any of your current clients?",
+        "Do you have a solicitor or data protection advisor you work with?",
+        "Are any of your clients public sector or regulated industry (NHS, financial services, education)?"
+      ]
+    },
+
+    {
+      "id": "sub_processor_list",
+      "name": "Sub-Processor List Published",
+      "pillar": "transparency",
+      "tier": "paid",
+      "category": "contracts_dpa",
+      "focus_areas": ["contracts_dpa", "gdpr_eu"],
+      "severity": "important",
+      "what_we_check": "Whether the business publishes or can provide a list of sub-processors",
+      "why_it_matters": "Your DPA must name sub-processors. Enterprise clients will ask for this list during procurement. Not having it ready creates delays.",
+      "buyer_impact": ["legal_procurement"],
+      "fix_guide": "Create a sub-processor list. At minimum: tool name, purpose, data location, link to their privacy/security page. Keep it updated when you add new tools.",
+      "effort": "medium",
+      "time_to_fix": "1–2 days",
+      "source": "own",
+      "follow_up_questions_paid": [
+        "Can you list the key tools your business uses that handle client or learner data?",
+        "Are any of these tools based outside the UK/EU? (affects international transfer rules)"
+      ]
+    }
+  ]
+}

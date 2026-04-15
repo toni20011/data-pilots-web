@@ -1,0 +1,169 @@
+{
+  "_meta": {
+    "description": "Focus areas selectable by paid users to deepen their scan. Each focus area unlocks additional checks and a specific set of follow-up questions in the wizard.",
+    "usage": "On the paid wizard (Step 2), users select 1–3 focus areas. The scanner runs all free checks + the paid checks tagged to the selected areas. The follow-up questions shown in the Step 3 modal are filtered to match."
+  },
+
+  "focus_areas": [
+
+    {
+      "id": "gdpr_eu",
+      "label": "GDPR & EU/UK Data Protection",
+      "icon": "🇪🇺",
+      "short_desc": "Are you meeting GDPR requirements — and can you prove it to UK and EU enterprise clients?",
+      "why_select": "Choose this if any of your clients or learners are UK or EU-based, or if you've been asked about GDPR compliance in a procurement process.",
+      "checks_unlocked": ["policy_gdpr", "policy_ccpa", "policy_coverage", "policy_dpa", "policy_date", "cookie_policy_page", "papaya_cmp", "papaya_categories", "lms_data_retention"],
+      "follow_up_questions": [
+        "Do you have clients or learners based in the UK or EU?",
+        "Have you registered with the ICO (or equivalent data protection authority)?",
+        "Do you have a named person responsible for data protection in your business?",
+        "When did you last review your privacy policy?",
+        "Have any clients asked you to sign a Data Processing Agreement?"
+      ],
+      "output_section": "GDPR Readiness Summary",
+      "output_intro": "Based on your website and your answers, here's where you stand on GDPR requirements that enterprise UK and EU clients will check:"
+    },
+
+    {
+      "id": "ccpa_us",
+      "label": "CCPA & US Privacy",
+      "icon": "🇺🇸",
+      "short_desc": "Do you meet California consumer privacy requirements for US-based clients?",
+      "why_select": "Choose this if you have US clients or learners, particularly in California.",
+      "checks_unlocked": ["policy_ccpa", "policy_coverage"],
+      "follow_up_questions": [
+        "Do you have clients or learners based in the US?",
+        "Do you use any tools that place advertising or analytics cookies on US visitors?",
+        "Do you sell or share personal data with any third parties for marketing purposes?"
+      ],
+      "output_section": "US Privacy Compliance Summary",
+      "output_intro": "Here's how your website and practices align with key US privacy expectations:"
+    },
+
+    {
+      "id": "enterprise_procurement",
+      "label": "Enterprise Procurement Readiness",
+      "icon": "🏢",
+      "short_desc": "Would your website and documents pass the checks that large employers run on L&D suppliers?",
+      "why_select": "Choose this if you're pitching to large employers, NHS, financial services, or any client with a formal procurement or due diligence process.",
+      "checks_unlocked": ["policy_gdpr", "policy_dpa", "terms_page", "footer_links", "csp", "hsts", "ai_disclose", "papaya_cmp"],
+      "follow_up_questions": [
+        "Have you gone through a formal procurement or supplier vetting process with any client?",
+        "Have you been asked to complete a supplier questionnaire, security assessment, or tender?",
+        "Do you have cyber essentials certification or similar?",
+        "Do you carry professional indemnity or cyber liability insurance?",
+        "What is the typical size or type of organisation you sell to?"
+      ],
+      "output_section": "Enterprise Procurement Readiness",
+      "output_intro": "Here's what enterprise procurement teams typically check — and how you currently measure up:"
+    },
+
+    {
+      "id": "learner_data",
+      "label": "Learner Data Protection",
+      "icon": "🎓",
+      "short_desc": "Are you handling learner personal data (progress, scores, identifiers) in a way that satisfies enterprise HR and legal teams?",
+      "why_select": "Choose this if you run an LMS, deliver online learning, or collect any data about learners during training.",
+      "checks_unlocked": ["lms_data_notice", "lms_data_retention", "lms_third_party", "ai_learner_disclosure", "policy_dpa"],
+      "follow_up_questions": [
+        "Which platform or LMS do you use to deliver learning? (e.g. Moodle, TalentLMS, Articulate Rise, custom)",
+        "What learner data do you collect? (e.g. completion status, quiz scores, time-on-task, video watch progress)",
+        "Who can access individual learner data — just your team, the learner, or the client employer too?",
+        "How long do you retain learner records after a programme ends?",
+        "Do learners create accounts with your platform, or are they provisioned by the client?",
+        "Do any AI tools you use interact with or assess learners directly?"
+      ],
+      "output_section": "Learner Data Protection Summary",
+      "output_intro": "Enterprise HR and legal teams ask specific questions about learner data. Here's how your current setup holds up:"
+    },
+
+    {
+      "id": "ai_transparency",
+      "label": "AI Disclosure & Governance",
+      "icon": "🤖",
+      "short_desc": "Are you transparent about how you use AI — with buyers, with learners, and in your contracts?",
+      "why_select": "Choose this if you use AI tools in content creation, delivery, or your business operations — or if clients have started asking about AI.",
+      "checks_unlocked": ["ai_disclose", "ai_learner_disclosure", "ai_governance_policy"],
+      "follow_up_questions": [
+        "Which AI tools does your team use in designing or delivering learning? (e.g. ChatGPT, Copilot, Midjourney, AI authoring tools)",
+        "Does any AI tool interact directly with learners — e.g. AI tutor, chatbot, adaptive engine?",
+        "Is AI used to generate or significantly influence any learning content?",
+        "Are learners told when AI is involved in their learning or assessment?",
+        "Do your client contracts or terms of service mention AI use?",
+        "Have any enterprise clients asked you to complete an AI supplier questionnaire?"
+      ],
+      "output_section": "AI Trust & Transparency Summary",
+      "output_intro": "Enterprise clients are increasingly asking L&D suppliers about AI. Here's how your current transparency measures up:"
+    },
+
+    {
+      "id": "cookie_consent",
+      "label": "Cookie & Consent Compliance",
+      "icon": "🍪",
+      "short_desc": "Does your consent mechanism actually work — and would it hold up to a GDPR audit?",
+      "why_select": "Choose this if you've been flagged for cookie issues, use analytics or marketing trackers, or want to verify your consent banner is genuinely compliant.",
+      "checks_unlocked": ["papaya_banner", "papaya_reject", "papaya_preload", "papaya_cmp", "papaya_categories", "cookie_policy_page", "cookie_policy_link"],
+      "follow_up_questions": [
+        "Which consent management platform (CMP) do you currently use?",
+        "Do you use Google Analytics, Meta Pixel, LinkedIn Insight Tag, or similar marketing trackers?",
+        "Has your CMP ever been flagged or complained about by a visitor?",
+        "Does your consent banner block all non-essential cookies until consent is given?",
+        "Do you have a record of consent that you could produce if audited?"
+      ],
+      "output_section": "Cookie & Consent Compliance Summary",
+      "output_intro": "Here's what Papaya's live browser agent found when it visited your site — and what it means in practice:"
+    },
+
+    {
+      "id": "contracts_dpa",
+      "label": "Terms, Contracts & DPAs",
+      "icon": "📄",
+      "short_desc": "Do you have the legal documents enterprise clients will ask for before signing?",
+      "why_select": "Choose this if you're pitching to enterprise clients, have been asked for a DPA, or want to make sure your contractual setup is ready for serious buyers.",
+      "checks_unlocked": ["policy_dpa", "terms_page", "dpa_contract", "sub_processor_list"],
+      "follow_up_questions": [
+        "Do you have a standard set of terms and conditions you use with clients?",
+        "Have any clients asked you to sign their DPA, or asked you to provide yours?",
+        "Do you have a sub-processor list you can share?",
+        "Are any of your clients in regulated sectors (healthcare, financial services, education, government)?",
+        "Do you have a solicitor or data protection advisor who has reviewed your contracts?"
+      ],
+      "output_section": "Contracts & DPA Readiness",
+      "output_intro": "Enterprise procurement almost always requires specific legal documents before a contract is issued. Here's where you stand:"
+    },
+
+    {
+      "id": "security_posture",
+      "label": "Technical Security",
+      "icon": "🔒",
+      "short_desc": "Do your security headers and configuration pass the checks IT and security teams run on suppliers?",
+      "why_select": "Choose this if you've been asked to complete a security questionnaire, are working with clients in regulated sectors, or want to prepare for Cyber Essentials.",
+      "checks_unlocked": ["https", "hsts", "csp", "xfo"],
+      "follow_up_questions": [
+        "Have you or your hosting provider done a security review of your site in the last 12 months?",
+        "Do you have Cyber Essentials or any other security certification?",
+        "Does your site include any user authentication (login areas, portals)?",
+        "Do you use a CDN (e.g. Cloudflare) that might allow easy header configuration?"
+      ],
+      "output_section": "Technical Security Summary",
+      "output_intro": "Here's how your site's security configuration compares to what IT teams check in supplier reviews:"
+    },
+
+    {
+      "id": "brand_trust",
+      "label": "First Impressions & Buyer Trust Signals",
+      "icon": "✨",
+      "short_desc": "What does a buyer see when they google you before a meeting — and does it build or break confidence?",
+      "why_select": "Choose this if you want to understand the basic trust signals buyers check before replying to your outreach or agreeing to a meeting.",
+      "checks_unlocked": ["footer_links", "contact_page", "privacy_page", "terms_page", "policy_date"],
+      "follow_up_questions": [
+        "What does your target buyer typically google about you before a first call?",
+        "Do you know if any buyers have visited your site and then not responded to outreach?",
+        "Is there any specific concern — e.g. no testimonials, no clear pricing, no case studies — that you think affects trust?"
+      ],
+      "output_section": "Buyer First-Impression Summary",
+      "output_intro": "4 in 5 enterprise buyers check your website before responding to outreach. Here's what they currently find:"
+    }
+
+  ]
+}
