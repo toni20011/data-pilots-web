@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How Our Checks Work | Data Pilots</title>
+  <meta name="description" content="Data Pilots translates plain business language into expert and legal frameworks. See the three layers behind every trust check."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+  :root {
+    --navy:       #0B1929;
+    --navy-mid:   #112238;
+    --navy-soft:  #1A3350;
+    --teal:       #00C8A8;
+    --teal-dim:   rgba(0,200,168,.12);
+    --teal-border:rgba(0,200,168,.22);
+    --cyan:       #00AFCC;
+    --green:      #10B981;
+    --purple:     #8B5CF6;
+    --blue:       #2C5AA0;
+    --slate-50:   #F8FAFC;
+    --slate-100:  #F1F5F9;
+    --slate-200:  #E2E8F0;
+    --slate-400:  #94A3B8;
+    --slate-600:  #475569;
+    --slate-800:  #1E293B;
+    --white:      #FFFFFF;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
+    --ease: cubic-bezier(.4,0,.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--slate-50); color: var(--slate-800);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+  .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  /* NAV */
+  nav {
+    background: rgba(11,25,41,.97); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.06); padding: 13px 0;
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-wordmark { font-size: 15px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--white); }
+  .logo-wordmark span { color: var(--teal); }
+  .btn { display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; text-decoration: none; white-space: nowrap; transition: all .17s var(--ease); }
+  .btn-ghost { padding: 9px 18px; font-size: 13.5px; border-radius: var(--r-sm); color: rgba(255,255,255,.55); background: transparent; border: 1px solid rgba(255,255,255,.12); }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+  .btn-teal { padding: 10px 22px; font-size: 13.5px; border-radius: var(--r-sm); background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--navy); }
+  .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,200,168,.3); }
+  .btn-green { padding: 13px 26px; font-size: 14.5px; border-radius: var(--r-sm); background: var(--green); color: var(--white); box-shadow: 0 4px 14px rgba(16,185,129,.3); }
+  .btn-green:hover { background: #0EA573; transform: translateY(-1px); }
+
+  /* PAGE HERO */
+  .page-hero {
+    background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 100%);
+    padding: 72px 0 80px; position: relative; overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,200,168,.13) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .page-hero-inner { position: relative; z-index: 1; max-width: 680px; }
+  .page-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 12px; }
+  .page-h1 { font-size: clamp(30px, 4vw, 52px); font-weight: 900; letter-spacing: -.025em; line-height: 1.08; color: var(--white); margin-bottom: 18px; }
+  .page-h1 span { color: var(--teal); }
+  .page-sub { font-size: 17px; color: rgba(255,255,255,.58); line-height: 1.75; max-width: 540px; margin-bottom: 28px; }
+  .plain-promise {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,200,168,.1); border: 1px solid var(--teal-border);
+    border-radius: var(--r-sm); padding: 9px 14px;
+    font-size: 13px; color: rgba(255,255,255,.7);
+  }
+  .plain-promise svg { color: var(--teal); }
+
+  /* INTRO EXPLAINER */
+  .intro-section { padding: 72px 0 60px; background: var(--white); border-bottom: 1px solid var(--slate-200); }
+  .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .intro-h2 { font-size: clamp(22px, 2.8vw, 34px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--slate-800); margin-bottom: 16px; }
+  .intro-body { font-size: 15.5px; color: var(--slate-600); line-height: 1.8; }
+  .intro-body p + p { margin-top: 14px; }
+  .analogy-box {
+    background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--r-lg);
+    padding: 28px 32px; position: relative;
+  }
+  .analogy-box::before {
+    content: 'Real world example';
+    position: absolute; top: -11px; left: 20px;
+    background: var(--white); border: 1px solid var(--slate-200);
+    padding: 3px 10px; border-radius: 99px;
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--slate-400);
+  }
+  .analogy-box p { font-size: 15px; color: var(--slate-700); line-height: 1.75; }
+  .analogy-box strong { color: var(--slate-800); }
+
+  /* LAYER DIAGRAM */
+  .layers-section { padding: 80px 0; background: var(--slate-50); }
+  .layers-header { text-align: center; margin-bottom: 60px; }
+  .layers-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .layers-h2 { font-size: clamp(24px, 3vw, 40px); font-weight: 900; letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800); margin-bottom: 12px; }
+  .layers-sub { font-size: 16px; color: var(--slate-600); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+
+  /* Layer stack */
+  .layer-stack { display: flex; flex-direction: column; gap: 0; max-width: 800px; margin: 0 auto 64px; position: relative; }
+  .layer-stack::before {
+    content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--teal), var(--green), var(--purple));
+    transform: translateX(-50%); z-index: 0;
+  }
+
+  .layer-card {
+    background: var(--white); border: 2px solid var(--slate-200);
+    border-radius: var(--r-xl); padding: 36px 40px;
+    position: relative; z-index: 1; transition: all .2s var(--ease);
+    cursor: default;
+  }
+  .layer-card:hover { transform: scale(1.01); box-shadow: 0 12px 40px rgba(0,0,0,.08); }
+  .layer-card + .layer-card { margin-top: -1px; border-radius: 0; }
+  .layer-card:first-child { border-radius: var(--r-xl) var(--r-xl) 0 0; }
+  .layer-card:last-child  { border-radius: 0 0 var(--r-xl) var(--r-xl); }
+  .layer-card.layer-1 { border-color: rgba(0,200,168,.35); border-bottom-color: var(--slate-200); }
+  .layer-card.layer-2 { border-color: rgba(16,185,129,.35); border-top-color: var(--slate-200); border-bottom-color: var(--slate-200); }
+  .layer-card.layer-3 { border-color: rgba(139,92,246,.35); border-top-color: var(--slate-200); }
+
+  .layer-number {
+    position: absolute; top: 28px; right: 36px;
+    font-size: 72px; font-weight: 900; line-height: 1; letter-spacing: -.05em;
+    pointer-events: none;
+  }
+  .layer-card.layer-1 .layer-number { color: rgba(0,200,168,.07); }
+  .layer-card.layer-2 .layer-number { color: rgba(16,185,129,.07); }
+  .layer-card.layer-3 .layer-number { color: rgba(139,92,246,.07); }
+
+  .layer-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 99px; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .chip-1 { background: var(--teal-dim); color: var(--teal); }
+  .chip-2 { background: rgba(16,185,129,.1); color: #059669; }
+  .chip-3 { background: rgba(139,92,246,.1); color: var(--purple); }
+
+  .layer-hed { font-size: 22px; font-weight: 900; letter-spacing: -.015em; color: var(--slate-800); margin-bottom: 8px; }
+  .layer-tagline { font-size: 15px; color: var(--slate-600); line-height: 1.65; margin-bottom: 24px; max-width: 520px; }
+
+  .layer-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .layer-item {
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-md); padding: 14px 16px;
+    transition: all .15s;
+  }
+  .layer-item:hover { border-color: var(--slate-300); background: var(--slate-100); }
+  .layer-item-title { font-size: 13.5px; font-weight: 700; color: var(--slate-800); margin-bottom: 4px; }
+  .layer-item-desc { font-size: 12.5px; color: var(--slate-500); line-height: 1.55; }
+
+  /* connector arrows */
+  .layer-connector {
+    display: flex; align-items: center; justify-content: center;
+    height: 36px; position: relative; z-index: 2;
+  }
+  .connector-inner {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: 99px; padding: 5px 14px;
+    font-size: 11.5px; font-weight: 600; color: var(--slate-400);
+  }
+
+  /* PILLAR DETAIL */
+  .pillars-section { padding: 72px 0 80px; background: var(--white); }
+  .pillars-header { max-width: 560px; margin-bottom: 48px; }
+  .pillars-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .pillars-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; color: var(--slate-800); margin-bottom: 10px; }
+  .pillars-sub { font-size: 15.5px; color: var(--slate-600); line-height: 1.7; }
+
+  /* Pillar tabs */
+  .pillar-tabs { display: flex; gap: 6px; margin-bottom: 32px; flex-wrap: wrap; }
+  .pillar-tab {
+    padding: 9px 18px; border-radius: 99px; font-size: 13.5px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--slate-200);
+    background: var(--white); color: var(--slate-600); transition: all .15s;
+  }
+  .pillar-tab:hover { border-color: var(--slate-400); color: var(--slate-800); }
+  .pillar-tab.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+  .pillar-content { display: none; }
+  .pillar-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .pillar-detail {
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-xl); padding: 32px;
+  }
+  .pillar-detail-icon {
+    width: 48px; height: 48px; border-radius: 12px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pillar-detail-h { font-size: 20px; font-weight: 800; color: var(--slate-800); margin-bottom: 8px; }
+  .pillar-detail-sub { font-size: 14px; color: var(--slate-600); line-height: 1.7; margin-bottom: 20px; }
+  .what-we-check { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 10px; }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .check-list li { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; color: var(--slate-600); line-height: 1.55; }
+  .check-list li svg { color: var(--teal); flex-shrink: 0; margin-top: 2px; }
+  .pillar-example {
+    background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--r-lg); padding: 20px 24px; margin-top: 20px;
+  }
+  .example-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 8px; }
+  .example-text { font-size: 13.5px; color: var(--slate-700); line-height: 1.65; }
+  .pillar-principles { background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--r-xl); padding: 28px 32px; }
+  .pp-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 16px; }
+  .pp-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--slate-100); }
+  .pp-item:last-child { border-bottom: none; }
+  .pp-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+  .pp-title { font-size: 14px; font-weight: 700; color: var(--slate-800); margin-bottom: 3px; }
+  .pp-desc { font-size: 13px; color: var(--slate-500); line-height: 1.6; }
+  .pp-maps { font-size: 11px; color: var(--slate-400); margin-top: 5px; }
+  .pp-maps span { background: var(--slate-100); border-radius: 99px; padding: 2px 8px; margin-right: 4px; display: inline-block; margin-top: 3px; }
+
+  /* PAPAYA SECTION */
+  .papaya-section { padding: 72px 0; background: var(--slate-50); }
+  .papaya-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .papaya-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 12px; }
+  .papaya-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--slate-800); margin-bottom: 14px; }
+  .papaya-body { font-size: 15px; color: var(--slate-600); line-height: 1.8; margin-bottom: 24px; }
+  .papaya-body p + p { margin-top: 12px; }
+  .papaya-card {
+    background: linear-gradient(145deg, var(--navy), var(--navy-mid));
+    border-radius: var(--r-xl); padding: 36px; position: relative; overflow: hidden;
+  }
+  .papaya-card::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,200,168,.1) 1px, transparent 1px);
+    background-size: 22px 22px; pointer-events: none;
+  }
+  .papaya-logo {
+    display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .papaya-logotype { font-size: 22px; font-weight: 900; color: var(--white); letter-spacing: -.01em; }
+  .papaya-logotype span { color: var(--teal); }
+  .papaya-desc { font-size: 14.5px; color: rgba(255,255,255,.6); line-height: 1.7; position: relative; z-index: 1; margin-bottom: 20px; }
+  .papaya-principles { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+  .papaya-principle {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-sm); padding: 10px 14px;
+    font-size: 13px; color: rgba(255,255,255,.7);
+  }
+  .papaya-principle svg { color: var(--teal); flex-shrink: 0; }
+
+  /* FOOTER */
+  footer { background: var(--navy); padding: 40px 0 28px; border-top: 1px solid rgba(255,255,255,.06); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 12.5px; color: rgba(255,255,255,.28); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,.4); text-decoration: none; transition: color .14s; }
+  .footer-links a:hover { color: rgba(255,255,255,.75); }
+
+  @media (max-width: 860px) {
+    .intro-grid, .layer-items, .papaya-grid { grid-template-columns: 1fr; }
+    .layer-items { grid-template-columns: 1fr; }
+    .pillar-content.active { grid-template-columns: 1fr; }
+    .pillar-tabs { gap: 8px; }
+  }
+  @media (max-width: 560px) {
+    .layer-stack::before { display: none; }
+  }
+  </style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="9" cy="16" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="16" r="1" fill="currentColor" stroke="none"/><path d="M8 11V7a4 4 0 018 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="i-arrow-d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <svg width="34" height="34" viewBox="0 0 200 195" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="nl" x1="10" y1="10" x2="190" y2="185" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00F59D"/><stop offset="100%" stop-color="#0085FF"/></linearGradient></defs>
+          <path d="M 25 107 A 75 75 0 0 1 175 107" stroke="url(#nl)" stroke-width="20" stroke-linecap="round" fill="none"/>
+          <path d="M 44 107 A 56 56 0 0 1 156 107" stroke="url(#nl)" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <rect x="3" y="82" width="26" height="48" rx="9" fill="url(#nl)"/>
+          <rect x="171" y="82" width="26" height="48" rx="9" fill="url(#nl)"/>
+          <rect x="58" y="44" width="84" height="64" rx="11" fill="#0B1929"/>
+          <circle cx="79" cy="70" r="11" fill="url(#nl)"/>
+          <circle cx="121" cy="70" r="11" fill="url(#nl)"/>
+          <line x1="107" y1="110" x2="88" y2="131" stroke="url(#nl)" stroke-width="7" stroke-linecap="round"/>
+          <rect x="70" y="125" width="20" height="13" rx="6" fill="url(#nl)"/>
+        </svg>
+        <div class="logo-wordmark">DATA <span>PILOTS</span></div>
+      </a>
+      <div style="display:flex;gap:12px;">
+        <a href="index.html" class="btn btn-ghost">Back to Home</a>
+        <a href="index.html#hero-scan" class="btn btn-teal">Free Check</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-inner reveal">
+      <div class="page-kicker">How Our Checks Work</div>
+      <h1 class="page-h1">Built for businesses.<br><span>Not for experts.</span></h1>
+      <p class="page-sub">You should not need a legal degree to know if your business looks trustworthy. We handle the expert layer. You just see the results in plain English, with a clear list of what to do next.</p>
+      <div class="plain-promise">
+        <svg class="icon" width="14" height="14"><use href="#i-info"/></svg>
+        <span>No jargon. Every term on this page is explained in plain language.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO EXPLAINER -->
+<section class="intro-section">
+  <div class="container">
+    <div class="intro-grid">
+
+      <div class="reveal">
+        <h2 class="intro-h2">Why does this even matter for a small L&D business?</h2>
+        <div class="intro-body">
+          <p>When a company is about to hire you, someone on their team googles you. Sometimes it's the HR director, sometimes it's procurement, sometimes it's an IT person. They are checking one thing: can we trust this vendor with our people and our data?</p>
+          <p>Most small coaching businesses and L&D teams fail that check not because they are untrustworthy, but because the right signals are not visible. No privacy page, no mention of how you use AI tools, contact form without basic security. Buyers move on without saying why.</p>
+          <p>A trust check surfaces those gaps so you can fix them, often in a day or two, before they cost you the next deal.</p>
+        </div>
+      </div>
+
+      <div class="analogy-box reveal reveal-delay-1">
+        <p>Think of it like this: if you are running a coaching practice from a professional office, you naturally have a reception desk, a sign on the door, maybe a certificate on the wall. These are not legal requirements but they make a client feel safe walking in.</p>
+        <p style="margin-top:14px;">Your <strong>website is that office.</strong> A trust check is the equivalent of walking in with fresh eyes and asking: does this look like somewhere I would hand over my team's personal details?</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- THREE-LAYER DIAGRAM -->
+<section class="layers-section">
+  <div class="container">
+
+    <div class="layers-header reveal">
+      <div class="layers-kicker">The Translation System</div>
+      <h2 class="layers-h2">Three layers. You only need to care about one.</h2>
+      <p class="layers-sub">Every result you see in plain language is backed by a chain of expert thinking. Here is how it works, starting from what you see and going down to the expert foundations.</p>
+    </div>
+
+    <div class="layer-stack">
+
+      <!-- Layer 1: Business -->
+      <div class="layer-card layer-1 reveal">
+        <div class="layer-number">1</div>
+        <div class="layer-chip chip-1">
+          <svg class="icon" width="12" height="12"><use href="#i-users"/></svg>
+          Business Layer
+        </div>
+        <div class="layer-hed">What you see</div>
+        <div class="layer-tagline">Four areas written in plain English. No jargon. Results any business owner can understand and act on, even without any technical or legal background.</div>
+        <div class="layer-items">
+          <div class="layer-item">
+            <div class="layer-item-title">
+              <svg class="icon" width="13" height="13" style="color:#2C5AA0;margin-right:5px;"><use href="#i-users"/></svg>
+              User Experience
+            </div>
+            <div class="layer-item-desc">How clear and trustworthy your site feels to a visitor. Does it feel like a real, professional business?</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">
+              <svg class="icon" width="13" height="13" style="color:#10B981;margin-right:5px;"><use href="#i-eye"/></svg>
+              Transparency
+            </div>
+            <div class="layer-item-desc">Do you clearly explain what you do, who you are, and how you handle people's information?</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">
+              <svg class="icon" width="13" height="13" style="color:#D97706;margin-right:5px;"><use href="#i-shield"/></svg>
+              Safety and Security
+            </div>
+            <div class="layer-item-desc">Does your site have the basic protections a buyer would expect before trusting you with their team's details?</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">
+              <svg class="icon" width="13" height="13" style="color:#8B5CF6;margin-right:5px;"><use href="#i-bot"/></svg>
+              AI Trust
+            </div>
+            <div class="layer-item-desc">If you use AI tools in your work, do you say so? Buyers are increasingly asking this question before they sign.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-connector">
+        <div class="connector-inner">
+          <svg class="icon" width="12" height="12"><use href="#i-arrow-d"/></svg>
+          Each business result maps to expert principles
+        </div>
+      </div>
+
+      <!-- Layer 2: Principles -->
+      <div class="layer-card layer-2 reveal">
+        <div class="layer-number">2</div>
+        <div class="layer-chip chip-2">
+          <svg class="icon" width="12" height="12"><use href="#i-layers"/></svg>
+          Principles Layer
+        </div>
+        <div class="layer-hed">How we think about it</div>
+        <div class="layer-tagline">Established design and engineering principles that experts have developed over decades. We use these as the backbone of our checks so results are grounded in real knowledge, not opinion.</div>
+        <div class="layer-items">
+          <div class="layer-item">
+            <div class="layer-item-title">Privacy by Design</div>
+            <div class="layer-item-desc">Building privacy in from the start rather than bolting it on. Developed by privacy expert Ann Cavoukian in the 1990s, now adopted globally.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">Security by Design</div>
+            <div class="layer-item-desc">Building basic protections into how a system works rather than treating them as an afterthought.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">Accessible and Inclusive UX</div>
+            <div class="layer-item-desc">Design principles that make sites work for everyone, which also signals professionalism and care to buyers.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">Ethical AI Principles</div>
+            <div class="layer-item-desc">Guidelines for using AI fairly, transparently, and in ways that respect the people whose data it touches.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-connector">
+        <div class="connector-inner">
+          <svg class="icon" width="12" height="12"><use href="#i-arrow-d"/></svg>
+          Principles map to real frameworks and regulations
+        </div>
+      </div>
+
+      <!-- Layer 3: Compliance -->
+      <div class="layer-card layer-3 reveal">
+        <div class="layer-number">3</div>
+        <div class="layer-chip chip-3">
+          <svg class="icon" width="12" height="12"><use href="#i-shield"/></svg>
+          Compliance Layer
+        </div>
+        <div class="layer-hed">What it maps to</div>
+        <div class="layer-tagline">Our proprietary simplified risk framework maps to global legal and industry standards. You never see this layer directly, but your results are always grounded in it. When a buyer's legal team asks questions, your fixes will hold up.</div>
+        <div class="layer-items">
+          <div class="layer-item">
+            <div class="layer-item-title">GDPR</div>
+            <div class="layer-item-desc">The EU data protection regulation. Applies to anyone handling EU residents' personal data, including UK-based businesses post-Brexit.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">SOC 2</div>
+            <div class="layer-item-desc">A widely recognised security and trust standard often requested by enterprise buyers before they will sign a vendor contract.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">ISO 27001</div>
+            <div class="layer-item-desc">An international information security standard. Our checks are aligned to its core principles even if you are not formally certified.</div>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item-title">WCAG and OWASP</div>
+            <div class="layer-item-desc">Accessibility and web security guidelines. OWASP defines the most common website security risks every business site should address.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Key message -->
+    <div style="max-width:620px; margin:0 auto; text-align:center;" class="reveal">
+      <div style="background:var(--white); border:1px solid var(--slate-200); border-radius:var(--r-xl); padding:36px 40px;">
+        <svg class="icon" width="28" height="28" style="color:var(--teal); margin-bottom:12px;"><use href="#i-layers"/></svg>
+        <div style="font-size:20px; font-weight:800; color:var(--slate-800); margin-bottom:10px; letter-spacing:-.01em;">You only ever deal with Layer 1.</div>
+        <p style="font-size:15px; color:var(--slate-600); line-height:1.75;">We do the translation for you. When we say "your AI usage is not disclosed anywhere visible," we have already checked that against the principles and frameworks below it. You just get the plain-language result and the fix.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PILLAR DETAIL TABS -->
+<section class="pillars-section">
+  <div class="container">
+
+    <div class="pillars-header reveal">
+      <div class="pillars-kicker">The Four Business Areas</div>
+      <h2 class="pillars-h2">What we actually check in each area</h2>
+      <p class="pillars-sub">Select an area to see exactly what we look at, what it means for your business, and a real-world example of why it matters to buyers.</p>
+    </div>
+
+    <div class="pillar-tabs reveal">
+      <button class="pillar-tab active" onclick="showPillar('ux')">User Experience</button>
+      <button class="pillar-tab" onclick="showPillar('transparency')">Transparency</button>
+      <button class="pillar-tab" onclick="showPillar('safety')">Safety and Security</button>
+      <button class="pillar-tab" onclick="showPillar('ai')">AI Trust</button>
+    </div>
+
+    <!-- UX -->
+    <div class="pillar-content active" id="pillar-ux">
+      <div class="pillar-detail">
+        <div class="pillar-detail-icon" style="background:#EBF2FF;">
+          <svg class="icon" width="22" height="22" style="color:#2C5AA0;"><use href="#i-users"/></svg>
+        </div>
+        <div class="pillar-detail-h">User Experience</div>
+        <div class="pillar-detail-sub">How professional and clear your site looks to a first-time visitor. A buyer often makes a gut decision about trust in under 10 seconds. This area checks whether those first impressions are working in your favour.</div>
+        <div class="what-we-check">What we check</div>
+        <ul class="check-list">
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Does your site load quickly and work on mobile?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Is it clear what you do and who you help, within a few seconds?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Is there an easy way for a buyer to contact you or find out more?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Does the site look current and actively maintained?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Can someone with a visual impairment use it? (Accessibility)</li>
+        </ul>
+        <div class="pillar-example">
+          <div class="example-label">Why this matters to a buyer</div>
+          <div class="example-text">A procurement manager at a large company is comparing three L&D providers. Your site loads slowly on her phone and the nav menu doesn't work. She moves on before she even reads your services page. You never knew you were in consideration.</div>
+        </div>
+      </div>
+      <div class="pillar-principles">
+        <div class="pp-label">How we think about it (Principles Layer)</div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#2C5AA0;"></div>
+          <div>
+            <div class="pp-title">Accessible and Inclusive Design</div>
+            <div class="pp-desc">Sites that work for people with disabilities also load faster and rank better in search. Accessibility is not a nice-to-have, it is a signal of quality.</div>
+            <div class="pp-maps">Maps to: <span>WCAG 2.1</span><span>ISO 9241</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#4A7FD4;"></div>
+          <div>
+            <div class="pp-title">Clear Communication Principles</div>
+            <div class="pp-desc">Plain language, logical structure, and visible contact information are all established UX best practices that build immediate credibility.</div>
+            <div class="pp-maps">Maps to: <span>Nielsen Norman Heuristics</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#7CA8E0;"></div>
+          <div>
+            <div class="pp-title">Performance and Reliability</div>
+            <div class="pp-desc">A slow or broken site signals to both buyers and search engines that the business is not on top of its operations.</div>
+            <div class="pp-maps">Maps to: <span>Core Web Vitals</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transparency -->
+    <div class="pillar-content" id="pillar-transparency">
+      <div class="pillar-detail">
+        <div class="pillar-detail-icon" style="background:#D1FAE5;">
+          <svg class="icon" width="22" height="22" style="color:#10B981;"><use href="#i-eye"/></svg>
+        </div>
+        <div class="pillar-detail-h">Transparency</div>
+        <div class="pillar-detail-sub">How open and honest your business looks. Buyers need to feel they understand who they are dealing with, what you do with their information, and that you have nothing to hide. This does not require legal expertise. It requires honesty, clearly displayed.</div>
+        <div class="what-we-check">What we check</div>
+        <ul class="check-list">
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you have a privacy page, and is it easy to find?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Does it explain in plain terms what data you collect and why?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you explain what happens to information submitted through contact forms?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Are your terms and conditions (if you have them) accessible?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Are you clear about who owns your company and where you are based?</li>
+        </ul>
+        <div class="pillar-example">
+          <div class="example-label">Why this matters to a buyer</div>
+          <div class="example-text">A corporate HR lead needs to sign off on any vendor who will access employee data. She looks for a privacy policy and cannot find one. She flags it to procurement. The deal stalls. All you needed was a single plain-language page in your footer.</div>
+        </div>
+      </div>
+      <div class="pillar-principles">
+        <div class="pp-label">How we think about it (Principles Layer)</div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#10B981;"></div>
+          <div>
+            <div class="pp-title">Privacy by Design</div>
+            <div class="pp-desc">Privacy is built in from the start rather than added as a legal afterthought. Developed by Ann Cavoukian, now embedded in GDPR and most modern data regulations.</div>
+            <div class="pp-maps">Maps to: <span>GDPR Article 25</span><span>CCPA</span><span>PIPEDA</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#34D399;"></div>
+          <div>
+            <div class="pp-title">Transparency and Openness</div>
+            <div class="pp-desc">Being clear about data practices is not just good ethics, it is a legal requirement under GDPR and a core expectation in enterprise procurement.</div>
+            <div class="pp-maps">Maps to: <span>GDPR Article 12-14</span><span>ICO Guidelines</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#6EE7B7;"></div>
+          <div>
+            <div class="pp-title">Purpose Limitation</div>
+            <div class="pp-desc">Only collecting data you actually need, and being clear about why. Buyers want to see this is stated, not assumed.</div>
+            <div class="pp-maps">Maps to: <span>GDPR Article 5</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Safety -->
+    <div class="pillar-content" id="pillar-safety">
+      <div class="pillar-detail">
+        <div class="pillar-detail-icon" style="background:#FEF3C7;">
+          <svg class="icon" width="22" height="22" style="color:#D97706;"><use href="#i-shield"/></svg>
+        </div>
+        <div class="pillar-detail-h">Safety and Security</div>
+        <div class="pillar-detail-sub">Whether your site has the basic protections a buyer would expect before trusting you with their team's information. Think of it like locking the front door to your office. Most of these are set-and-forget. Most small businesses are missing at least two.</div>
+        <div class="what-we-check">What we check</div>
+        <ul class="check-list">
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Is your site served over HTTPS (the padlock in the browser bar)?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Are basic security headers in place on your forms?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do the third-party tools you use (Zoom, HubSpot, etc.) have their own trust policies you reference?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Is your site free of known malware flags or mixed content warnings?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you mention how long you keep client information?</li>
+        </ul>
+        <div class="pillar-example">
+          <div class="example-label">Why this matters to a buyer</div>
+          <div class="example-text">An IT security manager at a mid-sized company runs a quick check on every new vendor's website before approving a contract. Your contact form is missing a basic protection called CSRF. He flags it. The deal goes on hold. A developer could have fixed it in 30 minutes.</div>
+        </div>
+      </div>
+      <div class="pillar-principles">
+        <div class="pp-label">How we think about it (Principles Layer)</div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#F59E0B;"></div>
+          <div>
+            <div class="pp-title">Security by Design</div>
+            <div class="pp-desc">Building basic protections into how a site works, rather than relying on hope. Established by Carnegie Mellon's Software Engineering Institute and now standard practice.</div>
+            <div class="pp-maps">Maps to: <span>OWASP Top 10</span><span>NIST CSF</span><span>Cyber Essentials</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#FBBF24;"></div>
+          <div>
+            <div class="pp-title">Minimum Necessary Access</div>
+            <div class="pp-desc">Only collecting the information you actually need, secured appropriately. A contact form that asks for a date of birth is a red flag.</div>
+            <div class="pp-maps">Maps to: <span>ISO 27001</span><span>GDPR Article 5</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#FDE68A;"></div>
+          <div>
+            <div class="pp-title">Third-Party Risk Awareness</div>
+            <div class="pp-desc">Understanding and communicating that the tools you use (Zoom, payment processors, etc.) also touch your clients' data.</div>
+            <div class="pp-maps">Maps to: <span>SOC 2 CC9</span><span>ISO 27001 A.15</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Trust -->
+    <div class="pillar-content" id="pillar-ai">
+      <div class="pillar-detail">
+        <div class="pillar-detail-icon" style="background:#EDE9FE;">
+          <svg class="icon" width="22" height="22" style="color:#8B5CF6;"><use href="#i-bot"/></svg>
+        </div>
+        <div class="pillar-detail-h">AI Trust</div>
+        <div class="pillar-detail-sub">This is the newest and fastest-growing trust question in B2B. Enterprise buyers are increasingly asking: do you use AI in your work, and if so, how? A single honest sentence on your website can answer the question before it is even asked.</div>
+        <div class="what-we-check">What we check</div>
+        <ul class="check-list">
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you mention anywhere visible whether you use AI tools?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> If you use AI, do you explain what for, and what you do not use it for?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you explain how client or learner data is handled in AI tools?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Is there a human in the loop for any AI-assisted advice or content?</li>
+          <li><svg class="icon" width="13" height="13"><use href="#i-check"/></svg> Do you reference any AI ethics principles or guidelines you follow?</li>
+        </ul>
+        <div class="pillar-example">
+          <div class="example-label">Why this matters to a buyer</div>
+          <div class="example-text">A learning director at a financial services firm is reviewing your proposal. She asks her compliance team to check your website. They search for any mention of AI. They find nothing. She now has to ask you directly, which adds a delay. You use AI for session summaries only and could have answered this in two sentences on your services page.</div>
+        </div>
+      </div>
+      <div class="pillar-principles">
+        <div class="pp-label">How we think about it (Principles Layer)</div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#8B5CF6;"></div>
+          <div>
+            <div class="pp-title">AI Transparency and Explainability</div>
+            <div class="pp-desc">Being open about when and how AI is used. One of the core principles in the EU AI Act and most enterprise AI governance policies.</div>
+            <div class="pp-maps">Maps to: <span>EU AI Act</span><span>UNESCO AI Ethics</span><span>NIST AI RMF</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#A78BFA;"></div>
+          <div>
+            <div class="pp-title">Human Oversight</div>
+            <div class="pp-desc">Keeping a human accountable for AI-assisted decisions. Especially important when AI touches learning content, coaching notes, or assessments.</div>
+            <div class="pp-maps">Maps to: <span>EU AI Act Article 14</span><span>ISO 42001</span></div>
+          </div>
+        </div>
+        <div class="pp-item">
+          <div class="pp-dot" style="background:#C4B5FD;"></div>
+          <div>
+            <div class="pp-title">Data Minimisation in AI Systems</div>
+            <div class="pp-desc">Not feeding more personal data into AI tools than necessary. This is the most common gap we see in small L&D businesses.</div>
+            <div class="pp-maps">Maps to: <span>GDPR Article 5</span><span>ISO 42001</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PAPAYA SECTION -->
+<section class="papaya-section">
+  <div class="container">
+    <div class="papaya-grid">
+
+      <div class="reveal">
+        <div class="papaya-kicker">Our AI Partner</div>
+        <h2 class="papaya-h2">AI insights powered by Papaya</h2>
+        <div class="papaya-body">
+          <p>We use Papaya to power the AI layer of our trust checks. Papaya helps us translate what we find on your site into clear, specific findings and prioritised recommendations, without exposing your data or making opaque decisions.</p>
+          <p>We chose Papaya because they share our values around explainability and ethical AI use. Every insight Papaya generates can be traced back to a specific check on your site. There are no black box scores.</p>
+        </div>
+        <a href="index.html#hero-scan" class="btn btn-green">
+          Try the free check
+        </a>
+      </div>
+
+      <div class="papaya-card reveal reveal-delay-1">
+        <div class="papaya-logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="16" fill="rgba(0,200,168,.2)"/>
+            <circle cx="16" cy="16" r="10" fill="rgba(0,200,168,.15)" stroke="rgba(0,200,168,.4)" stroke-width="1.5"/>
+            <circle cx="16" cy="16" r="4" fill="var(--teal)"/>
+          </svg>
+          <div class="papaya-logotype"><span>Papaya</span></div>
+        </div>
+        <div class="papaya-desc">Papaya's AI analyses your site's publicly visible trust signals and maps them to our framework. You get results that are specific, traceable, and explained in plain language.</div>
+        <div class="papaya-principles">
+          <div class="papaya-principle">
+            <svg class="icon" width="14" height="14"><use href="#i-check"/></svg>
+            Every AI finding is explained, not just scored
+          </div>
+          <div class="papaya-principle">
+            <svg class="icon" width="14" height="14"><use href="#i-check"/></svg>
+            No personal data is used to train AI models
+          </div>
+          <div class="papaya-principle">
+            <svg class="icon" width="14" height="14"><use href="#i-check"/></svg>
+            Scans are not stored unless you choose to save results
+          </div>
+          <div class="papaya-principle">
+            <svg class="icon" width="14" height="14"><use href="#i-check"/></svg>
+            Human review available on all Co-Pilot findings
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <p>2025 Data Pilots · datapilots.tech</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="#">Privacy Policy</a>
+        <a href="mailto:hello@datapilots.tech">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveals
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+  // Pillar tabs
+  function showPillar(id) {
+    document.querySelectorAll('.pillar-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pillar-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('pillar-' + id).classList.add('active');
+  }
+</script>
+</body>
+</html>

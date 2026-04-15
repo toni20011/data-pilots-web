@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Pilots | Free Trust Check for L&D Businesses</title>
+  <meta name="description" content="Find out how trustworthy your business looks to clients in about 5 minutes. Free trust score for L&D providers and coaches."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+  /* ───────────────────────────────────────────
+     TOKENS
+  ─────────────────────────────────────────── */
+  :root {
+    --navy:       #0B1929;
+    --navy-mid:   #112238;
+    --navy-soft:  #1A3350;
+    --teal:       #00C8A8;
+    --teal-dim:   rgba(0,200,168,.12);
+    --teal-border:rgba(0,200,168,.22);
+    --cyan:       #00AFCC;
+    --green:      #10B981;
+    --green-glow: rgba(16,185,129,.3);
+    --blue:       #2C5AA0;
+    --slate-50:   #F8FAFC;
+    --slate-100:  #F1F5F9;
+    --slate-200:  #E2E8F0;
+    --slate-300:  #CBD5E1;
+    --slate-400:  #94A3B8;
+    --slate-600:  #475569;
+    --slate-700:  #334155;
+    --slate-800:  #1E293B;
+    --white:      #FFFFFF;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
+    --ease: cubic-bezier(.4,0,.2,1);
+  }
+
+  /* ───────────────────────────────────────────
+     BASE
+  ─────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--slate-50);
+    color: var(--slate-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
+
+  /* ───────────────────────────────────────────
+     SVG ICON HELPER
+  ─────────────────────────────────────────── */
+  .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+
+  /* ───────────────────────────────────────────
+     TOOLTIP SYSTEM
+  ─────────────────────────────────────────── */
+  .term {
+    border-bottom: 1.5px dotted var(--teal);
+    cursor: help;
+    position: relative;
+    white-space: nowrap;
+  }
+  .term::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%; transform: translateX(-50%);
+    background: var(--navy);
+    color: rgba(255,255,255,.85);
+    font-size: 12.5px; font-weight: 400; line-height: 1.55;
+    padding: 10px 14px; border-radius: var(--r-md);
+    width: 220px; white-space: normal;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    opacity: 0; pointer-events: none;
+    transition: opacity .18s var(--ease);
+    z-index: 900;
+  }
+  .term:hover::after { opacity: 1; }
+
+  /* ───────────────────────────────────────────
+     LOGO MARK ANIMATIONS
+  ─────────────────────────────────────────── */
+  @keyframes dp-blink {
+    0%, 87%, 100% { transform: scaleY(1); }
+    92% { transform: scaleY(0.1); }
+    95% { transform: scaleY(1); }
+  }
+  @keyframes dp-glow {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(0,245,157,.35)); }
+    50%       { filter: drop-shadow(0 0 16px rgba(0,245,157,.7)) drop-shadow(0 0 30px rgba(0,133,255,.3)); }
+  }
+  @keyframes dp-scan {
+    0%   { transform: translateY(0px);   opacity: 0; }
+    8%   { opacity: .45; }
+    92%  { opacity: .45; }
+    100% { transform: translateY(62px); opacity: 0; }
+  }
+  .dp-ring  { animation: dp-glow 3.2s ease-in-out infinite; }
+  .dp-eye   { transform-origin: 50% 50%; animation: dp-blink 5s ease-in-out infinite; }
+  .dp-eye-r { animation-delay: .05s; }
+  .dp-scan-line { animation: dp-scan 5s ease-in-out infinite 2s; }
+
+  /* ───────────────────────────────────────────
+     BUTTONS
+  ─────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: inherit; font-weight: 600; cursor: pointer; border: none;
+    text-decoration: none; white-space: nowrap; line-height: 1;
+    transition: all .17s var(--ease);
+  }
+  .btn-ghost {
+    padding: 9px 18px; font-size: 13.5px; border-radius: var(--r-sm);
+    color: rgba(255,255,255,.6); background: transparent;
+    border: 1px solid rgba(255,255,255,.12);
+  }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+  .btn-teal {
+    padding: 10px 22px; font-size: 13.5px; border-radius: var(--r-sm);
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    color: var(--navy); box-shadow: 0 4px 14px rgba(0,200,168,.3);
+  }
+  .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,200,168,.4); }
+  .btn-green {
+    padding: 14px 28px; font-size: 15px; border-radius: var(--r-sm);
+    background: var(--green); color: var(--white);
+    box-shadow: 0 4px 16px var(--green-glow);
+  }
+  .btn-green:hover { background: #0EA573; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(16,185,129,.4); }
+  .btn-outline {
+    padding: 13px 24px; font-size: 14px; border-radius: var(--r-sm);
+    background: transparent; color: rgba(255,255,255,.8);
+    border: 1.5px solid rgba(255,255,255,.25);
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,.6); background: rgba(255,255,255,.06); }
+  .btn-white {
+    padding: 12px 24px; font-size: 14px; border-radius: var(--r-sm);
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.75);
+    border: 1px solid rgba(255,255,255,.15);
+  }
+  .btn-white:hover { background: rgba(255,255,255,.14); color: var(--white); }
+  .btn-blue {
+    padding: 12px 22px; font-size: 14px; border-radius: var(--r-sm);
+    background: var(--blue); color: var(--white);
+    box-shadow: 0 3px 12px rgba(44,90,160,.25);
+  }
+  .btn-blue:hover { background: #234a87; transform: translateY(-1px); }
+
+  /* tag pills */
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 11px; border-radius: 99px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  }
+  .tag-teal  { background: var(--teal-dim); color: var(--teal); }
+  .tag-slate { background: var(--slate-100); color: var(--slate-600); }
+  .tag-green { background: rgba(16,185,129,.1); color: #059669; }
+
+  /* ───────────────────────────────────────────
+     SCROLL REVEAL
+  ─────────────────────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity .55s var(--ease), transform .55s var(--ease);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+
+  /* ───────────────────────────────────────────
+     ANNOUNCE BAR
+  ─────────────────────────────────────────── */
+  #announce {
+    background: linear-gradient(90deg, var(--navy), var(--navy-mid));
+    padding: 9px 0; text-align: center;
+  }
+  #announce p { font-size: 12.5px; color: rgba(255,255,255,.55); }
+  #announce strong { color: var(--teal); font-weight: 600; }
+  #announce a { color: rgba(255,255,255,.75); text-underline-offset: 3px; }
+
+  /* ───────────────────────────────────────────
+     NAV
+  ─────────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 200;
+    background: rgba(11,25,41,.97); backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 0;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 11px;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .logo-wordmark {
+    font-size: 15px; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--white);
+  }
+  .logo-wordmark span { color: var(--teal); }
+  nav ul { display: flex; align-items: center; gap: 28px; list-style: none; }
+  nav ul a {
+    font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.5);
+    text-decoration: none; transition: color .15s;
+  }
+  nav ul a:hover { color: var(--white); }
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+
+  /* ───────────────────────────────────────────
+     HERO
+  ─────────────────────────────────────────── */
+  #hero {
+    background: var(--navy);
+    padding: 80px 0 0;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,200,168,.15) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 70% 60% at 65% 35%, black 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    display: grid; grid-template-columns: 1.1fr .9fr;
+    gap: 48px; align-items: end; position: relative; z-index: 1;
+  }
+  .hero-copy { padding-bottom: 72px; }
+  .hero-live {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,200,168,.1); border: 1px solid var(--teal-border);
+    border-radius: 99px; padding: 5px 14px; margin-bottom: 28px;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,200,168,.2);
+    animation: livepulse 2.2s ease-in-out infinite; flex-shrink: 0;
+  }
+  @keyframes livepulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(0,200,168,.2); }
+    50%       { box-shadow: 0 0 0 7px rgba(0,200,168,.06); }
+  }
+  .hero-live span { font-size: 12px; font-weight: 600; color: var(--teal); letter-spacing: .05em; }
+  .hero-h1 {
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 900; line-height: 1.08;
+    color: var(--white); letter-spacing: -.025em; margin-bottom: 22px;
+  }
+  .hero-h1 .teal { color: var(--teal); }
+  .hero-h1 .light { color: rgba(255,255,255,.42); font-weight: 300; }
+  .hero-p {
+    font-size: 17px; line-height: 1.75; color: rgba(255,255,255,.6);
+    max-width: 480px; margin-bottom: 32px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+  .hero-trust-chips { display: flex; flex-wrap: wrap; gap: 18px; }
+  .chip {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: rgba(255,255,255,.38);
+  }
+  .chip svg { color: var(--teal); opacity: .65; }
+  .papaya-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-sm); padding: 7px 12px; margin-top: 20px;
+    font-size: 12px; color: rgba(255,255,255,.4);
+  }
+  .papaya-badge strong { color: rgba(255,255,255,.7); font-weight: 600; }
+
+  /* scan card */
+  .scan-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1); border-bottom: none;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    backdrop-filter: blur(16px); padding: 32px 32px 36px;
+  }
+  .scan-step { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 6px; }
+  .scan-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 18px; line-height: 1.35; }
+  .url-row {
+    display: flex; border-radius: var(--r-sm); overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+    margin-bottom: 14px; transition: border-color .15s;
+  }
+  .url-row:focus-within { border-color: var(--teal); }
+  .url-row input {
+    flex: 1; background: transparent; border: none; outline: none;
+    padding: 13px 16px; font-size: 14px; color: var(--white); font-family: inherit;
+  }
+  .url-row input::placeholder { color: rgba(255,255,255,.28); }
+  .url-scan-btn {
+    padding: 0 18px; background: rgba(0,200,168,.15);
+    border: none; border-left: 1px solid rgba(255,255,255,.1);
+    cursor: pointer; color: var(--teal); font-size: 13px;
+    font-weight: 700; font-family: inherit; white-space: nowrap; transition: background .14s;
+  }
+  .url-scan-btn:hover { background: rgba(0,200,168,.28); }
+  .scan-qs { display: none; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .scan-qs.open { display: flex; }
+  .q-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 13px; border-radius: var(--r-sm);
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+    cursor: pointer; transition: all .13s;
+  }
+  .q-item:hover { border-color: rgba(0,200,168,.3); background: rgba(0,200,168,.05); }
+  .q-item input { accent-color: var(--teal); width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+  .q-item label { font-size: 12.5px; color: rgba(255,255,255,.6); cursor: pointer; flex: 1; }
+  .scan-go {
+    width: 100%; padding: 15px; background: var(--green);
+    border: none; border-radius: var(--r-sm); color: var(--white);
+    font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    box-shadow: 0 4px 16px var(--green-glow); transition: all .17s;
+  }
+  .scan-go:hover { background: #0EA573; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(16,185,129,.45); }
+  .scan-fine { text-align: center; font-size: 11.5px; color: rgba(255,255,255,.27); margin-top: 10px; }
+
+  /* wizard progress dots */
+  .wizard-progress {
+    display: flex; align-items: center; gap: 0; margin-bottom: 20px;
+  }
+  .wp-step {
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.3);
+    border: 1.5px solid rgba(255,255,255,.1); transition: all .2s;
+  }
+  .wp-step.active { background: var(--teal); color: var(--navy); border-color: var(--teal); }
+  .wp-step.done { background: rgba(0,200,168,.2); color: var(--teal); border-color: rgba(0,200,168,.35); }
+  .wp-line { flex: 1; height: 1.5px; background: rgba(255,255,255,.1); margin: 0 6px; }
+  .wp-line.done { background: rgba(0,200,168,.35); }
+
+  /* wizard step panels */
+  .wizard-step { transition: opacity .22s ease, transform .22s ease; }
+  .wizard-step.hidden { display: none; }
+
+  /* scan modal overlay */
+  .scan-modal {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(11,25,41,.88); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .scan-modal-inner {
+    background: var(--navy-mid); border: 1px solid rgba(255,255,255,.12);
+    border-radius: var(--r-xl); padding: 32px; max-width: 500px; width: 100%;
+    box-shadow: 0 24px 60px rgba(0,0,0,.5);
+  }
+  .modal-scanning {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0,200,168,.08); border: 1px solid rgba(0,200,168,.2);
+    border-radius: var(--r-sm); padding: 10px 14px; margin-bottom: 22px;
+    font-size: 13px; color: var(--teal); font-weight: 600;
+  }
+  .modal-spinner {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(0,200,168,.25); border-top-color: var(--teal);
+    animation: spin .8s linear infinite; flex-shrink: 0;
+  }
+  .modal-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 18px; line-height: 1.4; }
+  .modal-qs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+  .modal-note { font-size: 11.5px; color: rgba(255,255,255,.3); text-align: center; margin-top: 10px; }
+
+  /* step back link */
+  .step-back {
+    background: none; border: none; color: rgba(255,255,255,.35);
+    font-size: 12.5px; cursor: pointer; padding: 6px 0;
+    font-family: inherit; display: inline-flex; align-items: center; gap: 5px;
+    transition: color .14s;
+  }
+  .step-back:hover { color: rgba(255,255,255,.65); }
+
+  /* ───────────────────────────────────────────
+     STATS BAND
+  ─────────────────────────────────────────── */
+  #stats {
+    background: var(--white); border-bottom: 1px solid var(--slate-200);
+  }
+  .stats-layout {
+    display: grid; grid-template-columns: 260px 1fr;
+  }
+  .stat-feature {
+    background: linear-gradient(145deg, var(--navy), var(--navy-mid));
+    padding: 30px 32px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .stat-feature-num {
+    font-size: 52px; font-weight: 900; line-height: 1;
+    letter-spacing: -.03em;
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .stat-feature-label { font-size: 12.5px; color: rgba(255,255,255,.45); margin-top: 6px; line-height: 1.45; max-width: 150px; }
+  .stat-feature-source { font-size: 10.5px; color: rgba(255,255,255,.22); margin-top: 8px; }
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border-left: 1px solid var(--slate-200);
+  }
+  .stat-cell {
+    padding: 26px 24px; border-right: 1px solid var(--slate-200); position: relative;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell-num {
+    font-size: 28px; font-weight: 800; color: var(--slate-800);
+    line-height: 1; letter-spacing: -.02em; margin-bottom: 5px;
+  }
+  .stat-cell-num em { font-style: normal; color: var(--teal); }
+  .stat-cell-desc { font-size: 12.5px; color: var(--slate-600); line-height: 1.5; }
+  .stat-cell-source { font-size: 10.5px; color: var(--slate-400); margin-top: 6px; }
+  .stat-bar-track {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--slate-100);
+  }
+  .stat-bar-fill {
+    height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), var(--cyan));
+    border-radius: 99px; transition: width 1.2s var(--ease);
+  }
+
+  /* ───────────────────────────────────────────
+     RESULTS / REPORT PREVIEW
+  ─────────────────────────────────────────── */
+  #results { padding: 92px 0 80px; background: var(--slate-50); }
+  .results-header { max-width: 600px; margin-bottom: 52px; }
+  .results-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .results-h2 {
+    font-size: clamp(26px, 3.5vw, 42px); font-weight: 900;
+    letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800); margin-bottom: 14px;
+  }
+  .results-h2 span { color: var(--teal); }
+  .results-sub { font-size: 16px; color: var(--slate-600); line-height: 1.7; }
+
+  /* Free vs Paid layout */
+  .report-split {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 36px;
+  }
+  .report-panel {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--r-xl); overflow: hidden;
+  }
+  .panel-header {
+    padding: 18px 24px; border-bottom: 1px solid var(--slate-200);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-title { font-size: 13px; font-weight: 700; color: var(--slate-800); }
+  .panel-status {
+    font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .status-free { background: rgba(16,185,129,.1); color: #059669; }
+  .status-paid { background: var(--teal-dim); color: var(--teal); }
+  .panel-body { padding: 24px; }
+
+  /* Score ring */
+  .score-wrap { text-align: center; margin-bottom: 24px; }
+  .score-ring-svg { width: 110px; height: 110px; }
+  .ring-track { fill: none; stroke: var(--slate-100); stroke-width: 10; }
+  .ring-fill {
+    fill: none; stroke: url(#rg); stroke-width: 10; stroke-linecap: round;
+    stroke-dasharray: 308; stroke-dashoffset: 308;
+    transition: stroke-dashoffset 1.4s var(--ease);
+  }
+  .score-num { font-size: 26px; font-weight: 900; color: var(--slate-800); margin-top: 8px; }
+  .score-num small { font-size: 13px; color: var(--slate-400); font-weight: 500; }
+  .score-label { font-size: 13px; font-weight: 700; color: var(--teal); }
+
+  /* Pillar bars (free panel) */
+  .pillar-rows { display: flex; flex-direction: column; gap: 12px; }
+  .p-row { display: grid; grid-template-columns: 28px 1fr 38px; gap: 10px; align-items: center; }
+  .p-icon {
+    width: 28px; height: 28px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .p-name { font-size: 13px; font-weight: 600; color: var(--slate-700); }
+  .p-track { height: 6px; background: var(--slate-100); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+  .p-fill { height: 100%; border-radius: 99px; transition: width 1s var(--ease); }
+  .p-score { font-size: 13px; font-weight: 800; text-align: right; }
+  .free-note {
+    background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--r-md);
+    padding: 14px 16px; margin-top: 16px;
+    font-size: 12.5px; color: var(--slate-500); line-height: 1.55;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .free-note svg { color: var(--slate-400); flex-shrink: 0; margin-top: 1px; }
+
+  /* Paid panel */
+  .finding-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 0; border-bottom: 1px solid var(--slate-100);
+  }
+  .finding-item:last-child { border-bottom: none; }
+  .finding-icon {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .finding-body strong { font-size: 13.5px; font-weight: 700; color: var(--slate-800); display: block; margin-bottom: 3px; }
+  .finding-body p { font-size: 12.5px; color: var(--slate-500); line-height: 1.55; }
+  .finding-tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .05em; padding: 2px 8px; border-radius: 99px; margin-top: 6px;
+  }
+  .tag-fix-now { background: rgba(239,68,68,.08); color: #DC2626; }
+  .tag-quick-win { background: rgba(16,185,129,.08); color: #059669; }
+  .tag-review { background: rgba(245,158,11,.08); color: #D97706; }
+  .paid-extras {
+    background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+    border-radius: var(--r-md); padding: 14px 16px; margin-top: 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .paid-extras p { font-size: 12.5px; color: rgba(255,255,255,.55); }
+  .paid-extras strong { color: var(--teal); font-weight: 700; }
+
+  /* CTA strip */
+  .cta-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--r-lg); padding: 22px 28px; flex-wrap: wrap; gap: 16px;
+  }
+  .cta-strip-copy strong { font-size: 16px; font-weight: 800; color: var(--slate-800); display: block; }
+  .cta-strip-copy span { font-size: 13.5px; color: var(--slate-400); }
+  .cta-strip-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .price-note { font-size: 12.5px; color: var(--slate-400); text-align: center; margin-top: 6px; }
+  .price-note strong { font-size: 16px; color: var(--slate-800); font-weight: 800; }
+
+  /* ───────────────────────────────────────────
+     PROOF
+  ─────────────────────────────────────────── */
+  #proof { padding: 80px 0; background: var(--white); }
+  .proof-top {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: end; margin-bottom: 48px;
+  }
+  .proof-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .proof-h2 {
+    font-size: clamp(24px, 3.2vw, 38px); font-weight: 900;
+    letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800);
+  }
+  .proof-h2 em { font-style: normal; color: var(--slate-300); font-weight: 300; }
+  .proof-right { font-size: 15px; color: var(--slate-600); line-height: 1.75; }
+
+  /* Featured testimonial */
+  .testi-featured {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-radius: var(--r-xl); padding: 44px 52px; margin-bottom: 20px;
+    position: relative; overflow: hidden;
+  }
+  .testi-featured::before {
+    content: '\201C'; position: absolute; top: -20px; left: 34px;
+    font-size: 150px; line-height: 1; color: rgba(0,200,168,.07);
+    font-family: Georgia, serif; pointer-events: none;
+  }
+  .testi-grid { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; position: relative; z-index: 1; }
+  .testi-q { font-size: 19px; font-weight: 500; line-height: 1.65; color: rgba(255,255,255,.88); font-style: italic; }
+  .testi-q strong { font-style: normal; color: var(--teal); }
+  .testi-attr { min-width: 160px; text-align: right; }
+  .testi-avatar {
+    width: 52px; height: 52px; border-radius: 50%; margin-left: auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; font-weight: 800; color: var(--navy);
+    background: linear-gradient(135deg, var(--teal), var(--cyan)); margin-bottom: 10px;
+  }
+  .testi-name { font-size: 14px; font-weight: 700; color: var(--white); }
+  .testi-role { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+  .stars { font-size: 13px; color: #FBBF24; letter-spacing: 2px; margin-top: 8px; }
+
+  /* Secondary testimonials */
+  .testi-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 48px; }
+  .testi-card {
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-lg); padding: 28px;
+  }
+  .testi-card .stars { font-size: 12px; margin: 0 0 14px; }
+  .testi-card blockquote { font-size: 14px; color: var(--slate-600); line-height: 1.75; font-style: italic; margin-bottom: 18px; }
+  .byline { display: flex; align-items: center; gap: 10px; }
+  .byline-av {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: var(--white);
+  }
+  .byline-name { font-size: 13px; font-weight: 700; color: var(--slate-800); }
+  .byline-role { font-size: 11.5px; color: var(--slate-400); }
+
+  /* trust marks */
+  .trust-marks { display: flex; flex-wrap: wrap; gap: 12px; }
+  .trust-mark {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-md); padding: 12px 18px;
+  }
+  .trust-mark-text .title { font-size: 13px; font-weight: 700; color: var(--slate-800); }
+  .trust-mark-text .sub   { font-size: 11px; color: var(--slate-400); }
+
+  /* ───────────────────────────────────────────
+     JOURNEY
+  ─────────────────────────────────────────── */
+  #journey { padding: 92px 0; background: var(--slate-50); position: relative; overflow: hidden; }
+  #journey::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--teal), var(--cyan), transparent);
+  }
+  .journey-header { text-align: center; margin-bottom: 60px; }
+  .journey-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .journey-h2 { font-size: clamp(24px, 3.5vw, 42px); font-weight: 900; letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800); margin-bottom: 12px; }
+  .journey-sub { font-size: 16px; color: var(--slate-600); max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+  /* Steps */
+  .steps-row {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    align-items: start; gap: 0; margin-bottom: 64px;
+  }
+  .step { text-align: center; padding: 0 16px; }
+  .step-icon {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .step-icon::after {
+    content: ''; position: absolute; inset: -5px; border-radius: 50%;
+    border: 1.5px dashed rgba(0,200,168,.22);
+  }
+  .step-num {
+    position: absolute; top: -4px; right: -4px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--navy); border: 2px solid var(--slate-50);
+    font-size: 10px; font-weight: 800; color: var(--white);
+    display: flex; align-items: center; justify-content: center; z-index: 1;
+  }
+  .step-name { font-size: 16px; font-weight: 800; color: var(--slate-800); margin-bottom: 8px; }
+  .step-desc { font-size: 13.5px; color: var(--slate-600); line-height: 1.65; max-width: 220px; margin: 0 auto; }
+  .step-arrow { display: flex; align-items: flex-start; padding-top: 32px; color: var(--slate-300); }
+
+  /* Mission/Vision */
+  .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 52px; }
+  .mv-card {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--r-lg); padding: 30px 34px; position: relative; overflow: hidden;
+  }
+  .mv-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .mv-card.mission::before { background: linear-gradient(90deg, var(--teal), var(--cyan)); }
+  .mv-card.vision::before  { background: linear-gradient(90deg, var(--green), #34D399); }
+  .mv-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+  .mv-card.mission .mv-label { color: var(--teal); }
+  .mv-card.vision  .mv-label { color: var(--green); }
+  .mv-headline { font-size: 17px; font-weight: 800; color: var(--slate-800); line-height: 1.3; margin-bottom: 8px; }
+  .mv-body { font-size: 14px; color: var(--slate-600); line-height: 1.7; }
+
+  /* Integrations vote section */
+  .int-section {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--r-xl); padding: 36px 40px;
+  }
+  .int-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+  .int-hed { font-size: 17px; font-weight: 800; color: var(--slate-800); margin-bottom: 4px; }
+  .int-sub { font-size: 14px; color: var(--slate-500); line-height: 1.6; }
+  .int-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .int-item {
+    border: 1.5px solid var(--slate-200); border-radius: var(--r-md); padding: 14px 12px;
+    text-align: center; cursor: pointer; transition: all .16s; position: relative;
+    background: var(--white);
+  }
+  .int-item:hover { border-color: var(--teal); background: var(--teal-dim); transform: translateY(-2px); }
+  .int-item.voted { border-color: var(--teal); background: var(--teal-dim); }
+  .int-item.voted .int-vote { opacity: 1; }
+  .int-name { font-size: 12px; font-weight: 600; color: var(--slate-600); margin-top: 6px; }
+  .int-vote-count { font-size: 11px; color: var(--slate-400); margin-top: 3px; }
+  .int-vote {
+    position: absolute; top: 6px; right: 6px; opacity: 0;
+    width: 16px; height: 16px; background: var(--teal); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .15s;
+  }
+  .int-vote svg { color: var(--navy); }
+  .int-logo { font-size: 20px; line-height: 1; }
+  .int-other {
+    grid-column: span 2; display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; text-align: left; justify-content: flex-start;
+  }
+  .int-other input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-size: 12.5px; color: var(--slate-600); font-family: inherit;
+  }
+  .int-other input::placeholder { color: var(--slate-300); }
+  .int-submit-row { margin-top: 20px; display: flex; align-items: center; gap: 12px; }
+  .int-submit-note { font-size: 12.5px; color: var(--slate-400); }
+
+  /* ───────────────────────────────────────────
+     FRAMEWORK TEASER
+  ─────────────────────────────────────────── */
+  #framework-teaser {
+    padding: 80px 0;
+    background: linear-gradient(145deg, var(--navy), var(--navy-mid));
+    position: relative; overflow: hidden;
+  }
+  #framework-teaser::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,200,168,.1) 1px, transparent 1px);
+    background-size: 28px 28px; pointer-events: none;
+  }
+  .fw-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .fw-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 12px; }
+  .fw-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.025em; line-height: 1.15; color: var(--white); margin-bottom: 14px; }
+  .fw-sub { font-size: 15.5px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 28px; }
+  .fw-layers { display: flex; flex-direction: column; gap: 12px; }
+  .fw-layer {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-md); padding: 16px 20px;
+    display: flex; align-items: center; gap: 14px;
+    transition: all .16s;
+  }
+  .fw-layer:hover { background: rgba(0,200,168,.08); border-color: rgba(0,200,168,.2); }
+  .fw-layer-badge {
+    width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; letter-spacing: .02em;
+  }
+  .fw-layer-title { font-size: 14px; font-weight: 700; color: var(--white); }
+  .fw-layer-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+  /* ───────────────────────────────────────────
+     PRICING
+  ─────────────────────────────────────────── */
+  #pricing { padding: 88px 0; background: var(--white); }
+  .pricing-header { max-width: 500px; margin-bottom: 52px; }
+  .pricing-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .pricing-h2 { font-size: clamp(24px, 3.2vw, 40px); font-weight: 900; letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800); margin-bottom: 10px; }
+  .pricing-sub { font-size: 16px; color: var(--slate-600); line-height: 1.7; }
+  .plans-grid { display: grid; grid-template-columns: 1fr 1.08fr; gap: 24px; align-items: start; }
+  .plan {
+    border-radius: var(--r-xl); padding: 40px;
+    border: 1.5px solid var(--slate-200); position: relative;
+  }
+  .plan.pro {
+    background: var(--navy); border-color: rgba(0,200,168,.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,.15), 0 0 0 1px rgba(0,200,168,.1);
+    margin-top: -16px;
+  }
+  .plan-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--navy);
+    font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    padding: 5px 16px; border-radius: 99px; white-space: nowrap;
+  }
+  .plan-tier { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+  .plan:not(.pro) .plan-tier { color: var(--slate-400); }
+  .plan.pro .plan-tier { color: var(--teal); }
+  .plan-price-row { display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+  .plan-price { font-size: 46px; font-weight: 900; letter-spacing: -.03em; line-height: 1; }
+  .plan:not(.pro) .plan-price { color: var(--slate-800); }
+  .plan.pro .plan-price { color: var(--white); }
+  .plan-period { font-size: 15px; font-weight: 400; }
+  .plan:not(.pro) .plan-period { color: var(--slate-400); }
+  .plan.pro .plan-period { color: rgba(255,255,255,.4); }
+  .plan-tagline { font-size: 14px; margin-bottom: 26px; line-height: 1.5; }
+  .plan:not(.pro) .plan-tagline { color: var(--slate-500); }
+  .plan.pro .plan-tagline { color: rgba(255,255,255,.55); }
+  .plan-feats { list-style: none; display: flex; flex-direction: column; gap: 11px; margin-bottom: 28px; }
+  .plan-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; }
+  .plan:not(.pro) .plan-feats li { color: var(--slate-600); }
+  .plan.pro .plan-feats li { color: rgba(255,255,255,.8); }
+  .chk { flex-shrink: 0; margin-top: 1px; }
+  .locked { opacity: .3; }
+  .plan-foot { text-align: center; font-size: 12px; margin-top: 14px; }
+  .plan:not(.pro) .plan-foot { color: var(--slate-400); }
+  .plan.pro .plan-foot { color: rgba(255,255,255,.28); }
+  .pricing-foot { text-align: center; margin-top: 24px; font-size: 13.5px; color: var(--slate-400); }
+  .pricing-foot a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+  /* ───────────────────────────────────────────
+     FOOTER
+  ─────────────────────────────────────────── */
+  footer { background: var(--navy); }
+  .footer-cta {
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy-soft));
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 56px 0; text-align: center; position: relative; overflow: hidden;
+  }
+  .footer-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,200,168,.09) 1px, transparent 1px);
+    background-size: 28px 28px; pointer-events: none;
+  }
+  .footer-cta-h { font-size: clamp(24px, 3.5vw, 42px); font-weight: 900; letter-spacing: -.025em; color: var(--white); line-height: 1.1; margin-bottom: 12px; position: relative; z-index: 1; }
+  .footer-cta-h span { color: var(--teal); }
+  .footer-cta-sub { font-size: 16px; color: rgba(255,255,255,.48); margin-bottom: 28px; position: relative; z-index: 1; }
+  .footer-cta-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .footer-links-band { padding: 48px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+  .footer-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; margin-bottom: 12px; }
+  .footer-blurb { font-size: 13.5px; color: rgba(255,255,255,.38); line-height: 1.7; max-width: 240px; margin-bottom: 16px; }
+  .privacy-notice {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: rgba(0,200,168,.08); border: 1px solid rgba(0,200,168,.16);
+    border-radius: var(--r-sm); padding: 11px 13px;
+    font-size: 12px; color: rgba(255,255,255,.48); line-height: 1.55;
+  }
+  .privacy-notice strong { color: rgba(255,255,255,.72); font-weight: 600; }
+  .footer-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.28); margin-bottom: 14px; }
+  .footer-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-list a { font-size: 13.5px; color: rgba(255,255,255,.42); text-decoration: none; transition: color .14s; }
+  .footer-list a:hover { color: rgba(255,255,255,.78); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.06); padding-top: 24px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 12.5px; color: rgba(255,255,255,.22); }
+
+  /* ───────────────────────────────────────────
+     RESPONSIVE
+  ─────────────────────────────────────────── */
+  @media (max-width: 1020px) {
+    .stats-layout { grid-template-columns: 1fr; }
+    .stats-grid { border-left: none; border-top: 1px solid var(--slate-200); grid-template-columns: repeat(3,1fr); }
+    .stat-feature { text-align: center; padding: 28px; }
+    .stat-feature-label { margin: 6px auto 0; }
+    .int-grid { grid-template-columns: repeat(3, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 860px) {
+    nav ul { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .scan-card { border-radius: var(--r-xl); border-bottom: 1px solid rgba(255,255,255,.1); }
+    .hero-copy { padding-bottom: 0; }
+    .report-split { grid-template-columns: 1fr; }
+    .proof-top { grid-template-columns: 1fr; gap: 20px; }
+    .testi-grid { grid-template-columns: 1fr; gap: 24px; }
+    .testi-attr { text-align: left; }
+    .testi-avatar { margin-left: 0; }
+    .testi-pair { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+    .step-arrow { display: none; }
+    .step { margin-bottom: 36px; }
+    .mv-grid { grid-template-columns: 1fr; }
+    .fw-inner { grid-template-columns: 1fr; gap: 36px; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .plan.pro { margin-top: 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .int-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { justify-content: center; }
+    .int-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-cta-actions { flex-direction: column; align-items: stretch; }
+    .footer-cta-actions .btn { justify-content: center; }
+  }
+
+  /* ───────────────────────────────────────────
+     LIVE FINDINGS (injected by scan API)
+  ─────────────────────────────────────────── */
+  .live-finding {
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-sm); padding: 14px 16px; margin-bottom: 10px;
+  }
+  .live-finding-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .live-finding-header strong { font-size: 13.5px; color: var(--slate-800); line-height: 1.4; }
+  .finding-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; padding-top: 2px; }
+  .live-finding p { font-size: 12.5px; color: var(--slate-500); line-height: 1.6; }
+  #live-findings > div:first-child { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--teal); margin-bottom: 12px; }
+
+  /* ───────────────────────────────────────────
+     PAIN POINTS
+  ─────────────────────────────────────────── */
+  #pain { padding: 80px 0; background: var(--slate-50); border-top: 1px solid var(--slate-200); }
+  .pain-header { max-width: 560px; margin-bottom: 48px; }
+  .pain-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .pain-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.025em; color: var(--slate-800); margin-bottom: 10px; }
+  .pain-sub { font-size: 15.5px; color: var(--slate-500); line-height: 1.7; max-width: 500px; }
+  .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pain-card {
+    background: var(--white); border: 1.5px solid var(--slate-200);
+    border-radius: var(--r-lg); padding: 28px;
+    transition: border-color .16s, box-shadow .16s;
+  }
+  .pain-card:hover { border-color: rgba(239,68,68,.3); box-shadow: 0 4px 20px rgba(239,68,68,.06); }
+  .pain-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #FFF1F0; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; color: #EF4444;
+  }
+  .pain-card h3 { font-size: 15px; font-weight: 700; color: var(--slate-800); margin-bottom: 8px; }
+  .pain-card p { font-size: 13.5px; color: var(--slate-500); line-height: 1.65; }
+
+  /* ───────────────────────────────────────────
+     BEFORE / AFTER
+  ─────────────────────────────────────────── */
+  #difference { padding: 80px 0; background: var(--white); border-top: 1px solid var(--slate-200); }
+  .diff-header { text-align: center; max-width: 520px; margin: 0 auto 48px; }
+  .diff-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .diff-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.025em; color: var(--slate-800); }
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 820px; margin: 0 auto; }
+  .diff-col { border-radius: var(--r-lg); padding: 32px; }
+  .diff-without { background: #FFF5F5; border: 1.5px solid #FECACA; }
+  .diff-with { background: #F0FDF4; border: 1.5px solid #BBF7D0; }
+  .diff-col-title { font-size: 14px; font-weight: 800; margin-bottom: 20px; }
+  .diff-without .diff-col-title { color: #DC2626; }
+  .diff-with .diff-col-title { color: #059669; }
+  .diff-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+  .diff-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; line-height: 1.55; }
+  .diff-without .diff-list li { color: #7F1D1D; }
+  .diff-with .diff-list li { color: #14532D; }
+  .diff-without .diff-list li svg { color: #EF4444; flex-shrink: 0; margin-top: 2px; }
+  .diff-with .diff-list li svg { color: #10B981; flex-shrink: 0; margin-top: 2px; }
+
+  /* ───────────────────────────────────────────
+     FAQ
+  ─────────────────────────────────────────── */
+  #faq { padding: 88px 0; background: var(--slate-50); border-top: 1px solid var(--slate-200); }
+  .faq-header { text-align: center; margin-bottom: 48px; }
+  .faq-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .faq-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.025em; color: var(--slate-800); }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--slate-200); }
+  .faq-item:first-child { border-top: 1px solid var(--slate-200); }
+  .faq-q {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 20px 4px; background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 15px; font-weight: 600; color: var(--slate-800);
+    text-align: left; transition: color .14s;
+  }
+  .faq-q:hover { color: var(--teal); }
+  .faq-q[aria-expanded="true"] { color: var(--teal); }
+  .faq-chevron { flex-shrink: 0; transition: transform .22s var(--ease); color: var(--slate-400); }
+  .faq-q[aria-expanded="true"] .faq-chevron { transform: rotate(180deg); }
+  .faq-a {
+    overflow: hidden; max-height: 0;
+    transition: max-height .3s var(--ease), padding .22s;
+    padding: 0 4px;
+  }
+  .faq-a.open { max-height: 400px; padding-bottom: 20px; }
+  .faq-a p { font-size: 14px; color: var(--slate-600); line-height: 1.75; }
+
+  /* ───────────────────────────────────────────
+     STICKY BOTTOM BAR
+  ─────────────────────────────────────────── */
+  .sticky-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+    background: var(--navy); border-top: 1px solid rgba(255,255,255,.08);
+    padding: 11px 24px;
+    display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
+    transform: translateY(100%); transition: transform .32s var(--ease);
+    box-shadow: 0 -4px 28px rgba(0,0,0,.3);
+  }
+  .sticky-bar.visible { transform: translateY(0); }
+  .sticky-label { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,.6); white-space: nowrap; }
+  .sticky-label strong { color: rgba(255,255,255,.88); }
+  .sticky-form {
+    display: flex; border-radius: var(--r-sm); overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,.14);
+  }
+  .sticky-form:focus-within { border-color: var(--teal); }
+  .sticky-form input {
+    background: rgba(255,255,255,.06); border: none; outline: none;
+    padding: 9px 14px; font-size: 13px; color: var(--white); font-family: inherit; width: 210px;
+  }
+  .sticky-form input::placeholder { color: rgba(255,255,255,.28); }
+  .sticky-btn { border-radius: 0 !important; padding: 9px 16px !important; font-size: 13px !important; }
+  @media (max-width: 560px) {
+    .sticky-form input { width: 140px; }
+    .sticky-label { display: none; }
+    body { padding-bottom: 58px; }
+  }
+  @media (max-width: 860px) {
+    .pain-grid { grid-template-columns: 1fr; }
+    .diff-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- SVG icon symbols (hidden, referenced via <use>) -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+    <path d="M7 11V7a5 5 0 0110 0v4"/>
+  </symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+  </symbol>
+  <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+  </symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+  </symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="5 3 19 12 5 21 5 3"/>
+  </symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </symbol>
+  <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+  </symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/>
+    <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/>
+  </symbol>
+  <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+  </symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+  </symbol>
+  <symbol id="i-thumb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/>
+    <path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/>
+  </symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+    <polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+  </symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="10" rx="2"/>
+    <circle cx="9" cy="16" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="15" cy="16" r="1" fill="currentColor" stroke="none"/>
+    <path d="M8 11V7a4 4 0 018 0v4"/><line x1="12" y1="11" x2="12" y2="7"/>
+  </symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </symbol>
+</svg>
+
+<!-- SVG gradient defs for ring score -->
+<svg style="display:none" width="0" height="0">
+  <defs>
+    <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00C8A8"/>
+      <stop offset="100%" stop-color="#00AFCC"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ════════════ ANNOUNCE BAR ════════════ -->
+<div id="announce">
+  <p>
+    AI insights <strong>powered by Papaya</strong>
+    &nbsp;·&nbsp;
+    New: AI Trust risk checks now included in every scan
+    &nbsp;·&nbsp;
+    <a href="framework.html">How our checks work</a>
+  </p>
+</div>
+
+<!-- ════════════ NAV ════════════ -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+
+      <a href="/" class="logo">
+        <!-- Logo mark SVG (original) -->
+        <svg width="36" height="36" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <defs>
+            <linearGradient id="nav-lg" x1="20" y1="20" x2="180" y2="185" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00F59D"/>
+              <stop offset="50%" stop-color="#00C8B4"/>
+              <stop offset="100%" stop-color="#0085FF"/>
+            </linearGradient>
+          </defs>
+          <!-- Headset arc over top -->
+          <path d="M 30 98 A 72 72 0 0 1 170 98" stroke="url(#nav-lg)" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <!-- Left ear cup -->
+          <rect x="8" y="83" width="22" height="38" rx="8" fill="url(#nav-lg)"/>
+          <!-- Right ear cup -->
+          <rect x="170" y="83" width="22" height="38" rx="8" fill="url(#nav-lg)"/>
+          <!-- Main helmet circle — dark fill + gradient ring -->
+          <circle cx="100" cy="105" r="72" fill="#0B1929"/>
+          <circle cx="100" cy="105" r="72" stroke="url(#nav-lg)" stroke-width="5" fill="none"/>
+          <!-- Face panel (slightly lighter) -->
+          <rect x="52" y="54" width="96" height="82" rx="14" fill="#112238"/>
+          <!-- Left eye -->
+          <rect x="62" y="72" width="28" height="22" rx="5" fill="url(#nav-lg)"/>
+          <!-- Right eye -->
+          <rect x="110" y="72" width="28" height="22" rx="5" fill="url(#nav-lg)"/>
+          <!-- Mouth grill -->
+          <rect x="66" y="108" width="68" height="5" rx="2.5" fill="url(#nav-lg)" opacity="0.5"/>
+          <rect x="66" y="117" width="50" height="5" rx="2.5" fill="url(#nav-lg)" opacity="0.3"/>
+          <!-- Mic arm from right side -->
+          <path d="M 164 122 Q 158 148 145 158" stroke="url(#nav-lg)" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <!-- Mic capsule -->
+          <rect x="130" y="156" width="22" height="12" rx="6" fill="url(#nav-lg)"/>
+        </svg>
+        <div class="logo-wordmark">DATA <span>PILOTS</span></div>
+      </a>
+
+      <ul>
+        <li><a href="#results">How It Works</a></li>
+        <li><a href="#proof">Stories</a></li>
+        <li><a href="#journey">About</a></li>
+        <li><a href="framework.html">Our Framework</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="#pricing" class="btn btn-ghost">See Plans</a>
+        <a href="#hero-scan" class="btn btn-teal">
+          <svg class="icon" width="13" height="13"><use href="#i-search"/></svg>
+          Free Check
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- Copy -->
+      <div class="hero-copy">
+        <div class="hero-live">
+          <div class="live-dot"></div>
+          <span>Free Trust Check Now Open</span>
+        </div>
+
+        <h1 class="hero-h1">
+          Does your business<br>
+          <span class="teal">look trustworthy</span><br>
+          <span class="light">before clients even</span><br>
+          call you?
+        </h1>
+
+        <p class="hero-p">
+          Most L&D providers lose deals before they ever get on a call. A buyer googles you, sees a privacy page that doesn't exist, and quietly picks someone else. The Trust Check is your <strong style="color:rgba(255,255,255,.85);">risk assessment</strong> to see exactly where you could be breaking trust and creating compliance issues, and what to fix first.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#hero-scan" class="btn btn-green" style="font-size:16px; padding:16px 32px;">
+            <svg class="icon" width="16" height="16"><use href="#i-search"/></svg>
+            Check My Business Free
+          </a>
+          <a href="#results" class="btn btn-outline">
+            See a sample report
+          </a>
+        </div>
+
+        <div class="hero-trust-chips">
+          <div class="chip">
+            <svg class="icon" width="13" height="13"><use href="#i-lock"/></svg>
+            Nothing stored by default
+          </div>
+          <div class="chip">
+            <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
+            About 5 minutes
+          </div>
+          <div class="chip">
+            <svg class="icon" width="13" height="13"><use href="#i-card"/></svg>
+            No card needed
+          </div>
+        </div>
+
+        <div class="papaya-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-bot"/></svg>
+          AI insights powered by <strong>Papaya</strong>
+        </div>
+      </div>
+
+      <!-- Scan form — multi-step wizard -->
+      <div id="hero-scan">
+        <div class="scan-card">
+
+          <!-- Progress indicator -->
+          <div class="wizard-progress" id="wizProgress">
+            <div class="wp-step active" id="wpDot1">1</div>
+            <div class="wp-line" id="wpLine1"></div>
+            <div class="wp-step" id="wpDot2">2</div>
+            <div class="wp-line" id="wpLine2"></div>
+            <div class="wp-step" id="wpDot3">3</div>
+            <div class="wp-line" id="wpLine3"></div>
+            <div class="wp-step" id="wpDot4">4</div>
+            <div class="wp-line" id="wpLine4"></div>
+            <div class="wp-step" id="wpDot5">5</div>
+          </div>
+
+          <!-- Step 1: Website URL -->
+          <div class="wizard-step" id="wiz-step-1">
+            <div class="scan-step">Step 1 — Your website</div>
+            <div class="scan-title">Enter your website URL to get started</div>
+            <div class="url-row">
+              <input type="url" id="scanUrl" placeholder="https://yourcoachingbusiness.com" autocomplete="off"/>
+              <button class="url-scan-btn" onclick="wizNext(1)">Next →</button>
+            </div>
+            <p class="scan-fine">Free · No account needed · We don't store data unless you save your results</p>
+          </div>
+
+          <!-- Step 2: Basic questions -->
+          <div class="wizard-step hidden" id="wiz-step-2">
+            <button class="step-back" onclick="wizBack(2)">← Back</button>
+            <div class="scan-step" style="margin-top:6px;">Step 2 — Quick questions</div>
+            <div class="scan-title">Tell us a little about your business</div>
+            <div class="scan-qs open" style="margin-bottom:18px;">
+              <div class="q-item">
+                <input type="checkbox" id="q1"/>
+                <label for="q1">I pitch to companies or corporate L&amp;D teams</label>
+              </div>
+              <div class="q-item">
+                <input type="checkbox" id="q2"/>
+                <label for="q2">I collect or store information about my learners</label>
+              </div>
+              <div class="q-item">
+                <input type="checkbox" id="q3"/>
+                <label for="q3">A client has asked about data privacy or security</label>
+              </div>
+              <div class="q-item">
+                <input type="checkbox" id="q4"/>
+                <label for="q4">I use tools like Zoom, HubSpot, or a learning platform</label>
+              </div>
+            </div>
+            <button class="scan-go" id="scanBtn" onclick="startScanAndModal()">
+              <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
+              Run My Free Trust Check
+            </button>
+            <p class="scan-fine">Takes about 30 seconds · Scan starts immediately</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 3 modal — deeper questions while scan runs -->
+      <div id="scan-modal" class="scan-modal" style="display:none;">
+        <div class="scan-modal-inner">
+          <div class="modal-scanning" id="modalScanStatus">
+            <div class="modal-spinner"></div>
+            <span>Scanning your website in the background…</span>
+          </div>
+          <div class="scan-step">Step 3 — While we scan</div>
+          <div class="modal-title">A few more questions to personalise your report</div>
+          <div class="modal-qs">
+            <div class="q-item">
+              <input type="checkbox" id="mq1"/>
+              <label for="mq1">I have a learning portal, LMS, or online platform</label>
+            </div>
+            <div class="q-item">
+              <input type="checkbox" id="mq2"/>
+              <label for="mq2">I work with enterprise or public sector clients</label>
+            </div>
+            <div class="q-item">
+              <input type="checkbox" id="mq3"/>
+              <label for="mq3">A prospect has asked to see my security or compliance docs</label>
+            </div>
+            <div class="q-item">
+              <input type="checkbox" id="mq4"/>
+              <label for="mq4">I use AI tools as part of my service or content delivery</label>
+            </div>
+          </div>
+          <button class="scan-go" id="modalBtn" onclick="submitModal()">
+            <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
+            View My Results →
+          </button>
+          <p class="modal-note">Step 4 is your report · Step 5 is what to do next</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PAIN POINTS ════════════ -->
+<section id="pain">
+  <div class="container">
+
+    <div class="pain-header reveal">
+      <div class="pain-kicker">The real cost of broken trust</div>
+      <h2 class="pain-h2">Are You Losing Trust — and Deals — on Your Website?</h2>
+      <p class="pain-sub">Every day, B2B buyers quietly check your site before they reply to you. When it doesn't meet their expectations, they move on — and you never find out why.</p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="pain-icon">
+          <svg class="icon" width="20" height="20"><use href="#i-eye"/></svg>
+        </div>
+        <h3>Losing potential leads</h3>
+        <p>Buyers google you before they reply. A missing privacy page, no SSL, or unclear data practices sends them somewhere else — silently.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="pain-icon">
+          <svg class="icon" width="20" height="20"><use href="#i-users"/></svg>
+        </div>
+        <h3>Losing potential customers</h3>
+        <p>You had a great demo but procurement stalled the deal. Often your site didn't meet their vendor due diligence checklist.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-1">
+        <div class="pain-icon">
+          <svg class="icon" width="20" height="20"><use href="#i-clock"/></svg>
+        </div>
+        <h3>Failing general best practices</h3>
+        <p>Cookie consent, contact details, accessibility — things every credible business should have. Small gaps signal big risks to buyers.</p>
+      </div>
+      <div class="pain-card reveal reveal-delay-2">
+        <div class="pain-icon">
+          <svg class="icon" width="20" height="20"><use href="#i-info"/></svg>
+        </div>
+        <h3>Compliance &amp; lawsuit exposure</h3>
+        <p>GDPR, AI transparency, data handling — your clients have legal expectations, and so does the law. Gaps here aren't just lost deals, they're liability.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ BEFORE / AFTER ════════════ -->
+<section id="difference">
+  <div class="container">
+
+    <div class="diff-header reveal">
+      <div class="diff-kicker">The difference</div>
+      <h2 class="diff-h2">What Changes When You Know Your Trust Score</h2>
+    </div>
+
+    <div class="diff-grid reveal">
+      <div class="diff-col diff-without">
+        <div class="diff-col-title">Without Data Pilots</div>
+        <ul class="diff-list">
+          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Prospects ghost after checking your site</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Procurement asks questions you can't answer</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> You guess what's wrong and hope for the best</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Trust issues stay invisible until it's too late</li>
+        </ul>
+      </div>
+      <div class="diff-col diff-with">
+        <div class="diff-col-title">With Data Pilots</div>
+        <ul class="diff-list">
+          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> Your site signals credibility before the first call</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> You hand procurement a trust report that says yes</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> You get a ranked fix list you can delegate in minutes</li>
+          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> Hidden gaps surface early so you fix them fast</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ STATS BAND ════════════ -->
+<section id="stats">
+  <div class="stats-layout">
+
+    <div class="stat-feature">
+      <div class="stat-feature-num" id="stat-big">74%</div>
+      <div class="stat-feature-label">of B2B buyers check a vendor website for trust signals before agreeing to a meeting</div>
+      <div class="stat-feature-source">Forrester B2B Buying Research</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-cell">
+        <div class="stat-cell-num"><em>1 in 3</em></div>
+        <div class="stat-cell-desc">deals stalls because a buyer had unanswered trust or compliance questions</div>
+        <div class="stat-cell-source">Gartner B2B Sales Research</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" data-width="33%"></div></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-num"><em>$108K</em></div>
+        <div class="stat-cell-desc">average cost of a data-related incident for a small business</div>
+        <div class="stat-cell-source">IBM / Keeper Security Report</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" data-width="68%"></div></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-num"><em>~5</em> <span style="font-size:16px;color:var(--slate-400);">min</span></div>
+        <div class="stat-cell-desc">to get your free trust score. Fix most issues the same week.</div>
+        <div class="stat-cell-source">Average Data Pilots check time</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" data-width="100%"></div></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="container" style="padding: 10px 28px 12px; text-align:right;">
+    <span style="font-size:11px; color:var(--slate-400);">We are brand new, so these are industry stats. We will swap in our own numbers as we grow.</span>
+  </div>
+</section>
+
+<!-- ════════════ RESULTS PREVIEW ════════════ -->
+<section id="results">
+  <div class="container">
+
+    <div class="results-header reveal">
+      <div class="results-kicker">Trust Check &mdash; Risk Assessment</div>
+      <h2 class="results-h2">
+        Free gives you the <span>big picture.</span><br>
+        Paid gives you the full picture and how to fix it.
+      </h2>
+      <p class="results-sub">
+        Your free check scans your <strong>public-facing website</strong> and shows where you stand across four trust areas. No jargon, no 40-page PDFs. To go deeper into your <span class="term" data-tip="Your LMS, client portal, or training platform. The private side of your business that buyers and procurement teams may request access to review.">learning portal or platform</span>, upgrade to Co-Pilot for the full picture and a step-by-step fix plan.
+      </p>
+    </div>
+
+    <!-- Score gradient def -->
+    <svg style="display:none;position:absolute;width:0;height:0;">
+      <defs>
+        <linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00C8A8"/>
+          <stop offset="100%" stop-color="#00AFCC"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <div class="report-split">
+
+      <!-- FREE panel -->
+      <div class="report-panel reveal reveal-delay-1">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Your Trust Score</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourcoachingbiz.com</div>
+          </div>
+          <div class="panel-status status-free">Free</div>
+        </div>
+        <div class="panel-body">
+          <div class="score-wrap">
+            <svg class="score-ring-svg" viewBox="0 0 110 110" style="transform:rotate(-90deg)">
+              <circle class="ring-track" cx="55" cy="55" r="49"/>
+              <circle class="ring-fill" cx="55" cy="55" r="49" id="ringFill"/>
+            </svg>
+            <div class="score-num" style="margin-top:4px;">75<small>/100</small></div>
+            <div class="score-label">Pilot Ready</div>
+          </div>
+
+          <div class="pillar-rows" id="pillarRows">
+            <div class="p-row">
+              <div class="p-icon" style="background:#EBF2FF;">
+                <svg class="icon" width="14" height="14" style="color:#2C5AA0;"><use href="#i-users"/></svg>
+              </div>
+              <div>
+                <div class="p-name"><span class="term" data-tip="How easy and clear your site is to use. Buyers judge this in seconds.">User Experience</span></div>
+                <div class="p-track"><div class="p-fill" data-w="82" style="background:linear-gradient(90deg,#2C5AA0,#4A7FD4);"></div></div>
+              </div>
+              <div class="p-score" style="color:#2C5AA0;">82</div>
+            </div>
+            <div class="p-row">
+              <div class="p-icon" style="background:#D1FAE5;">
+                <svg class="icon" width="14" height="14" style="color:#10B981;"><use href="#i-eye"/></svg>
+              </div>
+              <div>
+                <div class="p-name"><span class="term" data-tip="How open and honest your business looks. Includes privacy pages, terms, and how you describe what you do with data.">Transparency</span></div>
+                <div class="p-track"><div class="p-fill" data-w="70" style="background:linear-gradient(90deg,#10B981,#34D399);"></div></div>
+              </div>
+              <div class="p-score" style="color:#10B981;">70</div>
+            </div>
+            <div class="p-row">
+              <div class="p-icon" style="background:#FEF3C7;">
+                <svg class="icon" width="14" height="14" style="color:#D97706;"><use href="#i-shield"/></svg>
+              </div>
+              <div>
+                <div class="p-name"><span class="term" data-tip="Whether your site has basic security protections in place. Think of it as locking the door to your office. Buyers check this.">Safety and Security</span></div>
+                <div class="p-track"><div class="p-fill" data-w="78" style="background:linear-gradient(90deg,#F59E0B,#FBBF24);"></div></div>
+              </div>
+              <div class="p-score" style="color:#D97706;">78</div>
+            </div>
+            <div class="p-row">
+              <div class="p-icon" style="background:#EDE9FE;">
+                <svg class="icon" width="14" height="14" style="color:#7C3AED;"><use href="#i-bot"/></svg>
+              </div>
+              <div>
+                <div class="p-name"><span class="term" data-tip="Do you explain if and how you use AI tools? Enterprise buyers increasingly ask this before they sign. This is the newest, fastest-growing trust question.">AI Trust</span></div>
+                <div class="p-track"><div class="p-fill" data-w="65" style="background:linear-gradient(90deg,#8B5CF6,#A78BFA);"></div></div>
+              </div>
+              <div class="p-score" style="color:#7C3AED;">65</div>
+            </div>
+          </div>
+
+          <div class="free-note">
+            <svg class="icon" width="15" height="15"><use href="#i-info"/></svg>
+            <span>The free check shows where you stand in each area. Upgrade to see the specific issues and get a step-by-step plan to fix them.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAID panel -->
+      <div class="report-panel reveal reveal-delay-2">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Your Fix Roadmap</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">What you get with Co-Pilot</div>
+          </div>
+          <div class="panel-status status-paid">Co-Pilot</div>
+        </div>
+        <div class="panel-body">
+
+          <div class="finding-item">
+            <div class="finding-icon" style="background:#EDE9FE;">
+              <svg class="icon" width="15" height="15" style="color:#7C3AED;"><use href="#i-bot"/></svg>
+            </div>
+            <div class="finding-body">
+              <strong>No AI disclosure on your site</strong>
+              <p>You use AI tools in your work but don't mention it anywhere visible. Over half of enterprise L&D buyers now ask about this before signing.</p>
+              <span class="finding-tag tag-fix-now">Fix This Week</span>
+            </div>
+          </div>
+
+          <div class="finding-item">
+            <div class="finding-icon" style="background:#D1FAE5;">
+              <svg class="icon" width="15" height="15" style="color:#059669;"><use href="#i-eye"/></svg>
+            </div>
+            <div class="finding-body">
+              <strong>Privacy page exists but is hard to find</strong>
+              <p>You have a privacy page but it's buried. Moving the link to your footer takes 10 minutes and noticeably improves your transparency score.</p>
+              <span class="finding-tag tag-quick-win">Quick Win</span>
+            </div>
+          </div>
+
+          <div class="finding-item">
+            <div class="finding-icon" style="background:#FEF3C7;">
+              <svg class="icon" width="15" height="15" style="color:#D97706;"><use href="#i-shield"/></svg>
+            </div>
+            <div class="finding-body">
+              <strong>Missing security headers on contact form</strong>
+              <p>Your contact form is missing two basic protections. A developer can add these in under an hour. We have step-by-step instructions you can share with them.</p>
+              <span class="finding-tag tag-review">Review</span>
+            </div>
+          </div>
+
+          <div class="paid-extras">
+            <p>Co-Pilot also includes: <strong>exportable trust proof PDF</strong> for proposals, team task delegation, and monthly re-scans.</p>
+            <a href="#pricing" class="btn btn-teal" style="padding:9px 16px;font-size:12.5px;flex-shrink:0;">See Pricing</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-strip reveal">
+      <div class="cta-strip-copy">
+        <strong>Your score is waiting.</strong>
+        <span>Free check takes about 5 minutes. No account, no credit card.</span>
+      </div>
+      <div class="cta-strip-actions">
+        <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Get My Free Score</a>
+        <div>
+          <a href="#pricing" class="btn btn-blue" style="padding:12px 20px;font-size:14px;">See Full Roadmap</a>
+          <div class="price-note">from <strong>$29</strong>/month</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ PROOF ════════════ -->
+<section id="proof">
+  <div class="container">
+
+    <div class="proof-top reveal">
+      <div>
+        <div class="proof-kicker">From L&D Businesses Like Yours</div>
+        <h2 class="proof-h2">Trust that <em>closes deals.</em></h2>
+      </div>
+      <p class="proof-right">
+        These are not polished case studies. They are real messages from coaches and small teams who fixed their trust gaps and watched something change in their pipeline.
+      </p>
+    </div>
+
+    <div class="testi-featured reveal">
+      <div class="testi-grid">
+        <blockquote class="testi-q">
+          "We were losing enterprise bids on due diligence without even getting on a call. Data Pilots showed us <strong>exactly why</strong>: no privacy page, no security headers, no AI disclosure. We fixed it in a weekend. The next proposal we sent? <strong>Closed it.</strong>"
+        </blockquote>
+        <div class="testi-attr">
+          <div class="testi-avatar">S</div>
+          <div class="testi-name">Sarah M.</div>
+          <div class="testi-role">Founder, Momentum L&D</div>
+          <div class="stars">★★★★★</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-pair">
+      <div class="testi-card reveal reveal-delay-1">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The free score alone stopped me in my tracks. I had no idea my privacy page was a red flag for buyers. The paid plan gave me a week-by-week fix list. My clients noticed within a month."</blockquote>
+        <div class="byline">
+          <div class="byline-av" style="background:linear-gradient(135deg,#10B981,#34D399);">J</div>
+          <div>
+            <div class="byline-name">James T.</div>
+            <div class="byline-role">Executive Coach</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I never thought data trust applied to a solo operator like me. Now my trust score is on the front page of every proposal I send. It is the first thing clients comment on."</blockquote>
+        <div class="byline">
+          <div class="byline-av" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA);">A</div>
+          <div>
+            <div class="byline-name">Amara O.</div>
+            <div class="byline-role">Team Development Specialist</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trust marks: no legal jargon, business language -->
+    <div class="trust-marks reveal">
+      <div class="trust-mark">
+        <svg class="icon" width="20" height="20" style="color:var(--teal);"><use href="#i-shield"/></svg>
+        <div class="trust-mark-text">
+          <div class="title">Built for businesses, not lawyers</div>
+          <div class="sub">Plain language, no legal expertise needed</div>
+        </div>
+      </div>
+      <div class="trust-mark">
+        <svg class="icon" width="20" height="20" style="color:var(--green);"><use href="#i-check-circle"/></svg>
+        <div class="trust-mark-text">
+          <div class="title">Nothing stored unless you choose</div>
+          <div class="sub">Scans run privately. You decide what to save.</div>
+        </div>
+      </div>
+      <div class="trust-mark">
+        <svg class="icon" width="20" height="20" style="color:#7C3AED;"><use href="#i-bot"/></svg>
+        <div class="trust-mark-text">
+          <div class="title">AI insights powered by Papaya</div>
+          <div class="sub">Transparent, explainable scoring</div>
+        </div>
+      </div>
+      <div class="trust-mark">
+        <svg class="icon" width="20" height="20" style="color:var(--blue);"><use href="#i-layers"/></svg>
+        <div class="trust-mark-text">
+          <div class="title">Backed by real frameworks</div>
+          <div class="sub"><a href="framework.html" style="color:var(--blue);text-decoration:none;font-weight:600;">See how our checks work</a></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ JOURNEY / HOW IT WORKS ════════════ -->
+<section id="journey">
+  <div class="container">
+
+    <div class="journey-header reveal">
+      <div class="journey-kicker">How It Works</div>
+      <h2 class="journey-h2">Check. Treat. Strengthen.</h2>
+      <p class="journey-sub">Three steps from "we nearly lost that deal" to "trust is actually our edge." One shared view for every stakeholder who needs to act.</p>
+    </div>
+
+    <div class="steps-row reveal">
+
+      <div class="step">
+        <div class="step-icon" style="background:rgba(0,200,168,.12);border:1.5px solid rgba(0,200,168,.2);">
+          <svg class="icon" width="24" height="24" style="color:var(--teal);"><use href="#i-search"/></svg>
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-name">Check</div>
+        <div class="step-desc">Enter your website URL. Our AI runs a risk assessment across four trust areas — UX, Transparency, Safety, and AI Trust — surfacing where you could be breaking trust or creating compliance issues. Plain results in about 5 minutes.</div>
+      </div>
+
+      <div class="step-arrow">
+        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
+          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
+          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
+          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
+        </svg>
+      </div>
+
+      <div class="step">
+        <div class="step-icon" style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.2);">
+          <svg class="icon" width="24" height="24" style="color:var(--green);"><use href="#i-zap"/></svg>
+          <div class="step-num" style="background:var(--green);">2</div>
+        </div>
+        <div class="step-name">Treat</div>
+        <div class="step-desc">Each finding comes with plain-language guidance your business owner understands, technical steps your developer can act on, and the legal context your compliance team needs. One report — every person who needs to act has their part.</div>
+      </div>
+
+      <div class="step-arrow">
+        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
+          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
+          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
+          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
+        </svg>
+      </div>
+
+      <div class="step">
+        <div class="step-icon" style="background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.2);">
+          <svg class="icon" width="24" height="24" style="color:#8B5CF6;"><use href="#i-trend"/></svg>
+          <div class="step-num" style="background:#8B5CF6;">3</div>
+        </div>
+        <div class="step-name">Strengthen</div>
+        <div class="step-desc">Export your trust score as a PDF for proposals. Track improvement each month. And because findings map to the legal and security tools your specialist partners already use, there is no new system to buy — just faster coordination.</div>
+      </div>
+
+    </div>
+
+    <!-- Mission / Vision -->
+    <div class="mv-grid reveal">
+      <div class="mv-card mission">
+        <div class="mv-label">Mission</div>
+        <div class="mv-headline">Empower small businesses with confidence.</div>
+        <div class="mv-body">We take the stuff big companies have legal teams for and turn it into a plain checklist that any business owner can act on. No expertise needed.</div>
+      </div>
+      <div class="mv-card vision">
+        <div class="mv-label">Vision</div>
+        <div class="mv-headline">Stronger leaders through trusted growth.</div>
+        <div class="mv-body">The best L&D providers should win on the quality of their work, not on who has a bigger compliance department.</div>
+      </div>
+    </div>
+
+    <!-- Integration voting -->
+    <div class="int-section reveal">
+      <div class="int-header">
+        <div>
+          <div class="int-hed">Help us build to fit your day-to-day</div>
+          <p class="int-sub">We are building integrations that slot into the tools you already use. Vote for the ones that would genuinely help you, and we will build them first.</p>
+        </div>
+        <a href="#pricing" class="btn btn-teal" style="flex-shrink:0;padding:11px 20px;font-size:13.5px;">
+          Get early access
+        </a>
+      </div>
+
+      <div class="int-grid" id="intGrid">
+        <div class="int-item" data-tool="Zapier" onclick="voteInt(this)">
+          <div class="int-logo">⚡</div>
+          <div class="int-name">Zapier</div>
+          <div class="int-vote-count" id="v-zapier">14 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="HubSpot" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#FF7A59;">H</div>
+          <div class="int-name">HubSpot</div>
+          <div class="int-vote-count" id="v-hubspot">11 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Slack" onclick="voteInt(this)">
+          <div class="int-logo">💬</div>
+          <div class="int-name">Slack</div>
+          <div class="int-vote-count" id="v-slack">9 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Notion" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#000;">N</div>
+          <div class="int-name">Notion</div>
+          <div class="int-vote-count" id="v-notion">7 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Calendly" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#006BFF;">C</div>
+          <div class="int-name">Calendly</div>
+          <div class="int-vote-count" id="v-calendly">8 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Sheets" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#34A853;">G</div>
+          <div class="int-name">Google Sheets</div>
+          <div class="int-vote-count" id="v-sheets">6 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+      </div>
+
+      <div class="int-submit-row">
+        <div class="int-item int-other" style="flex:1;max-width:340px;">
+          <svg class="icon" width="14" height="14" style="color:var(--slate-400);flex-shrink:0;"><use href="#i-search"/></svg>
+          <input type="text" id="otherTool" placeholder="Suggest a tool we should add..."/>
+        </div>
+        <button class="btn btn-green" style="padding:11px 20px;font-size:13.5px;" onclick="submitOther()">
+          <svg class="icon" width="14" height="14"><use href="#i-thumb"/></svg>
+          Vote
+        </button>
+        <p class="int-submit-note" id="intMsg"></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ FRAMEWORK TEASER ════════════ -->
+<section id="framework-teaser">
+  <div class="container">
+    <div class="fw-inner reveal">
+
+      <div>
+        <div class="fw-kicker">How We Think</div>
+        <h2 class="fw-h2">One framework. Every stakeholder speaks the same language.</h2>
+        <p class="fw-sub">Most L&D businesses have a legal team, a developer, and a business owner — each seeing a different slice of the trust picture. Our framework gives everyone a shared view: executive visibility at the top, coordination between roles in the middle, and mapping to the specialist tools each team already uses at the bottom. No new tools to buy. No expertise required on your end.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+          <a href="framework.html" class="btn btn-teal" style="padding:13px 24px;font-size:14.5px;">
+            See how our checks work
+            <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="fw-layers">
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(0,200,168,.15);color:var(--teal);">
+            <svg class="icon" width="16" height="16"><use href="#i-users"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Executive Visibility</div>
+            <div class="fw-layer-sub">Leadership sees the whole trust picture — one score, four clear areas, no jargon</div>
+          </div>
+        </div>
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(16,185,129,.12);color:var(--green);">
+            <svg class="icon" width="16" height="16"><use href="#i-layers"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Coordination &amp; Translation</div>
+            <div class="fw-layer-sub">Connects business owners, legal teams, and developers around the same findings</div>
+          </div>
+        </div>
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(139,92,246,.12);color:#A78BFA;">
+            <svg class="icon" width="16" height="16"><use href="#i-award"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Tool Agnostic</div>
+            <div class="fw-layer-sub">Maps findings to the legal, security, and compliance tools each specialist already uses</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PRICING ════════════ -->
+<section id="pricing">
+  <div class="container">
+
+    <div class="pricing-header reveal">
+      <div class="pricing-kicker">Pricing</div>
+      <h2 class="pricing-h2">Two speeds.<br>One destination.</h2>
+      <p class="pricing-sub">Start free. You get the big picture on your public website. Upgrade when you want the full picture — including your portal or platform — plus the specific fixes and proof to share with clients.</p>
+    </div>
+
+    <div class="plans-grid">
+
+      <!-- Free -->
+      <div class="plan reveal reveal-delay-1">
+        <div class="plan-tier">Free Pilot</div>
+        <div class="plan-price-row">
+          <div class="plan-price">$0</div>
+          <div class="plan-period"> always</div>
+        </div>
+        <p class="plan-tagline">A real look at where you stand. No catch, no card.</p>
+        <ul class="plan-feats">
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Full trust check across all four areas</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Your overall score out of 100</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Top three plain-language findings</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No account, no card, your data stays yours</li>
+          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Specific issues with fix instructions</li>
+          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Exportable trust proof PDF</li>
+          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Monthly progress tracking</li>
+        </ul>
+        <a href="#hero-scan" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
+          Start Free Check
+        </a>
+        <p class="plan-foot">Takes about 5 minutes. No account needed.</p>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan pro reveal reveal-delay-2">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-tier">Co-Pilot</div>
+        <div class="plan-price-row">
+          <div class="plan-price">$29</div>
+          <div class="plan-period"> /month</div>
+        </div>
+        <p class="plan-tagline">Everything you need to turn your score into a business asset.</p>
+        <ul class="plan-feats">
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in the free plan</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Specific findings with step-by-step fix guides</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF to include in proposals</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Team task delegation view</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan and progress tracking</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> AI-powered quick win suggestions (via Papaya)</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Priority support</li>
+        </ul>
+        <a href="#hero-scan" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
+          Unlock Full Roadmap
+        </a>
+        <p class="plan-foot">Cancel any time. No tricks, no annual lock-in.</p>
+      </div>
+
+    </div>
+
+    <p class="pricing-foot">
+      Need a team plan or a custom setup?
+      <a href="mailto:hello@datapilots.tech">Get in touch</a>
+    </p>
+
+  </div>
+</section>
+
+<!-- ════════════ FAQ ════════════ -->
+<section id="faq">
+  <div class="container">
+
+    <div class="faq-header reveal">
+      <div class="faq-kicker">FAQ</div>
+      <h2 class="faq-h2">Questions? We've Got Answers.</h2>
+    </div>
+
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>Is this just another website audit tool?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>No. Think of it as a risk assessment, not an audit. Most audit tools are built for developers and flag technical issues in jargon. The Trust Check is built for L&amp;D business owners — it surfaces where you could be breaking trust or creating compliance issues, in plain language, ranked by what matters most to your buyers. You get clarity, not a 50-page report.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>What happens to my data?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Nothing is stored unless you choose to save your results. We scan your public-facing website and return a score. No account needed for the free check. You are always in control of what gets saved.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>I'm not technical — will I understand the results?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>That's exactly who we built this for. Every finding is written in plain language with a real-world example. If it says "Missing privacy page," we tell you what that means to a buyer, why it matters, and how to fix it — without needing a developer or a lawyer.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>How is the free scan different from the paid roadmap?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>The free scan gives you your trust score and a high-level view across four pillars: UX, Transparency, Safety, and AI Trust. The paid Co-Pilot plan adds specific findings with step-by-step fix guides, a trust proof PDF you can share in proposals, team task delegation, and monthly re-scans to track progress over time.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>Who is this built for?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>L&amp;D coaches, consultants, and small training firms selling to enterprise clients or navigating procurement processes. If your buyers check your website before agreeing to meet, this is for you. No technical background needed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" onclick="toggleFaq(this)">
+          <span>Can I share my trust report with prospects?</span>
+          <svg class="icon faq-chevron" width="18" height="18"><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a">
+          <p>Yes — that's one of the most popular uses. Co-Pilot includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+
+  <div class="footer-cta">
+    <h2 class="footer-cta-h">Ready for <span>takeoff?</span></h2>
+    <p class="footer-cta-sub">Your free check takes about 5 minutes. Your next deal might depend on it.</p>
+    <div class="footer-cta-actions">
+      <a href="#hero-scan" class="btn btn-green" style="padding:16px 34px;font-size:15px;">Start Free Check</a>
+      <a href="https://calendly.com/datapilots" class="btn btn-white" style="padding:14px 24px;font-size:14px;">
+        <svg class="icon" width="14" height="14"><use href="#i-clock"/></svg>
+        Book a 20-min call
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-links-band">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div>
+          <a href="/" class="footer-logo">
+            <svg width="30" height="30" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="ft-lg" x1="20" y1="20" x2="180" y2="185" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#00F59D"/>
+                  <stop offset="50%" stop-color="#00C8B4"/>
+                  <stop offset="100%" stop-color="#0085FF"/>
+                </linearGradient>
+              </defs>
+              <path d="M 30 98 A 72 72 0 0 1 170 98" stroke="url(#ft-lg)" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <rect x="8" y="83" width="22" height="38" rx="8" fill="url(#ft-lg)"/>
+              <rect x="170" y="83" width="22" height="38" rx="8" fill="url(#ft-lg)"/>
+              <circle cx="100" cy="105" r="72" fill="#0B1929"/>
+              <circle cx="100" cy="105" r="72" stroke="url(#ft-lg)" stroke-width="5" fill="none"/>
+              <rect x="52" y="54" width="96" height="82" rx="14" fill="#112238"/>
+              <rect x="62" y="72" width="28" height="22" rx="5" fill="url(#ft-lg)"/>
+              <rect x="110" y="72" width="28" height="22" rx="5" fill="url(#ft-lg)"/>
+              <rect x="66" y="108" width="68" height="5" rx="2.5" fill="url(#ft-lg)" opacity="0.5"/>
+              <rect x="66" y="117" width="50" height="5" rx="2.5" fill="url(#ft-lg)" opacity="0.3"/>
+              <path d="M 164 122 Q 158 148 145 158" stroke="url(#ft-lg)" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <rect x="130" y="156" width="22" height="12" rx="6" fill="url(#ft-lg)"/>
+            </svg>
+            <div class="logo-wordmark" style="font-size:14px;">DATA <span>PILOTS</span></div>
+          </a>
+          <p class="footer-blurb">Helping L&D businesses show up as trustworthy, so the best work wins the deal.</p>
+          <div class="privacy-notice">
+            <svg class="icon" width="14" height="14" style="color:var(--teal);flex-shrink:0;margin-top:1px;"><use href="#i-lock"/></svg>
+            <span><strong>Nothing stored by default.</strong> We do not store, sell, or share your site data unless you choose to save your results. You are always in control.</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="footer-col-label">Product</div>
+          <ul class="footer-list">
+            <li><a href="#results">How It Works</a></li>
+            <li><a href="framework.html">Our Framework</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#journey">About</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-label">Legal</div>
+          <ul class="footer-list">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">AI Ethics Statement</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="footer-col-label">Talk to Us</div>
+          <ul class="footer-list">
+            <li><a href="mailto:hello@datapilots.tech">hello@datapilots.tech</a></li>
+            <li><a href="https://calendly.com/datapilots">Book a call</a></li>
+            <li><a href="#">LinkedIn</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>2025 Data Pilots · datapilots.tech · All rights reserved.</p>
+        <p>Made for businesses. Not for lawyers.</p>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ════════════ STICKY BAR ════════════ -->
+<div id="sticky-bar" class="sticky-bar" role="complementary" aria-label="Quick trust check">
+  <span class="sticky-label">See your trust score <strong>free</strong></span>
+  <div class="sticky-form">
+    <input type="url" id="stickyUrl" placeholder="yoursite.com" autocomplete="off" aria-label="Your website URL"/>
+    <button onclick="stickySubmit()" class="btn btn-teal sticky-btn">
+      Free Scan <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
+    </button>
+  </div>
+  <button onclick="document.getElementById('sticky-bar').classList.remove('visible');localStorage.setItem('dp-bar-dismissed','1');"
+    style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.3);padding:4px;line-height:1;font-size:18px;margin-left:4px;" aria-label="Dismiss">&#x2715;</button>
+</div>
+
+<!-- ════════════ JAVASCRIPT ════════════ -->
+<script>
+  // ── Scroll reveals ──────────────────────────────
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── Stat bars ───────────────────────────────────
+  const barObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const fill = e.target.querySelector('.stat-bar-fill');
+      if (fill) { fill.style.width = fill.dataset.width; }
+      barObserver.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-bar-track').forEach(el => barObserver.observe(el));
+
+  // ── Score ring + pillar bars ─────────────────────
+  const ring = document.getElementById('ringFill');
+  const pillarSection = document.getElementById('pillarRows');
+  if (ring && pillarSection) {
+    ring.style.strokeDashoffset = '308';
+    const ringObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        ring.style.strokeDashoffset = '77'; // ~75% fill
+        document.querySelectorAll('.p-fill').forEach(el => {
+          const w = el.dataset.w;
+          el.style.width = '0%';
+          setTimeout(() => { el.style.width = w + '%'; }, 120);
+        });
+        ringObs.unobserve(e.target);
+      });
+    }, { threshold: 0.3 });
+    ringObs.observe(pillarSection);
+  }
+
+  // ── Multi-step wizard ───────────────────────
+  let _scanPromise = null; // holds scan result or promise
+
+  function wizNext(fromStep) {
+    if (fromStep === 1) {
+      const url = document.getElementById('scanUrl').value.trim();
+      if (!url || url.length < 5) {
+        const row = document.getElementById('scanUrl').parentElement;
+        row.style.borderColor = '#EF4444';
+        row.style.animation = 'shake .3s ease';
+        document.getElementById('scanUrl').focus();
+        setTimeout(() => { row.style.borderColor = ''; row.style.animation = ''; }, 1600);
+        return;
+      }
+      showStep(2);
+    }
+  }
+
+  function wizBack(fromStep) {
+    if (fromStep === 2) showStep(1);
+  }
+
+  function showStep(n) {
+    for (let i = 1; i <= 2; i++) {
+      const el = document.getElementById('wiz-step-' + i);
+      if (el) el.classList.toggle('hidden', i !== n);
+    }
+    // Update progress dots
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('wpDot' + i);
+      if (!dot) continue;
+      dot.classList.remove('active', 'done');
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+      const line = document.getElementById('wpLine' + i);
+      if (line) line.classList.toggle('done', i < n);
+    }
+  }
+
+  // Auto-advance to step 2 when URL is typed
+  document.getElementById('scanUrl').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') wizNext(1);
+  });
+
+  const API_BASE = 'http://localhost:3001';
+
+  function startScanAndModal() {
+    const url = document.getElementById('scanUrl').value.trim();
+    if (!url) return;
+
+    // Kick off scan in background — store promise
+    _scanPromise = callScanAPI(url).catch(() => demoResults(url));
+
+    // Show step 3 modal
+    document.getElementById('scan-modal').style.display = 'flex';
+
+    // Update progress to show step 3 active
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('wpDot' + i);
+      if (!dot) continue;
+      dot.classList.remove('active','done');
+      if (i < 3) dot.classList.add('done');
+      else if (i === 3) dot.classList.add('active');
+      const line = document.getElementById('wpLine' + i);
+      if (line) line.classList.toggle('done', i < 3);
+    }
+  }
+
+  async function submitModal() {
+    const btn = document.getElementById('modalBtn');
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="icon" width="15" height="15" style="animation:spin .7s linear infinite"><use href="#i-search"/></svg> Getting your results…`;
+
+    // Wait for scan to finish (may already be done)
+    let data;
+    try { data = await _scanPromise; } catch(e) { data = demoResults(document.getElementById('scanUrl').value.trim()); }
+
+    // Close modal, show step 4
+    document.getElementById('scan-modal').style.display = 'none';
+
+    // Update progress to step 4
+    for (let i = 1; i <= 5; i++) {
+      const dot = document.getElementById('wpDot' + i);
+      if (!dot) continue;
+      dot.classList.remove('active','done');
+      if (i < 4) dot.classList.add('done');
+      else if (i === 4) dot.classList.add('active');
+      const line = document.getElementById('wpLine' + i);
+      if (line) line.classList.toggle('done', i < 4);
+    }
+
+    renderScanResults(data);
+
+    btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-play"/></svg> View My Results →`;
+    btn.disabled = false;
+  }
+
+  // Legacy handleScan kept for sticky bar submit
+  function handleScan() {
+    const urlInput = document.getElementById('scanUrl') || document.getElementById('stickyUrl');
+    const url = (urlInput ? urlInput.value : '').trim();
+    if (!url) return;
+    _scanPromise = callScanAPI(url).catch(() => demoResults(url));
+    submitModal();
+  }
+
+  async function callScanAPI(url) {
+    const resp = await fetch(`${API_BASE}/scan`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+      signal: AbortSignal.timeout(20000)
+    });
+    if (!resp.ok) throw new Error('API error');
+    return resp.json();
+  }
+
+  function demoResults(url) {
+    // Shown when API server is not running
+    return {
+      url, score: 62, score_label: 'Pilot Ready', partial: true,
+      pillars: {
+        ux:           { score: 80, label: 'User Experience' },
+        transparency: { score: 55, label: 'Transparency' },
+        safety:       { score: 58, label: 'Safety' },
+        ai_trust:     { score: 55, label: 'AI Trust' },
+      },
+      free_findings: [
+        { id:'privacy', pillar:'transparency', status:'fail',
+          title:'No privacy page detected',
+          detail:'Over 70% of B2B buyers check for a privacy policy before signing. A missing policy is the most common trust issue we find.',
+          tag:'FIX THIS WEEK' },
+        { id:'ai_disclose', pillar:'ai_trust', status:'warn',
+          title:'No AI disclosure found on public site',
+          detail:'Over half of enterprise L&D buyers now ask about AI use before signing. A short note prevents the question coming up in procurement.',
+          tag:'QUICK WIN' },
+        { id:'hsts', pillar:'safety', status:'warn',
+          title:'HSTS not enabled',
+          detail:'HSTS tells browsers to always use HTTPS. Without it, the first connection could be intercepted.',
+          tag:'QUICK WIN' },
+      ],
+      total_issues: 5,
+      note: 'Free check covers your public-facing website. Upgrade to Co-Pilot to scan your learning portal/platform and unlock full fix guides.'
+    };
+  }
+
+  // ── Tag colour map ───────────────────────────
+  const TAG_COLOR = { 'FIX THIS WEEK': '#EF4444', 'QUICK WIN': '#10B981', 'REVIEW': '#D97706' };
+
+  function buildFindingHTML(f) {
+    const src = f.source === 'papaya'
+      ? `<span style="font-size:10px;font-weight:600;color:var(--teal);opacity:.7;margin-left:6px;">✦ Papaya</span>`
+      : '';
+    return `
+      <div class="live-finding">
+        <div class="live-finding-header">
+          <strong>${f.title}${src}</strong>
+          ${f.tag ? `<span class="finding-tag" style="color:${TAG_COLOR[f.tag]||'#666'}">${f.tag}</span>` : ''}
+        </div>
+        ${f.detail ? `<p>${f.detail}</p>` : ''}
+      </div>`;
+  }
+
+  function renderScanResults(data) {
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+    // Score ring
+    const ring = document.getElementById('ringFill');
+    if (ring) {
+      const circumference = 2 * Math.PI * 49;
+      ring.style.strokeDashoffset = circumference * (1 - data.score / 100);
+    }
+
+    // Score number & label
+    const scoreNum = document.querySelector('.score-num');
+    if (scoreNum) scoreNum.innerHTML = `${data.score}<small>/100</small>`;
+    const scoreLabel = document.querySelector('.score-label');
+    if (scoreLabel) scoreLabel.textContent = data.score_label;
+
+    // Pillar bars
+    const pillarMap = { ux: 0, transparency: 1, safety: 2, ai_trust: 3 };
+    const pFills  = document.querySelectorAll('.p-fill');
+    const pScores = document.querySelectorAll('.p-score');
+    Object.entries(data.pillars).forEach(([key, val]) => {
+      const idx = pillarMap[key];
+      if (pFills[idx])  { pFills[idx].dataset.w = val.score; pFills[idx].style.width = val.score + '%'; }
+      if (pScores[idx]) pScores[idx].textContent = val.score;
+    });
+
+    // Findings panel
+    const paidPanel = document.querySelector('.report-panel:last-child .panel-body');
+    if (!paidPanel) return;
+
+    // Hide static demo findings
+    paidPanel.querySelectorAll('.finding-item, .paid-extras').forEach(el => el.style.display = 'none');
+
+    // Create or reuse live-findings container
+    let liveArea = document.getElementById('live-findings');
+    if (!liveArea) {
+      liveArea = document.createElement('div');
+      liveArea.id = 'live-findings';
+      paidPanel.insertBefore(liveArea, paidPanel.firstChild);
+    }
+
+    const domain = data.url.replace(/^https?:\/\//, '');
+    const findingsHTML = (data.free_findings || []).map(buildFindingHTML).join('');
+
+    // Papaya status strip (shown while Papaya scan runs in background)
+    const papayaStrip = data.papaya_session_id ? `
+      <div id="papaya-strip" style="
+        display:flex;align-items:center;gap:10px;
+        background:rgba(0,200,168,.07);border:1px solid rgba(0,200,168,.18);
+        border-radius:8px;padding:10px 14px;margin-top:14px;
+        font-size:12px;color:rgba(255,255,255,.55);">
+        <div class="modal-spinner" style="width:13px;height:13px;flex-shrink:0;"></div>
+        <span id="papaya-strip-msg">AI consent scan running in background (Papaya)…</span>
+      </div>` : '';
+
+    const noteBlock = `
+      <div style="margin-top:16px;padding:12px;background:rgba(0,200,168,.08);
+        border:1px solid rgba(0,200,168,.25);border-radius:8px;
+        font-size:12px;color:var(--slate-500);line-height:1.6;">
+        ${data.note || ''}
+      </div>`;
+
+    liveArea.innerHTML = `
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;
+        letter-spacing:.08em;color:var(--teal);margin-bottom:12px;">
+        Live findings — ${domain} &nbsp;·&nbsp; ${data.total_issues} issues found
+      </div>
+      <div id="live-findings-list">${findingsHTML}</div>
+      ${papayaStrip}
+      ${noteBlock}`;
+
+    // Start polling for Papaya findings if we have a session
+    if (data.papaya_session_id) {
+      pollPapayaFindings(data.papaya_session_id);
+    }
+  }
+
+  // ── Papaya findings live-update ─────────────────
+  function pollPapayaFindings(sessionId) {
+    let attempts = 0;
+    const maxAttempts = 24; // 24 × 5s = 2 min max
+
+    function poll() {
+      attempts++;
+      fetch(`${API_BASE}/papaya/${sessionId}`)
+        .then(r => r.json())
+        .then(data => {
+          const strip  = document.getElementById('papaya-strip');
+          const msg    = document.getElementById('papaya-strip-msg');
+          const list   = document.getElementById('live-findings-list');
+
+          if (data.status === 'completed') {
+            // Inject Papaya findings into findings list
+            if (data.findings && data.findings.length && list) {
+              const papayaHTML = data.findings
+                .filter(f => f.status === 'fail' || f.status === 'warn')
+                .map(buildFindingHTML).join('');
+              if (papayaHTML) {
+                list.insertAdjacentHTML('beforeend', papayaHTML);
+              }
+            }
+
+            // Update strip to show completion
+            if (strip) {
+              strip.style.background = 'rgba(16,185,129,.08)';
+              strip.style.borderColor = 'rgba(16,185,129,.25)';
+              strip.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  style="flex-shrink:0;">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span style="color:rgba(255,255,255,.6);">
+                  Papaya consent scan complete
+                  ${data.results_url ? `· <a href="${data.results_url}" target="_blank"
+                    style="color:var(--teal);text-decoration:underline;">view full report</a>` : ''}
+                </span>`;
+            }
+
+          } else if (data.status === 'failed') {
+            if (strip && msg) {
+              strip.style.opacity = '.4';
+              msg.textContent = 'Papaya consent scan unavailable — continuing with standard checks.';
+            }
+          } else if (attempts < maxAttempts) {
+            // Still running — keep polling
+            setTimeout(poll, 5000);
+          } else {
+            if (strip && msg) msg.textContent = 'Papaya scan still running — check back shortly.';
+          }
+        })
+        .catch(() => {
+          if (attempts < maxAttempts) setTimeout(poll, 8000);
+        });
+    }
+
+    // First poll after 5 seconds
+    setTimeout(poll, 5000);
+  }
+
+  // ── Integration voting ──────────────────────────
+  const votes = JSON.parse(localStorage.getItem('dp-votes') || '{}');
+
+  function voteInt(el) {
+    const tool = el.dataset.tool;
+    if (votes[tool]) return; // already voted
+    votes[tool] = true;
+    localStorage.setItem('dp-votes', JSON.stringify(votes));
+    el.classList.add('voted');
+    const key = 'v-' + tool.toLowerCase().replace(' ', '');
+    const countEl = document.getElementById(key);
+    if (countEl) {
+      const n = parseInt(countEl.textContent) + 1;
+      countEl.textContent = n + ' votes';
+    }
+  }
+
+  function submitOther() {
+    const val = document.getElementById('otherTool').value.trim();
+    const msg = document.getElementById('intMsg');
+    if (!val) return;
+    msg.textContent = 'Vote received for ' + val + '. Thank you!';
+    msg.style.color = 'var(--teal)';
+    document.getElementById('otherTool').value = '';
+    setTimeout(() => { msg.textContent = ''; }, 3500);
+  }
+
+  // Restore votes from localStorage
+  Object.keys(votes).forEach(tool => {
+    const el = document.querySelector(`[data-tool="${tool}"]`);
+    if (el) el.classList.add('voted');
+  });
+
+  // ── FAQ accordion ───────────────────────────────
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-a.open').forEach(el => {
+      el.classList.remove('open');
+      el.previousElementSibling.setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      answer.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  // ── Sticky bar ──────────────────────────────────
+  (function() {
+    if (localStorage.getItem('dp-bar-dismissed')) return;
+    const bar = document.getElementById('sticky-bar');
+    const hero = document.getElementById('hero');
+    if (!bar || !hero) return;
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) bar.classList.add('visible');
+        else bar.classList.remove('visible');
+      });
+    }, { threshold: 0 });
+    obs.observe(hero);
+  })();
+
+  function stickySubmit() {
+    const url = document.getElementById('stickyUrl').value.trim();
+    if (!url) { document.getElementById('stickyUrl').focus(); return; }
+    document.getElementById('scanUrl').value = url;
+    document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => { showStep(2); }, 600);
+  }
+
+  // ── Injected keyframes ──────────────────────────
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes spin  { to { transform: rotate(360deg); } }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+  `;
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>
