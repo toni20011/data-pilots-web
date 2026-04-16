@@ -2763,7 +2763,9 @@
     if (e.key === 'Enter') wizNext(1);
   });
 
-  const API_BASE = 'http://localhost:3001';
+  // Use real API only when running locally — deployed HTTPS site can't call HTTP localhost
+  const IS_LOCAL = ['localhost','127.0.0.1'].includes(window.location.hostname);
+  const API_BASE  = IS_LOCAL ? 'http://localhost:3001' : null;
 
   function startScanAndModal() {
     const url = document.getElementById('scanUrl').value.trim();
@@ -2826,42 +2828,56 @@
   }
 
   async function callScanAPI(url) {
+    // If no API available (deployed site), return rich demo immediately
+    if (!API_BASE) return demoResults(url, true);
+
     const resp = await fetch(`${API_BASE}/scan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
-      signal: AbortSignal.timeout(20000)
+      signal: AbortSignal.timeout(25000)
     });
     if (!resp.ok) throw new Error('API error');
     return resp.json();
   }
 
-  function demoResults(url) {
-    // Shown when API server is not running
+  function demoResults(url, isPreview = false) {
+    // Rich demo — shown when API isn't reachable (deployed site without hosted API)
+    // isPreview = true flags results as illustrative so user knows it's a sample
+    const domain = url.replace(/^https?:\/\//, '').replace(/\/$/, '') || 'yoursite.com';
     return {
-      url, score: 62, score_label: 'Pilot Ready', partial: true,
+      url, score: 58, score_label: 'Pre-Flight', partial: true,
+      is_preview: isPreview,
       pillars: {
-        ux:           { score: 80, label: 'User Experience' },
-        transparency: { score: 55, label: 'Transparency' },
-        safety:       { score: 58, label: 'Safety' },
-        ai_trust:     { score: 55, label: 'AI Trust' },
+        ux:           { score: 75, label: 'User Experience' },
+        transparency: { score: 48, label: 'Transparency' },
+        safety:       { score: 55, label: 'Safety' },
+        ai_trust:     { score: 40, label: 'AI Trust' },
       },
       free_findings: [
-        { id:'privacy', pillar:'transparency', status:'fail',
-          title:'No privacy page detected',
-          detail:'Over 70% of B2B buyers check for a privacy policy before signing. A missing policy is the most common trust issue we find.',
-          tag:'FIX THIS WEEK' },
-        { id:'ai_disclose', pillar:'ai_trust', status:'warn',
-          title:'No AI disclosure found on public site',
-          detail:'Over half of enterprise L&D buyers now ask about AI use before signing. A short note prevents the question coming up in procurement.',
-          tag:'QUICK WIN' },
-        { id:'hsts', pillar:'safety', status:'warn',
-          title:'HSTS not enabled',
-          detail:'HSTS tells browsers to always use HTTPS. Without it, the first connection could be intercepted.',
-          tag:'QUICK WIN' },
+        {
+          id: 'privacy', pillar: 'transparency', status: 'fail',
+          title: 'No privacy page detected',
+          detail: '73% of L&D buyers check for a privacy policy before signing. A missing policy is the most common trust-killer we find — and the easiest to fix.',
+          tag: 'FIX THIS WEEK'
+        },
+        {
+          id: 'papaya_reject', pillar: 'transparency', status: 'fail',
+          title: 'Reject-all not honoured — trackers still active after consent declined',
+          detail: 'Our AI browser agent clicked "Decline All" on your consent banner — but tracking continued. This is a direct GDPR violation and a common finding in enterprise procurement security reviews.',
+          tag: 'FIX THIS WEEK', source: 'papaya'
+        },
+        {
+          id: 'ai_disclose', pillar: 'ai_trust', status: 'warn',
+          title: 'No AI disclosure found on public site',
+          detail: 'Over half of enterprise L&D buyers now ask about AI use before signing. A short plain-language note on your site prevents the question becoming a procurement blocker.',
+          tag: 'QUICK WIN'
+        },
       ],
-      total_issues: 5,
-      note: 'Free check covers your public-facing website. Upgrade to Co-Pilot to scan your learning portal/platform and unlock full fix guides.'
+      total_issues: 7,
+      note: isPreview
+        ? `This is an illustrative preview using typical findings for an L&D website. Run the check locally with the Data Pilots API for your actual ${domain} results.`
+        : 'Free check covers your public-facing website. Upgrade to Co-Pilot to scan your learning portal/platform and unlock full fix guides.'
     };
   }
 
@@ -2926,6 +2942,20 @@
     const domain = data.url.replace(/^https?:\/\//, '');
     const findingsHTML = (data.free_findings || []).map(buildFindingHTML).join('');
 
+    // Preview banner (when real API not available)
+    const previewBanner = data.is_preview ? `
+      <div style="
+        display:flex;align-items:flex-start;gap:10px;
+        background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);
+        border-radius:8px;padding:11px 13px;margin-bottom:14px;font-size:12px;
+        color:rgba(255,255,255,.55);line-height:1.5;">
+        <span style="color:#FBBF24;flex-shrink:0;font-size:14px;">◎</span>
+        <span><strong style="color:#FBBF24;">Illustrative preview</strong> — these are typical findings for an L&D website.
+        To scan <strong style="color:rgba(255,255,255,.75);">${domain}</strong> for real, run the Trust Check locally
+        or <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank"
+          style="color:var(--teal);text-decoration:underline;">book a live check with our team</a>.</span>
+      </div>` : '';
+
     // Papaya status strip (shown while Papaya scan runs in background)
     const papayaStrip = data.papaya_session_id ? `
       <div id="papaya-strip" style="
@@ -2945,9 +2975,11 @@
       </div>`;
 
     liveArea.innerHTML = `
+      ${previewBanner}
       <div style="font-size:11px;font-weight:700;text-transform:uppercase;
         letter-spacing:.08em;color:var(--teal);margin-bottom:12px;">
-        Live findings — ${domain} &nbsp;·&nbsp; ${data.total_issues} issues found
+        ${data.is_preview ? 'Typical findings for an L&D website' : `Live findings — ${domain}`}
+        &nbsp;·&nbsp; ${data.total_issues} issues found
       </div>
       <div id="live-findings-list">${findingsHTML}</div>
       ${papayaStrip}
