@@ -1037,9 +1037,10 @@
     pointer-events: none;
   }
   .cs-icon {
-    font-size: 18px;
     flex-shrink: 0;
-    opacity: .8;
+    opacity: .7;
+    color: var(--teal);
+    margin-top: 1px;
   }
   .cs-text { flex: 1; }
   .cs-text strong { color: rgba(255,255,255,.8); font-weight: 600; }
@@ -2213,30 +2214,38 @@
           <div class="modal-title">Sound familiar? See what we find most often.</div>
           <div class="modal-sub" style="margin-bottom:14px;">Tap a scenario to see what's usually behind it — and whether it might apply to you.</div>
 
-          <!-- Journey progress strip -->
+          <!-- Scan progress strip -->
           <div class="journey-strip">
             <div class="js-stage js-active" id="jstage-1">
-              <div class="js-icon-wrap">🔍</div>
+              <div class="js-icon-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </div>
               <div class="js-label">Scanning</div>
-              <div class="js-sub">AI audit live</div>
+              <div class="js-sub">Live audit</div>
             </div>
             <div class="js-connector"></div>
             <div class="js-stage" id="jstage-2">
-              <div class="js-icon-wrap">💡</div>
-              <div class="js-label">Clarity</div>
-              <div class="js-sub">Your score</div>
+              <div class="js-icon-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="js-label">Your score</div>
+              <div class="js-sub">4 pillars</div>
             </div>
             <div class="js-connector"></div>
             <div class="js-stage" id="jstage-3">
-              <div class="js-icon-wrap">✅</div>
-              <div class="js-label">Action</div>
-              <div class="js-sub">Fix what matters</div>
+              <div class="js-icon-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              </div>
+              <div class="js-label">Action plan</div>
+              <div class="js-sub">Prioritised fixes</div>
             </div>
             <div class="js-connector"></div>
             <div class="js-stage" id="jstage-4">
-              <div class="js-icon-wrap">📈</div>
-              <div class="js-label">Growth</div>
-              <div class="js-sub">Win more deals</div>
+              <div class="js-icon-wrap">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+              </div>
+              <div class="js-label">Stronger deals</div>
+              <div class="js-sub">Trust as an edge</div>
             </div>
           </div>
 
@@ -2415,9 +2424,9 @@
   <div class="container">
 
     <div class="pain-header reveal">
-      <div class="pain-kicker">The real cost of broken trust</div>
-      <h2 class="pain-h2">Are You Losing Trust — and Deals — on Your Website?</h2>
-      <p class="pain-sub">Every day, B2B buyers quietly check your site before they reply to you. When it doesn't meet their expectations, they move on — and you never find out why.</p>
+      <div class="pain-kicker">What's actually happening</div>
+      <h2 class="pain-h2">They check before they reply. You never find out what they saw.</h2>
+      <p class="pain-sub">Before a corporate buyer responds to your pitch, they've already visited your website. Not to read your case studies — to check the basics. If something gives them pause, they move on quietly.</p>
     </div>
 
     <div class="pain-grid">
@@ -2425,29 +2434,29 @@
         <div class="pain-icon">
           <svg class="icon" width="20" height="20"><use href="#i-eye"/></svg>
         </div>
-        <h3>Losing potential leads</h3>
-        <p>Buyers google you before they reply. A missing privacy page, no SSL, or unclear data practices sends them somewhere else — silently.</p>
+        <h3>The deal goes quiet after a strong first call</h3>
+        <p>They liked the meeting. But then someone in procurement checked your site and flagged a missing privacy page or unclear data handling. You never heard why.</p>
       </div>
       <div class="pain-card reveal reveal-delay-2">
         <div class="pain-icon">
           <svg class="icon" width="20" height="20"><use href="#i-users"/></svg>
         </div>
-        <h3>Losing potential customers</h3>
-        <p>You had a great demo but procurement stalled the deal. Often your site didn't meet their vendor due diligence checklist.</p>
+        <h3>Procurement asks questions you can't answer</h3>
+        <p>"Do you have a DPA?" "What consent management platform do you use?" These questions shouldn't surprise you — but they often do.</p>
       </div>
       <div class="pain-card reveal reveal-delay-1">
         <div class="pain-icon">
           <svg class="icon" width="20" height="20"><use href="#i-clock"/></svg>
         </div>
-        <h3>Failing general best practices</h3>
-        <p>Cookie consent, contact details, accessibility — things every credible business should have. Small gaps signal big risks to buyers.</p>
+        <h3>You don't know what buyers actually see</h3>
+        <p>Cookie consent, security signals, AI disclosure — small gaps that seem invisible to you look like red flags to a buyer running a vendor check.</p>
       </div>
       <div class="pain-card reveal reveal-delay-2">
         <div class="pain-icon">
           <svg class="icon" width="20" height="20"><use href="#i-info"/></svg>
         </div>
-        <h3>Compliance &amp; lawsuit exposure</h3>
-        <p>GDPR, AI transparency, data handling — your clients have legal expectations, and so does the law. Gaps here aren't just lost deals, they're liability.</p>
+        <h3>Compliance exposure you haven't measured</h3>
+        <p>GDPR, CCPA, AI transparency requirements — your clients have legal obligations that flow through to their vendors. Gaps here aren't just lost deals, they're liability.</p>
       </div>
     </div>
 
@@ -2706,41 +2715,17 @@
     </div>
 
     <div class="testi-featured reveal">
-      <div class="testi-grid">
-        <blockquote class="testi-q">
-          "We were losing enterprise bids on due diligence without even getting on a call. Data Pilots showed us <strong>exactly why</strong>: no privacy page, no security headers, no AI disclosure. We fixed it in a weekend. The next proposal we sent? <strong>Closed it.</strong>"
-        </blockquote>
-        <div class="testi-attr">
-          <div class="testi-avatar">S</div>
-          <div class="testi-name">Sarah M.</div>
-          <div class="testi-role">Founder, Momentum L&D</div>
-          <div class="stars">★★★★★</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="testi-pair">
-      <div class="testi-card reveal reveal-delay-1">
-        <div class="stars">★★★★★</div>
-        <blockquote>"The free score alone stopped me in my tracks. I had no idea my privacy page was a red flag for buyers. The paid plan gave me a week-by-week fix list. My clients noticed within a month."</blockquote>
-        <div class="byline">
-          <div class="byline-av" style="background:linear-gradient(135deg,#10B981,#34D399);">J</div>
-          <div>
-            <div class="byline-name">James T.</div>
-            <div class="byline-role">Executive Coach</div>
-          </div>
-        </div>
-      </div>
-      <div class="testi-card reveal reveal-delay-2">
-        <div class="stars">★★★★★</div>
-        <blockquote>"I never thought data trust applied to a solo operator like me. Now my trust score is on the front page of every proposal I send. It is the first thing clients comment on."</blockquote>
-        <div class="byline">
-          <div class="byline-av" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA);">A</div>
-          <div>
-            <div class="byline-name">Amara O.</div>
-            <div class="byline-role">Team Development Specialist</div>
-          </div>
-        </div>
+      <div class="testi-grid testi-early-access" style="background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.18);border-radius:16px;padding:32px 36px;text-align:center;">
+        <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:12px;">Early Access — Beta Programme</div>
+        <p style="font-size:18px;line-height:1.7;color:rgba(255,255,255,.8);max-width:600px;margin:0 auto 20px;font-family:var(--font-display);font-weight:400;">
+          We're running free Trust Checks with a select group of L&amp;D founders and coaches. Results, feedback, and early stories coming soon.
+        </p>
+        <p style="font-size:14px;color:rgba(255,255,255,.45);margin-bottom:24px;">
+          Want to be in the first cohort? Run your free check above — or get in touch directly.
+        </p>
+        <a href="mailto:hello@datapilots.tech?subject=Early Access" class="btn btn-outline" style="font-size:14px;padding:12px 24px;">
+          Apply for early access
+        </a>
       </div>
     </div>
 
@@ -3030,7 +3015,7 @@
 
       <div class="int-grid" id="intGrid">
         <div class="int-item" data-tool="Zapier" onclick="voteInt(this)">
-          <div class="int-logo">⚡</div>
+          <div class="int-logo" style="font-size:16px;font-weight:800;color:#FF4A00;">Z</div>
           <div class="int-name">Zapier</div>
           <div class="int-vote-count" id="v-zapier">14 votes</div>
           <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
@@ -3042,7 +3027,7 @@
           <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
         </div>
         <div class="int-item" data-tool="Slack" onclick="voteInt(this)">
-          <div class="int-logo">💬</div>
+          <div class="int-logo" style="font-size:16px;font-weight:800;color:#4A154B;">S</div>
           <div class="int-name">Slack</div>
           <div class="int-vote-count" id="v-slack">9 votes</div>
           <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
@@ -3745,7 +3730,7 @@
 
   function buildFindingHTML(f) {
     const src = f.source === 'papaya'
-      ? `<span style="font-size:10px;font-weight:600;color:var(--teal);opacity:.7;margin-left:6px;">✦ Papaya</span>`
+      ? `<span style="font-size:10px;font-weight:600;color:var(--teal);opacity:.7;margin-left:6px;letter-spacing:.04em;">via Papaya</span>`
       : '';
     return `
       <div class="live-finding">
@@ -3822,7 +3807,7 @@
         border:1px solid rgba(16,185,129,.22);
         border-radius:10px;padding:16px 18px;margin-top:18px;
         font-size:13px;color:rgba(255,255,255,.65);line-height:1.55;">
-        <span style="font-size:20px;flex-shrink:0;margin-top:1px;">💾</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(16,185,129,.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         <div style="flex:1;">
           <strong style="color:var(--white);display:block;margin-bottom:4px;">
             Want to save these results?
@@ -4158,7 +4143,7 @@
 
 <!-- ════════════ COOKIE TRANSPARENCY STRIP ════════════ -->
 <div id="cookie-strip" role="note" aria-label="Cookie information">
-  <span class="cs-icon">🍪</span>
+  <svg class="cs-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
   <span class="cs-text">
     <strong>No cookie banner?</strong> That's intentional.
     We use no tracking or analytics cookies — only a strictly necessary security cookie from Cloudflare.
