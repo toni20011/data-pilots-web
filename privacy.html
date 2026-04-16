@@ -306,7 +306,7 @@
       </tr>
       <tr>
         <td>Analyses publicly visible content</td>
-        <td>Retain scan results after the API call is complete</td>
+        <td>Retain a copy of the scan after we have parsed the results</td>
       </tr>
       <tr>
         <td>Returns findings to Data Pilots</td>
@@ -315,7 +315,7 @@
     </tbody>
   </table>
 
-  <p>Papaya processes the URL and returns results to us immediately. Results are not retained by Papaya beyond the duration of the API call. On a free scan, they are not retained by Data Pilots either. On a paid account, results are saved to your account only.</p>
+  <p><strong>Deletion is automatic and immediate.</strong> As soon as Papaya returns results and we have parsed them, we send a deletion request to Papaya's API — their copy is removed without any action required from you. We do not wait for a timer or a user event. On a free scan, Data Pilots also discards the results when your session ends. On a paid account, results are saved to your account only, and you can delete them at any time.</p>
 
   <!-- 5. Third parties -->
   <h2 id="third-parties">5. Third-party services we use</h2>

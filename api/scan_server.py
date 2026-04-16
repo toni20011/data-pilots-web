@@ -214,6 +214,25 @@ def papaya_fetch_analysis(session_id: str) -> str:
     return ""
 
 
+def papaya_delete_run(session_id: str) -> bool:
+    """
+    Request deletion of a Papaya run.
+    Called immediately after we have parsed results — Papaya's copy is no longer needed.
+    Returns True if deletion was confirmed, False if the endpoint is unavailable or errors.
+    Failures are non-fatal: results are already in local cache regardless.
+    """
+    resp = papaya_call("DELETE", f"/runs/{session_id}")
+    if resp["ok"] or resp.get("status") in (200, 204):
+        print(f"  [Papaya] run deleted  session={session_id}", flush=True)
+        return True
+    # Some APIs return 404 if already deleted — treat as success
+    if resp.get("status") == 404:
+        print(f"  [Papaya] run already gone  session={session_id}", flush=True)
+        return True
+    print(f"  [Papaya] delete failed (non-fatal)  status={resp.get('status')}  session={session_id}", flush=True)
+    return False
+
+
 # ─────────────────────────────────────────────
 # Papaya report parser → trust findings
 # ─────────────────────────────────────────────
@@ -445,35 +464,48 @@ def _papaya_worker(session_id: str, target_url: str):
     """
     Runs in a background thread.
     Polls until Papaya completes, fetches report + analysis, parses findings,
-    and stores everything in _papaya_cache.
+    stores everything in _papaya_cache, then immediately requests deletion
+    of the run from Papaya's servers — their copy is no longer needed once
+    we have parsed the findings locally.
     """
     try:
         ok = papaya_poll_until_done(session_id)
         if not ok:
             with _papaya_lock:
-                _papaya_cache[session_id] = {"status": "failed", "findings": [], "error": "Papaya timed out or failed"}
+                _papaya_cache[session_id] = {
+                    "status": "failed", "findings": [], "error": "Papaya timed out or failed",
+                    "cached_at": time.time(),
+                }
             return
 
         report_md     = papaya_fetch_report(session_id)
         analysis_html = papaya_fetch_analysis(session_id)
         findings      = parse_papaya_report(report_md, analysis_html)
 
+        # ── Privacy: delete from Papaya immediately — we have everything we need locally ──
+        deleted = papaya_delete_run(session_id)
+
         results_url = f"https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/{session_id}"
 
         with _papaya_lock:
             _papaya_cache[session_id] = {
-                "status":      "completed",
-                "findings":    findings,
-                "results_url": results_url,
-                "report_len":  len(report_md),
-                "error":       None,
+                "status":               "completed",
+                "findings":             findings,
+                "results_url":          results_url,
+                "report_len":           len(report_md),
+                "papaya_data_deleted":  deleted,   # audit flag
+                "cached_at":            time.time(),
+                "error":                None,
             }
-        print(f"  [Papaya] worker done  {len(findings)} findings  session={session_id}", flush=True)
+        print(f"  [Papaya] worker done  {len(findings)} findings  deleted={deleted}  session={session_id}", flush=True)
 
     except Exception as e:
         print(f"  [Papaya] worker error: {e}", flush=True)
         with _papaya_lock:
-            _papaya_cache[session_id] = {"status": "failed", "findings": [], "error": str(e)}
+            _papaya_cache[session_id] = {
+                "status": "failed", "findings": [], "error": str(e),
+                "cached_at": time.time(),
+            }
 
 
 def launch_papaya_background(target_url: str):
@@ -486,11 +518,37 @@ def launch_papaya_background(target_url: str):
         return None
 
     with _papaya_lock:
-        _papaya_cache[session_id] = {"status": "running", "findings": [], "error": None}
+        _papaya_cache[session_id] = {
+            "status": "running", "findings": [], "error": None,
+            "cached_at": time.time(),
+        }
 
     t = threading.Thread(target=_papaya_worker, args=(session_id, target_url), daemon=True)
     t.start()
     return session_id
+
+
+# ── Local cache TTL cleanup ──────────────────────────────────────────────────
+# Papaya's copy is deleted immediately after parsing (above).
+# Our local in-memory cache is cleared after 1 hour so the server doesn't
+# accumulate stale sessions across a long uptime.
+_CACHE_TTL_SECONDS = 3600  # 1 hour
+
+def _cache_cleanup_worker():
+    """Background thread: remove _papaya_cache entries older than TTL."""
+    while True:
+        time.sleep(600)  # run every 10 minutes
+        cutoff = time.time() - _CACHE_TTL_SECONDS
+        with _papaya_lock:
+            stale = [sid for sid, v in _papaya_cache.items()
+                     if v.get("cached_at", 0) < cutoff]
+            for sid in stale:
+                del _papaya_cache[sid]
+        if stale:
+            print(f"  [Cache] evicted {len(stale)} stale session(s)", flush=True)
+
+_cleanup_thread = threading.Thread(target=_cache_cleanup_worker, daemon=True)
+_cleanup_thread.start()
 
 
 # ─────────────────────────────────────────────
