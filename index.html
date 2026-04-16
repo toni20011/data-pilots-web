@@ -272,9 +272,9 @@
     display: inline-flex; align-items: center; gap: 8px;
     background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
     border-radius: var(--r-sm); padding: 7px 12px; margin-top: 20px;
-    font-size: 12px; color: rgba(255,255,255,.4);
+    font-size: 12px; color: rgba(255,255,255,.65);
   }
-  .papaya-badge strong { color: rgba(255,255,255,.7); font-weight: 600; }
+  .papaya-badge strong { color: rgba(255,255,255,.85); font-weight: 600; }
 
   /* scan card */
   .scan-card {
@@ -332,8 +332,8 @@
     width: 26px; height: 26px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700; flex-shrink: 0;
-    background: rgba(255,255,255,.08); color: rgba(255,255,255,.3);
-    border: 1.5px solid rgba(255,255,255,.1); transition: all .2s;
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.55);
+    border: 1.5px solid rgba(255,255,255,.15); transition: all .2s;
   }
   .wp-step.active { background: var(--teal); color: var(--navy); border-color: var(--teal); }
   .wp-step.done { background: rgba(0,200,168,.2); color: var(--teal); border-color: rgba(0,200,168,.35); }
@@ -369,7 +369,7 @@
   .modal-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
   .modal-sub { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 18px; line-height: 1.5; }
   .modal-qs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-  .modal-note { font-size: 11.5px; color: rgba(255,255,255,.3); text-align: center; margin-top: 10px; }
+  .modal-note { font-size: 11.5px; color: rgba(255,255,255,.55); text-align: center; margin-top: 10px; }
 
   /* ── Modal tabs ── */
   .modal-tabs {
@@ -379,7 +379,7 @@
   .modal-tab {
     flex: 1; padding: 7px 6px; border: none; border-radius: 6px;
     font-size: 11.5px; font-weight: 600; cursor: pointer;
-    background: transparent; color: rgba(255,255,255,.4);
+    background: transparent; color: rgba(255,255,255,.6);
     transition: all .18s; white-space: nowrap;
   }
   .modal-tab.active {
@@ -414,7 +414,7 @@
     flex: 1; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.85); line-height: 1.3;
   }
   .scenario-chevron {
-    font-size: 14px; color: rgba(255,255,255,.3); flex-shrink: 0;
+    font-size: 14px; color: rgba(255,255,255,.5); flex-shrink: 0;
     transition: transform .2s;
   }
   .scenario-card.open .scenario-chevron { transform: rotate(180deg); color: var(--teal); }
@@ -684,7 +684,7 @@
     background: linear-gradient(135deg, var(--teal), var(--cyan)); margin-bottom: 10px;
   }
   .testi-name { font-size: 14px; font-weight: 700; color: var(--white); }
-  .testi-role { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+  .testi-role { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 2px; }
   .stars { font-size: 13px; color: #FBBF24; letter-spacing: 2px; margin-top: 8px; }
 
   /* Secondary testimonials */
@@ -837,7 +837,7 @@
     font-size: 12px; font-weight: 800; letter-spacing: .02em;
   }
   .fw-layer-title { font-size: 14px; font-weight: 700; color: var(--white); }
-  .fw-layer-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-top: 2px; }
+  .fw-layer-sub { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 2px; }
 
   /* ───────────────────────────────────────────
      PRICING
@@ -872,7 +872,7 @@
   .plan.pro .plan-price { color: var(--white); }
   .plan-period { font-size: 15px; font-weight: 400; }
   .plan:not(.pro) .plan-period { color: var(--slate-400); }
-  .plan.pro .plan-period { color: rgba(255,255,255,.4); }
+  .plan.pro .plan-period { color: rgba(255,255,255,.65); }
   .plan-tagline { font-size: 14px; margin-bottom: 26px; line-height: 1.5; }
   .plan:not(.pro) .plan-tagline { color: var(--slate-500); }
   .plan.pro .plan-tagline { color: rgba(255,255,255,.55); }
@@ -1094,13 +1094,18 @@
   .faq-q[aria-expanded="true"] { color: var(--teal); }
   .faq-chevron { flex-shrink: 0; transition: transform .22s var(--ease); color: var(--slate-400); }
   .faq-q[aria-expanded="true"] .faq-chevron { transform: rotate(180deg); }
-  .faq-a {
+  /* Old accordion-style FAQ (aria-expanded JS) — scope so it doesn't crush <details> FAQ */
+  #faq .faq-a {
     overflow: hidden; max-height: 0;
     transition: max-height .3s var(--ease), padding .22s;
     padding: 0 4px;
   }
-  .faq-a.open { max-height: 400px; padding-bottom: 20px; }
-  .faq-a p { font-size: 14px; color: var(--slate-600); line-height: 1.75; }
+  #faq .faq-a.open { max-height: 400px; padding-bottom: 20px; }
+  #faq .faq-a p { font-size: 14px; color: var(--slate-600); line-height: 1.75; }
+  /* Native <details> FAQ — override the max-height:0 rule above (#faq + details = higher specificity) */
+  #faq details.faq-item .faq-a {
+    max-height: none; overflow: visible; padding: 0 24px 20px;
+  }
 
   /* ───────────────────────────────────────────
      STICKY BOTTOM BAR
@@ -1242,7 +1247,7 @@
   50%      { box-shadow: 0 0 0 6px rgba(0,200,168,.15); }
 }
 .js-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,.7); letter-spacing: .02em; }
-.js-sub   { font-size: 8.5px; color: rgba(255,255,255,.3); text-align: center; line-height: 1.3; }
+.js-sub   { font-size: 8.5px; color: rgba(255,255,255,.55); text-align: center; line-height: 1.3; }
 .js-stage.js-active .js-label { color: var(--teal); }
 .js-connector {
   flex-shrink: 0; width: 16px; height: 1px;
@@ -1279,11 +1284,12 @@
   font-size: 11.5px; font-weight: 700; letter-spacing: .12em;
   text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
 }
-.journey-h2 {
+/* Scope white heading + gradient span to dark .journey-section only */
+.journey-section .journey-h2 {
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   font-weight: 900; color: var(--white); line-height: 1.2;
 }
-.journey-h2 span {
+.journey-section .journey-h2 span {
   background: linear-gradient(135deg, var(--teal), var(--cyan));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
@@ -1321,17 +1327,17 @@
   border: 1px solid rgba(0,200,168,.35);
 }
 .js-icon-win    { background: rgba(16,185,129,.1); border: 1px solid rgba(52,211,153,.2); }
-.js-stage-name  { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 6px; }
+.js-stage-name  { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.6); margin-bottom: 6px; }
 .journey-stage-card.js-current .js-stage-name { color: var(--teal); }
 .js-stage-title { font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 10px; line-height: 1.25; }
-.js-stage-desc  { font-size: 12.5px; color: rgba(255,255,255,.4); line-height: 1.65; margin-bottom: 14px; }
+.js-stage-desc  { font-size: 12.5px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 14px; }
 .js-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; width: 100%; }
 .js-bullets li {
   display: flex; align-items: flex-start; gap: 8px;
-  font-size: 12px; color: rgba(255,255,255,.45); text-align: left;
+  font-size: 12px; color: rgba(255,255,255,.65); text-align: left;
 }
-.js-bullets li::before { content: '—'; color: rgba(255,255,255,.2); flex-shrink: 0; }
-.journey-stage-card.js-current .js-bullets li { color: rgba(255,255,255,.6); }
+.js-bullets li::before { content: '—'; color: rgba(255,255,255,.45); flex-shrink: 0; }
+.journey-stage-card.js-current .js-bullets li { color: rgba(255,255,255,.75); }
 .journey-stage-card.js-current .js-bullets li::before { content: '✓'; color: var(--teal); }
 .journey-arrow-wrap {
   display: flex; align-items: center; justify-content: center;
@@ -1487,7 +1493,7 @@
       <ul>
         <li><a href="#results">How It Works</a></li>
         <li><a href="#proof">Stories</a></li>
-        <li><a href="#journey">About</a></li>
+        <li><a href="#trust-journey">About</a></li>
         <li><a href="framework.html">Our Framework</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -1876,7 +1882,7 @@
 </section>
 
 <!-- ════════════ TRUST JOURNEY ════════════ -->
-<section class="journey-section" id="journey">
+<section class="journey-section" id="trust-journey">
   <div class="container">
 
     <div class="journey-header reveal">
@@ -2683,7 +2689,7 @@
             <li><a href="#results">How It Works</a></li>
             <li><a href="framework.html">Our Framework</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#journey">About</a></li>
+            <li><a href="#trust-journey">About</a></li>
           </ul>
         </div>
 
