@@ -1349,6 +1349,453 @@
   .journey-arrow-wrap { transform: rotate(90deg); margin: 0 auto; }
   .journey-section::before { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════
+   VALUE STORY — scroll-triggered two-column narrative
+   ═══════════════════════════════════════════════════ */
+.vs-section {
+  background: var(--navy);
+  padding: 96px 0 0;
+  overflow: hidden;
+}
+.vs-section-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 72px;
+  padding: 0 24px;
+}
+.vs-kicker {
+  font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
+}
+.vs-headline {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 900; color: var(--white); line-height: 1.2; margin-bottom: 14px;
+}
+.vs-sub {
+  font-size: 1rem; color: rgba(255,255,255,.6); line-height: 1.7;
+}
+
+/* Two-column layout */
+.vs-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1120px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* LEFT: stacked text panels */
+.vs-panels {
+  padding: 0 48px 120px 24px;
+}
+.vs-panel {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  opacity: .25;
+  transition: opacity .5s var(--ease);
+}
+.vs-panel.vs-active { opacity: 1; }
+.vs-step-num {
+  font-size: 10px; font-weight: 800; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.vs-step-num::before {
+  content: ''; width: 24px; height: 1.5px;
+  background: var(--teal); display: block;
+}
+.vs-panel h3 {
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  font-weight: 800; color: var(--white);
+  line-height: 1.25; margin-bottom: 16px; letter-spacing: -.02em;
+}
+.vs-panel p {
+  font-size: .95rem; color: rgba(255,255,255,.65);
+  line-height: 1.75; margin-bottom: 12px;
+}
+.vs-panel p:last-child { margin-bottom: 0; }
+.vs-panel strong { color: rgba(255,255,255,.9); font-weight: 600; }
+.vs-free-note {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 18px;
+  font-size: 12px; color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 6px; padding: 7px 12px;
+}
+.vs-free-note span { color: var(--teal); font-weight: 700; }
+
+/* RIGHT: sticky display */
+.vs-display {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.vs-scenes {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  min-height: 380px;
+}
+.vs-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s var(--ease), transform .5s var(--ease);
+  pointer-events: none;
+}
+.vs-scene.vs-active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Progress dots */
+.vs-dots {
+  position: absolute;
+  bottom: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+.vs-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  transition: background .3s, transform .3s;
+}
+.vs-dot.vs-active {
+  background: var(--teal);
+  transform: scale(1.4);
+}
+
+/* ── Scene visuals ── */
+
+/* Scene 1: Growth arc */
+.vs-arc-wrap {
+  width: 100%;
+  padding: 32px 24px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+}
+.vs-arc-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.vs-arc-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.vs-arc-bar {
+  width: 36px;
+  background: rgba(0,200,168,.15);
+  border: 1px solid rgba(0,200,168,.25);
+  border-radius: 6px 6px 0 0;
+  transition: height .8s cubic-bezier(.22,1,.36,1);
+}
+.vs-arc-label {
+  font-size: 10px; color: rgba(255,255,255,.5); font-weight: 600;
+  text-align: center; line-height: 1.3;
+}
+.vs-arc-amount {
+  font-size: 11px; color: var(--teal); font-weight: 800;
+}
+.vs-arc-arrow {
+  display: flex; align-items: flex-end; padding-bottom: 18px;
+  color: rgba(0,200,168,.4); font-size: 22px;
+}
+.vs-arc-caption {
+  text-align: center;
+  font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.5;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 16px; margin-top: 4px;
+}
+.vs-arc-caption strong { color: rgba(255,255,255,.75); }
+
+/* Scene 2: The invisible check */
+.vs-browser {
+  width: 100%;
+  background: rgba(17,34,56,.9);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.vs-browser-bar {
+  background: rgba(255,255,255,.05);
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.vs-browser-dots {
+  display: flex; gap: 5px;
+}
+.vs-browser-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.12);
+}
+.vs-browser-url {
+  flex: 1;
+  background: rgba(255,255,255,.06);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,.35);
+}
+.vs-browser-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vs-flag-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: rgba(239,68,68,.07);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: 7px;
+  font-size: 12px;
+  color: rgba(255,255,255,.75);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .4s, transform .4s;
+}
+.vs-flag-item.vs-flag-show {
+  opacity: 1;
+  transform: translateX(0);
+}
+.vs-flag-x {
+  color: #F87171;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.vs-buyer-note {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.4);
+  font-style: italic;
+}
+
+/* Scene 3: Score reveal */
+.vs-score-wrap {
+  width: 100%;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 28px;
+}
+.vs-score-top {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.vs-score-ring-wrap {
+  position: relative;
+  width: 84px; height: 84px; flex-shrink: 0;
+}
+.vs-ring-svg { transform: rotate(-90deg); }
+.vs-ring-track { fill: none; stroke: rgba(255,255,255,.07); stroke-width: 7; }
+.vs-ring-fill-s3 {
+  fill: none; stroke: var(--teal); stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 263;
+  stroke-dashoffset: 263;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1);
+}
+.vs-score-num {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.vs-score-big {
+  font-size: 22px; font-weight: 900; color: var(--white);
+  line-height: 1;
+}
+.vs-score-denom {
+  font-size: 10px; color: rgba(255,255,255,.4);
+}
+.vs-score-meta { flex: 1; }
+.vs-score-label-s3 {
+  font-size: 12px; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 6px;
+}
+.vs-score-desc {
+  font-size: 12px; color: rgba(255,255,255,.55); line-height: 1.5;
+}
+.vs-pillars-s3 { display: flex; flex-direction: column; gap: 9px; }
+.vs-pillar-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.vs-pillar-name {
+  font-size: 11px; color: rgba(255,255,255,.5); width: 90px; flex-shrink: 0;
+}
+.vs-pillar-track {
+  flex: 1; height: 5px; background: rgba(255,255,255,.08);
+  border-radius: 3px; overflow: hidden;
+}
+.vs-pillar-bar {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--cyan));
+  width: 0;
+  transition: width 1s cubic-bezier(.22,1,.36,1);
+}
+.vs-pillar-score {
+  font-size: 11px; color: rgba(255,255,255,.55); width: 24px;
+  text-align: right; flex-shrink: 0;
+}
+
+/* Scene 4: Three views */
+.vs-cards {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vs-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px;
+  padding: 16px 18px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .4s, transform .4s;
+}
+.vs-card.vs-card-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.vs-card-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.vs-card-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.vs-card-title {
+  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--white);
+}
+.vs-card-role {
+  font-size: 10.5px; color: rgba(255,255,255,.45); margin-left: auto;
+}
+.vs-card p {
+  font-size: 12px; color: rgba(255,255,255,.6); line-height: 1.6; margin: 0;
+}
+.vs-card-1 .vs-card-icon { background: rgba(0,200,168,.15); }
+.vs-card-2 .vs-card-icon { background: rgba(59,130,246,.15); }
+.vs-card-3 .vs-card-icon { background: rgba(139,92,246,.15); }
+.vs-card-1 .vs-card-title { color: var(--teal); }
+.vs-card-2 .vs-card-title { color: #60A5FA; }
+.vs-card-3 .vs-card-title { color: #A78BFA; }
+
+/* Scene 5: Hub */
+.vs-hub-wrap {
+  width: 100%;
+  padding: 24px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+}
+.vs-hub-svg-wrap {
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.vs-hub-nodes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.vs-hub-node {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 11.5px; color: rgba(255,255,255,.65);
+  opacity: 0;
+  transform: scale(.94);
+  transition: opacity .4s, transform .4s;
+}
+.vs-hub-node.vs-node-show {
+  opacity: 1; transform: scale(1);
+}
+.vs-hub-node-icon {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.vs-hub-caption {
+  text-align: center;
+  font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.5;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding-top: 16px;
+}
+.vs-hub-caption strong { color: var(--teal); }
+
+/* Mobile: stack layout */
+@media (max-width: 860px) {
+  .vs-inner {
+    grid-template-columns: 1fr;
+  }
+  .vs-display {
+    position: relative;
+    height: auto;
+    padding: 0 24px;
+    margin-bottom: 0;
+  }
+  .vs-scenes {
+    min-height: 320px;
+  }
+  .vs-panel {
+    min-height: auto;
+    opacity: 1;
+    padding: 48px 24px;
+  }
+  .vs-panels {
+    padding: 0;
+  }
+  .vs-scene {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+    display: none;
+  }
+  .vs-scene.vs-active {
+    display: flex;
+  }
+  .vs-dots {
+    position: relative;
+    bottom: auto;
+    margin-top: 24px;
+  }
+}
   </style>
 </head>
 <body>
@@ -2281,6 +2728,268 @@
   </div>
 </section>
 
+<!-- ════════════ VALUE STORY ════════════ -->
+<section id="value-story" class="vs-section">
+
+  <div class="vs-section-header reveal">
+    <div class="vs-kicker">Your Trust Journey</div>
+    <h2 class="vs-headline">From where you are<br>to where you want to be</h2>
+    <p class="vs-sub">See exactly how Data Pilots helps — step by step, in plain language.</p>
+  </div>
+
+  <div class="vs-inner">
+
+    <!-- LEFT: text panels -->
+    <div class="vs-panels">
+
+      <div class="vs-panel vs-active" data-step="1">
+        <div class="vs-step-num">Step 1 of 5</div>
+        <h3>You're ready for bigger clients</h3>
+        <p>You've built something real. Your programmes work. Your clients come back. Now you're ready for bigger — corporate teams, longer contracts, buyers who take vendor selection seriously.</p>
+        <p>The work is ready. But there's one thing that often gets missed.</p>
+      </div>
+
+      <div class="vs-panel" data-step="2">
+        <div class="vs-step-num">Step 2 of 5</div>
+        <h3>They check before they reply</h3>
+        <p>Before a corporate buyer responds to your email, they've already visited your site. Not to read your case studies — to check the basics.</p>
+        <p><strong>Does this company look credible? Is my data safe? Does this feel like a business I can trust with my team?</strong></p>
+        <p>If something gives them pause, they move on. Quietly. You never find out why. It's not about your work — it's about what your site signals before you say anything.</p>
+      </div>
+
+      <div class="vs-panel" data-step="3">
+        <div class="vs-step-num">Step 3 of 5</div>
+        <h3>You see how your site reads to them</h3>
+        <p>Data Pilots checks the things a corporate buyer checks — privacy, security signals, how you communicate about data and AI — and gives you a plain-English score.</p>
+        <p>Not a 40-page audit. Not a list of technical jargon. Just: here's where you stand, here's what matters most, here's where to start.</p>
+        <div class="vs-free-note">
+          <span>FREE</span> The Trust Check covers your public-facing site. Takes 60 seconds.
+        </div>
+      </div>
+
+      <div class="vs-panel" data-step="4">
+        <div class="vs-step-num">Step 4 of 5</div>
+        <h3>One audit. Everyone gets what they need.</h3>
+        <p>The free scan shows you where you stand. Co-Pilot turns that into something actionable for every person on your team — without you becoming the expert on all of it.</p>
+        <p>You get the business picture. Your team gets specific guidance. Your proposals get a trust summary that answers buyer questions before they ask them.</p>
+        <p>No back-and-forth. No translating between departments. Just the right information in the right hands.</p>
+      </div>
+
+      <div class="vs-panel" data-step="5">
+        <div class="vs-step-num">Step 5 of 5</div>
+        <h3>A foundation that grows with you</h3>
+        <p>Your business will add services, clients, and team members. The trust signals that matter will shift too.</p>
+        <p>Co-Pilot supports regular rescans and fresh insights as things change — so you don't have to start from zero every time something moves.</p>
+        <p><strong>More visibility. Clearer conversations. A stronger foundation for the growth you're working towards.</strong></p>
+      </div>
+
+    </div><!-- /vs-panels -->
+
+    <!-- RIGHT: sticky display -->
+    <div class="vs-display">
+      <div class="vs-scenes" id="vsScenes">
+
+        <!-- Scene 1: Growth ambition -->
+        <div class="vs-scene vs-active" data-scene="1">
+          <div class="vs-arc-wrap">
+            <div class="vs-arc-track">
+              <div class="vs-arc-col">
+                <div class="vs-arc-bar" style="height:48px;" id="vsBar1"></div>
+                <div class="vs-arc-amount">£10K</div>
+                <div class="vs-arc-label">SMB<br>contract</div>
+              </div>
+              <div class="vs-arc-col">
+                <div class="vs-arc-bar" style="height:72px;" id="vsBar2"></div>
+                <div class="vs-arc-amount">£25K</div>
+                <div class="vs-arc-label">Mid-market<br>deal</div>
+              </div>
+              <div class="vs-arc-arrow">→</div>
+              <div class="vs-arc-col">
+                <div class="vs-arc-bar" style="height:108px;background:rgba(0,200,168,.28);border-color:rgba(0,200,168,.5);" id="vsBar3"></div>
+                <div class="vs-arc-amount" style="color:var(--green);">£100K+</div>
+                <div class="vs-arc-label">Corporate<br>contract</div>
+              </div>
+            </div>
+            <div class="vs-arc-caption">
+              <strong>The goal:</strong> fewer, bigger, longer partnerships.<br>
+              Trust is what makes that transition possible.
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2: The invisible check -->
+        <div class="vs-scene" data-scene="2">
+          <div class="vs-browser">
+            <div class="vs-browser-bar">
+              <div class="vs-browser-dots">
+                <div class="vs-browser-dot"></div>
+                <div class="vs-browser-dot"></div>
+                <div class="vs-browser-dot"></div>
+              </div>
+              <div class="vs-browser-url">yourcompany.com</div>
+            </div>
+            <div class="vs-browser-body">
+              <div class="vs-flag-item" id="vsFlag1">
+                <span class="vs-flag-x">✕</span>
+                No privacy policy found
+              </div>
+              <div class="vs-flag-item" id="vsFlag2">
+                <span class="vs-flag-x">✕</span>
+                Cookie consent not working
+              </div>
+              <div class="vs-flag-item" id="vsFlag3">
+                <span class="vs-flag-x">✕</span>
+                No AI use disclosure
+              </div>
+              <div class="vs-flag-item" id="vsFlag4">
+                <span class="vs-flag-x">✕</span>
+                Security headers missing
+              </div>
+            </div>
+          </div>
+          <div class="vs-buyer-note">What a corporate buyer found — before they replied to you.</div>
+        </div>
+
+        <!-- Scene 3: Score reveal -->
+        <div class="vs-scene" data-scene="3">
+          <div class="vs-score-wrap">
+            <div class="vs-score-top">
+              <div class="vs-score-ring-wrap">
+                <svg class="vs-ring-svg" width="84" height="84" viewBox="0 0 84 84">
+                  <circle class="vs-ring-track" cx="42" cy="42" r="35"/>
+                  <circle class="vs-ring-fill-s3" id="vsRingFill" cx="42" cy="42" r="35"/>
+                </svg>
+                <div class="vs-score-num">
+                  <span class="vs-score-big" id="vsScoreNum">0</span>
+                  <span class="vs-score-denom">/100</span>
+                </div>
+              </div>
+              <div class="vs-score-meta">
+                <div class="vs-score-label-s3">Pre-Flight</div>
+                <div class="vs-score-desc">Key gaps found. Fixable in days, not months.</div>
+              </div>
+            </div>
+            <div class="vs-pillars-s3">
+              <div class="vs-pillar-row">
+                <span class="vs-pillar-name">UX &amp; Trust</span>
+                <div class="vs-pillar-track"><div class="vs-pillar-bar" id="vsPb1"></div></div>
+                <span class="vs-pillar-score">75</span>
+              </div>
+              <div class="vs-pillar-row">
+                <span class="vs-pillar-name">Transparency</span>
+                <div class="vs-pillar-track"><div class="vs-pillar-bar" id="vsPb2"></div></div>
+                <span class="vs-pillar-score">48</span>
+              </div>
+              <div class="vs-pillar-row">
+                <span class="vs-pillar-name">Safety</span>
+                <div class="vs-pillar-track"><div class="vs-pillar-bar" id="vsPb3"></div></div>
+                <span class="vs-pillar-score">55</span>
+              </div>
+              <div class="vs-pillar-row">
+                <span class="vs-pillar-name">AI Trust</span>
+                <div class="vs-pillar-track"><div class="vs-pillar-bar" id="vsPb4"></div></div>
+                <span class="vs-pillar-score">40</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 4: Three views -->
+        <div class="vs-scene" data-scene="4">
+          <div class="vs-cards">
+            <div class="vs-card vs-card-1" id="vsCard1">
+              <div class="vs-card-header">
+                <div class="vs-card-icon">👤</div>
+                <div class="vs-card-title">You — the founder</div>
+                <div class="vs-card-role">Free + Co-Pilot</div>
+              </div>
+              <p>Your score, your priorities, your risk in plain English. What to act on first — and why it matters for your next pitch.</p>
+            </div>
+            <div class="vs-card vs-card-2" id="vsCard2">
+              <div class="vs-card-header">
+                <div class="vs-card-icon">🔧</div>
+                <div class="vs-card-title">Your team</div>
+                <div class="vs-card-role">Co-Pilot</div>
+              </div>
+              <p>Clear guidance for whoever's fixing it — your developer, ops lead, legal contact. Specific instructions, no translation needed.</p>
+            </div>
+            <div class="vs-card vs-card-3" id="vsCard3">
+              <div class="vs-card-header">
+                <div class="vs-card-icon">📄</div>
+                <div class="vs-card-title">Your proposals</div>
+                <div class="vs-card-role">Co-Pilot</div>
+              </div>
+              <p>A trust summary you can put in front of buyers before they ask. Shows you take this seriously — without having to explain it every time.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 5: Hub / foundation -->
+        <div class="vs-scene" data-scene="5">
+          <div class="vs-hub-wrap">
+            <div class="vs-hub-svg-wrap">
+              <svg width="160" height="120" viewBox="0 0 160 120" fill="none">
+                <!-- centre hub -->
+                <circle cx="80" cy="60" r="22" fill="rgba(0,200,168,.12)" stroke="rgba(0,200,168,.3)" stroke-width="1.5"/>
+                <text x="80" y="56" text-anchor="middle" font-size="10" font-weight="800" fill="rgba(0,200,168,.9)" font-family="inherit">DATA</text>
+                <text x="80" y="68" text-anchor="middle" font-size="10" font-weight="800" fill="rgba(0,200,168,.9)" font-family="inherit">PILOTS</text>
+                <!-- spoke lines -->
+                <line x1="58" y1="47" x2="26" y2="22" stroke="rgba(0,200,168,.2)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <line x1="102" y1="47" x2="134" y2="22" stroke="rgba(0,200,168,.2)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <line x1="58" y1="73" x2="26" y2="98" stroke="rgba(0,200,168,.2)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <line x1="102" y1="73" x2="134" y2="98" stroke="rgba(0,200,168,.2)" stroke-width="1.2" stroke-dasharray="3 3"/>
+                <!-- nodes -->
+                <circle cx="20" cy="18" r="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                <text x="20" y="22" text-anchor="middle" font-size="10">👤</text>
+                <circle cx="140" cy="18" r="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                <text x="140" y="22" text-anchor="middle" font-size="10">🔧</text>
+                <circle cx="20" cy="102" r="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                <text x="20" y="106" text-anchor="middle" font-size="10">⚖️</text>
+                <circle cx="140" cy="102" r="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)" stroke-width="1"/>
+                <text x="140" y="106" text-anchor="middle" font-size="10">🏢</text>
+              </svg>
+            </div>
+            <div class="vs-hub-nodes">
+              <div class="vs-hub-node" id="vsNode1">
+                <div class="vs-hub-node-icon" style="background:rgba(0,200,168,.12)">👤</div>
+                Founder
+              </div>
+              <div class="vs-hub-node" id="vsNode2">
+                <div class="vs-hub-node-icon" style="background:rgba(59,130,246,.12)">🔧</div>
+                Dev &amp; Ops
+              </div>
+              <div class="vs-hub-node" id="vsNode3">
+                <div class="vs-hub-node-icon" style="background:rgba(139,92,246,.12)">⚖️</div>
+                Legal
+              </div>
+              <div class="vs-hub-node" id="vsNode4">
+                <div class="vs-hub-node-icon" style="background:rgba(251,191,36,.12)">🏢</div>
+                Enterprise buyer
+              </div>
+            </div>
+            <div class="vs-hub-caption">
+              <strong>One Co-Pilot. Every stakeholder covered.</strong><br>
+              Grows with your business as requirements change.
+            </div>
+          </div>
+        </div>
+
+        <!-- progress dots -->
+        <div class="vs-dots" id="vsDots">
+          <div class="vs-dot vs-active"></div>
+          <div class="vs-dot"></div>
+          <div class="vs-dot"></div>
+          <div class="vs-dot"></div>
+          <div class="vs-dot"></div>
+        </div>
+
+      </div><!-- /vs-scenes -->
+    </div><!-- /vs-display -->
+
+  </div><!-- /vs-inner -->
+
+</section>
+
 <!-- ════════════ JOURNEY / HOW IT WORKS ════════════ -->
 <section id="journey">
   <div class="container">
@@ -2742,6 +3451,111 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ── Value Story: scroll-triggered two-column narrative ──────────────────
+  (function() {
+    var vsPanels = document.querySelectorAll('.vs-panel');
+    var vsScenes = document.querySelectorAll('.vs-scene');
+    var vsDotEls = document.querySelectorAll('#vsDots .vs-dot');
+    var scene2Animated = false;
+    var scene3Animated = false;
+    var scene4Animated = false;
+    var scene5Animated = false;
+
+    if (!vsPanels.length) return;
+
+    function setStep(step) {
+      vsPanels.forEach(p => p.classList.toggle('vs-active', p.dataset.step === step));
+      vsScenes.forEach(s => {
+        var wasActive = s.classList.contains('vs-active');
+        var nowActive = s.dataset.scene === step;
+        s.classList.toggle('vs-active', nowActive);
+        if (nowActive && !wasActive) triggerSceneAnim(step);
+      });
+      vsDotEls.forEach((d, i) => d.classList.toggle('vs-active', (i + 1) === +step));
+    }
+
+    function triggerSceneAnim(step) {
+      if (step === '2' && !scene2Animated) {
+        scene2Animated = true;
+        ['vsFlag1','vsFlag2','vsFlag3','vsFlag4'].forEach(function(id, i) {
+          setTimeout(function() {
+            var el = document.getElementById(id);
+            if (el) el.classList.add('vs-flag-show');
+          }, i * 200);
+        });
+      }
+      if (step === '3' && !scene3Animated) {
+        scene3Animated = true;
+        var ring = document.getElementById('vsRingFill');
+        var scoreEl = document.getElementById('vsScoreNum');
+        var target = 58;
+        var circumference = 2 * Math.PI * 35;
+        if (ring) {
+          setTimeout(function() {
+            ring.style.strokeDashoffset = circumference * (1 - target / 100);
+          }, 100);
+        }
+        if (scoreEl) {
+          var count = 0;
+          var timer = setInterval(function() {
+            count += 2;
+            scoreEl.textContent = Math.min(count, target);
+            if (count >= target) clearInterval(timer);
+          }, 30);
+        }
+        var pillars = [['vsPb1',75],['vsPb2',48],['vsPb3',55],['vsPb4',40]];
+        pillars.forEach(function(pair, i) {
+          setTimeout(function() {
+            var el = document.getElementById(pair[0]);
+            if (el) el.style.width = pair[1] + '%';
+          }, 300 + i * 150);
+        });
+      }
+      if (step === '4' && !scene4Animated) {
+        scene4Animated = true;
+        ['vsCard1','vsCard2','vsCard3'].forEach(function(id, i) {
+          setTimeout(function() {
+            var el = document.getElementById(id);
+            if (el) el.classList.add('vs-card-show');
+          }, i * 200);
+        });
+      }
+      if (step === '5' && !scene5Animated) {
+        scene5Animated = true;
+        ['vsNode1','vsNode2','vsNode3','vsNode4'].forEach(function(id, i) {
+          setTimeout(function() {
+            var el = document.getElementById(id);
+            if (el) el.classList.add('vs-node-show');
+          }, i * 150);
+        });
+      }
+    }
+
+    // Scroll handler: find which panel's centre is closest to viewport centre
+    function onScroll() {
+      var vh = window.innerHeight;
+      var mid = vh * 0.5;
+      var best = null, bestDist = Infinity;
+      vsPanels.forEach(function(p) {
+        var rect = p.getBoundingClientRect();
+        var pMid = rect.top + rect.height / 2;
+        var dist = Math.abs(pMid - mid);
+        if (dist < bestDist) { bestDist = dist; best = p; }
+      });
+      if (best) {
+        var inSection = best.getBoundingClientRect().top < vh && best.getBoundingClientRect().bottom > 0;
+        if (inSection) setStep(best.dataset.step);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Run once on load in case page starts mid-section
+    onScroll();
+
+    // Trigger step 1 animations immediately
+    triggerSceneAnim('1');
+  })();
 
   // ── Stat bars ───────────────────────────────────
   const barObserver = new IntersectionObserver(entries => {
