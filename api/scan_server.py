@@ -162,24 +162,29 @@ def papaya_start_run(url: str):
     return sid
 
 
-def papaya_poll_until_done(session_id: str) -> bool:
-    """Block until the Papaya run is complete. Returns True if completed, False if timed out/failed."""
+def papaya_poll_until_done(session_id: str) -> dict:
+    """
+    Block until the Papaya run is complete.
+    Returns the final run data dict on success, or {} on timeout/failure.
+    The run data may include screenshot_url / debug_url from Papaya's response.
+    """
     deadline = time.time() + PAPAYA_MAX_WAIT
     while time.time() < deadline:
         resp = papaya_call("GET", f"/runs/{session_id}")
         if not resp["ok"] or not resp["data"]:
             print(f"  [Papaya] poll error: {resp.get('error')}", flush=True)
-            return False
-        status   = resp["data"].get("status", "")
-        progress = resp["data"].get("progress", 0)
+            return {}
+        run_data = resp["data"]
+        status   = run_data.get("status", "")
+        progress = run_data.get("progress", 0)
         print(f"  [Papaya] status={status} progress={progress}%", flush=True)
         if status == "completed":
-            return True
+            return run_data
         if status in ("failed", "error"):
-            return False
+            return {}
         time.sleep(PAPAYA_POLL_SLEEP)
     print(f"  [Papaya] timed out after {PAPAYA_MAX_WAIT}s", flush=True)
-    return False
+    return {}
 
 
 def papaya_fetch_report(session_id: str) -> str:
@@ -472,14 +477,22 @@ def _papaya_worker(session_id: str, target_url: str, tier: str = "free"):
                    request or after the paid retention TTL.
     """
     try:
-        ok = papaya_poll_until_done(session_id)
-        if not ok:
+        run_data = papaya_poll_until_done(session_id)
+        if not run_data:
             with _papaya_lock:
                 _papaya_cache[session_id] = {
                     "status": "failed", "findings": [], "error": "Papaya timed out or failed",
                     "cached_at": time.time(), "tier": tier,
                 }
             return
+
+        # Extract screenshot URL from run data (Papaya may return screenshot_url or debug_url)
+        screenshot_url = (
+            run_data.get("screenshot_url") or
+            run_data.get("debug_url") or
+            run_data.get("screenshot") or
+            ""
+        )
 
         report_md     = papaya_fetch_report(session_id)
         analysis_html = papaya_fetch_analysis(session_id)
@@ -499,6 +512,7 @@ def _papaya_worker(session_id: str, target_url: str, tier: str = "free"):
             _papaya_cache[session_id] = {
                 "status":               "completed",
                 "findings":             findings,
+                "screenshot_url":       screenshot_url,
                 "results_url":          results_url,
                 "report_len":           len(report_md),
                 "tier":                 tier,
@@ -506,7 +520,7 @@ def _papaya_worker(session_id: str, target_url: str, tier: str = "free"):
                 "cached_at":            time.time(),
                 "error":                None,
             }
-        print(f"  [Papaya] worker done  tier={tier}  {len(findings)} findings  deleted={deleted}  session={session_id}", flush=True)
+        print(f"  [Papaya] worker done  tier={tier}  {len(findings)} findings  screenshot={'yes' if screenshot_url else 'no'}  deleted={deleted}  session={session_id}", flush=True)
 
     except Exception as e:
         print(f"  [Papaya] worker error: {e}", flush=True)
@@ -1052,15 +1066,37 @@ class ScanHandler(BaseHTTPRequestHandler):
         if self.path == "/health":
             self._send_json({"status": "ok", "service": "Data Pilots Scan API", "version": "2.0"})
 
+        elif self.path.startswith("/papaya/") and self.path.endswith("/report"):
+            # GET /papaya/<session_id>/report  →  full results: findings + screenshot
+            # Only available once status = completed
+            session_id = self.path[len("/papaya/"):][:-len("/report")].strip("/")
+            with _papaya_lock:
+                cached = _papaya_cache.get(session_id)
+            if cached is None:
+                self._send_json({"error": "Session not found"}, 404)
+            elif cached.get("status") != "completed":
+                self._send_json({"error": "Report not ready", "status": cached.get("status", "running")}, 202)
+            else:
+                self._send_json({
+                    "status":        "completed",
+                    "findings":      cached.get("findings", []),
+                    "screenshot_url": cached.get("screenshot_url", ""),
+                    "report_url":    cached.get("results_url", ""),
+                })
+
         elif self.path.startswith("/papaya/"):
-            # GET /papaya/<session_id>  →  return cached Papaya state
+            # GET /papaya/<session_id>  →  status only (lightweight poll)
             session_id = self.path[len("/papaya/"):].strip("/")
             with _papaya_lock:
                 cached = _papaya_cache.get(session_id)
             if cached is None:
                 self._send_json({"error": "Session not found"}, 404)
             else:
-                self._send_json(cached)
+                # Return minimal status response — no findings in status poll
+                self._send_json({
+                    "status":  cached.get("status", "running"),
+                    "error":   cached.get("error"),
+                })
 
         else:
             self._send_json({"error": "Not found"}, 404)
@@ -1103,8 +1139,9 @@ def main():
 
     server = HTTPServer(("0.0.0.0", port), ScanHandler)
     print(f"Data Pilots Scan API v2  http://localhost:{port}", flush=True)
-    print(f"  POST /scan          {{\"url\":\"https://example.com\"}}", flush=True)
-    print(f"  GET  /papaya/<id>   poll Papaya findings", flush=True)
+    print(f"  POST /scan                  {{\"url\":\"https://example.com\"}}", flush=True)
+    print(f"  GET  /papaya/<id>           poll status (lightweight — no findings)", flush=True)
+    print(f"  GET  /papaya/<id>/report    full results: findings + screenshot (completed only)", flush=True)
     print(f"  GET  /health", flush=True)
     server.serve_forever()
 
