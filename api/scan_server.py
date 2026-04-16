@@ -31,7 +31,8 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 PORT              = 3001
 TIMEOUT           = 6            # seconds per individual HTTP check
-MAX_HTML_BYTES    = 80_000       # bytes to read for content checks
+MAX_HTML_BYTES    = 80_000        # bytes for content checks (keywords, etc.)
+MAX_FOOTER_BYTES  = 400_000       # enough to reach footer on large CMS-built sites
 PAPAYA_API_BASE   = "https://papaya-consent-check-be11a0846ed5.herokuapp.com/api/v1"
 PAPAYA_API_KEY    = "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX"
 PAPAYA_MAX_WAIT   = 180          # max seconds to wait for a Papaya run to complete
@@ -40,7 +41,7 @@ PAPAYA_POLL_SLEEP = 6            # seconds between status polls
 PRIVACY_PATHS = ["/privacy-policy", "/privacy", "/privacy.html",
                  "/data-protection", "/data-privacy", "/cookie-policy", "/gdpr"]
 TERMS_PATHS   = ["/terms", "/terms-of-service", "/terms-and-conditions",
-                 "/legal", "/tos", "/terms.html"]
+                 "/legal", "/tos", "/terms.html", "/legal-notice"]
 CONTACT_PATHS = ["/contact", "/contact-us", "/about", "/get-in-touch", "/about-us"]
 
 AI_KEYWORDS = [
@@ -126,8 +127,9 @@ def fetch(url: str, method="GET", headers=None, body=None, max_bytes=MAX_HTML_BY
 
 
 def page_exists(base: str, paths: list) -> tuple:
+    """Check if any of the given paths exist. Uses GET with tiny read to follow redirects."""
     for path in paths:
-        r = fetch(base + path, method="HEAD")
+        r = fetch(base + path, method="GET", max_bytes=500)
         if r["ok"] and r["status"] and r["status"] < 400:
             return True, path
     return False, None
@@ -698,14 +700,19 @@ def check_cookie_consent(html: str) -> dict:
             "tag": "REVIEW"}
 
 
-def check_footer_policy_links(html: str) -> list:
-    """Check whether Privacy, Terms, and Cookie policy links appear in the footer."""
+def check_footer_policy_links(html: str, full_html: str = "") -> list:
+    """
+    Check whether Privacy, Terms, and Cookie policy links appear in the footer.
+    full_html may be a larger fetch of the page used only for footer detection.
+    """
     findings = []
-    lower = html.lower()
+    # Prefer the larger full_html for footer search if provided
+    search_html = full_html if full_html else html
+    lower = search_html.lower()
 
-    # Prefer footer section; fall back to last 6000 chars
+    # Prefer footer section; fall back to last 8000 chars of whatever we have
     footer_start = lower.rfind("<footer")
-    footer_text  = lower[footer_start:] if footer_start != -1 else lower[-6000:]
+    footer_text  = lower[footer_start:] if footer_start != -1 else lower[-8000:]
 
     has_privacy = bool(re.search(r'href=["\'][^"\']*privac[^"\']*["\']', footer_text))
     has_terms   = bool(re.search(r'href=["\'][^"\']*term[^"\']*["\']',   footer_text))
@@ -961,10 +968,12 @@ def run_scan(raw_url: str, tier: str = "free") -> dict:
     """
     base = normalise_url(raw_url)
 
-    # Fetch home page first (used by multiple checks)
-    home    = fetch(base, method="GET")
-    html    = home.get("text", "")
-    headers = home.get("headers", {})
+    # Fetch home page: standard read for content checks, larger read for footer
+    home         = fetch(base, method="GET", max_bytes=MAX_HTML_BYTES)
+    home_full    = fetch(base, method="GET", max_bytes=MAX_FOOTER_BYTES)
+    html         = home.get("text", "")
+    html_full    = home_full.get("text", html)   # fallback to standard if larger fetch fails
+    headers      = home.get("headers", {})
 
     findings = []
 
@@ -977,7 +986,7 @@ def run_scan(raw_url: str, tier: str = "free") -> dict:
             ex.submit(check_ai_disclosure,  html):       "ai",
             ex.submit(check_cookie_consent, html):       "cookies",
             ex.submit(check_sitemap,        base):       "sitemap",
-            ex.submit(check_footer_policy_links, html): "footer_links",
+            ex.submit(check_footer_policy_links, html, html_full): "footer_links",
             ex.submit(check_policy_content,      base): "policy_content",
         }
         for future in as_completed(futures, timeout=TIMEOUT + 4):
