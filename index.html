@@ -4174,7 +4174,7 @@
         privacyEl.style.borderColor = 'rgba(251,191,36,.2)';
         privacyEl.innerHTML = `
           <span style="font-size:16px;flex-shrink:0;margin-top:1px;">◎</span>
-          <span><strong style="color:#FBBF24;">Illustrative example</strong> — we couldn't reach <strong>${domain}</strong> from your local environment, so these are typical findings for a similar business. <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" style="color:var(--teal);text-decoration:underline;">Book a live check</a> to get your real score.</span>`;
+          <span><strong style="color:#FBBF24;">Example results</strong> — the live scan for <strong>${domain}</strong> isn't available yet in this preview. These are typical findings for a similar business, so you can see exactly what your real report will look like. <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" style="color:var(--teal);text-decoration:underline;">Book a live check</a> to get your actual score.</span>`;
       } else {
         privacyEl.style.background = '';
         privacyEl.style.borderColor = '';
@@ -4223,7 +4223,7 @@
     const findings = data.free_findings || [];
     const titleEl  = document.getElementById('ro-findings-title');
     if (data.is_preview) {
-      titleEl.innerHTML = `Scan Highlights <span style="font-size:10px;font-weight:400;text-transform:none;color:rgba(255,255,255,.3);letter-spacing:0">(illustrative example)</span>`;
+      titleEl.innerHTML = `Example Findings <span style="font-size:10px;font-weight:400;text-transform:none;color:rgba(255,255,255,.3);letter-spacing:0">— typical for this type of business</span>`;
     } else {
       titleEl.innerHTML = `Scan Highlights &nbsp;·&nbsp; <span style="color:rgba(255,255,255,.35)">${data.total_issues} issues found</span>`;
     }
