@@ -1152,6 +1152,11 @@
   .finding-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; padding-top: 2px; }
   .live-finding p { font-size: 12.5px; color: var(--slate-500); line-height: 1.6; }
   #live-findings > div:first-child { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--teal); margin-bottom: 12px; }
+  .fw-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+  .fw-tag { font-size: 10px; color: var(--slate-400); background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07); border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+  .p-name .fw-tags { margin-top: 3px; }
+  .finding-body .fw-tags { margin-top: 4px; }
+  .finding-item .fw-tag { font-size: 10px; color: var(--slate-400); background: rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.07); border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
 
   /* ───────────────────────────────────────────
      PAIN POINTS
@@ -2593,7 +2598,7 @@
                 <svg class="icon" width="14" height="14" style="color:#10B981;"><use href="#i-eye"/></svg>
               </div>
               <div>
-                <div class="p-name"><span class="term" data-tip="How open and honest your business looks. Includes privacy pages, terms, and how you describe what you do with data.">Transparency</span></div>
+                <div class="p-name"><span class="term" data-tip="How open and honest your business looks. Includes privacy pages, terms, and how you describe what you do with data.">Transparency</span><div class="fw-tags"><span class="fw-tag">US (CCPA)</span><span class="fw-tag">Global (GDPR)</span></div></div>
                 <div class="p-track"><div class="p-fill" data-w="70" style="background:linear-gradient(90deg,#10B981,#34D399);"></div></div>
               </div>
               <div class="p-score" style="color:#10B981;">70</div>
@@ -2603,7 +2608,7 @@
                 <svg class="icon" width="14" height="14" style="color:#D97706;"><use href="#i-shield"/></svg>
               </div>
               <div>
-                <div class="p-name"><span class="term" data-tip="Whether your site has basic security protections in place. Think of it as locking the door to your office. Buyers check this.">Safety and Security</span></div>
+                <div class="p-name"><span class="term" data-tip="Whether your site has basic security protections in place. Think of it as locking the door to your office. Buyers check this.">Safety and Security</span><div class="fw-tags"><span class="fw-tag">Certifications (ISO 27001)</span><span class="fw-tag">Audit (SOC 2)</span></div></div>
                 <div class="p-track"><div class="p-fill" data-w="78" style="background:linear-gradient(90deg,#F59E0B,#FBBF24);"></div></div>
               </div>
               <div class="p-score" style="color:#D97706;">78</div>
@@ -2644,8 +2649,8 @@
             </div>
             <div class="finding-body">
               <strong>No AI disclosure on your site</strong>
-              <p>You use AI tools in your work but don't mention it anywhere visible. Over half of enterprise L&D buyers now ask about this before signing.</p>
               <span class="finding-tag tag-fix-now">Fix This Week</span>
+              <p>You use AI tools in your work but don't mention it anywhere visible. Over half of enterprise L&D buyers now ask about this before signing.</p>
             </div>
           </div>
 
@@ -2655,8 +2660,9 @@
             </div>
             <div class="finding-body">
               <strong>Privacy page exists but is hard to find</strong>
-              <p>You have a privacy page but it's buried. Moving the link to your footer takes 10 minutes and noticeably improves your transparency score.</p>
               <span class="finding-tag tag-quick-win">Quick Win</span>
+              <div class="fw-tags"><span class="fw-tag">US (CCPA)</span><span class="fw-tag">Global (GDPR)</span></div>
+              <p>You have a privacy page but it's buried. Moving the link to your footer takes 10 minutes and noticeably improves your transparency score.</p>
             </div>
           </div>
 
@@ -2666,8 +2672,9 @@
             </div>
             <div class="finding-body">
               <strong>Missing security headers on contact form</strong>
-              <p>Your contact form is missing two basic protections. A developer can add these in under an hour. We have step-by-step instructions you can share with them.</p>
               <span class="finding-tag tag-review">Review</span>
+              <div class="fw-tags"><span class="fw-tag">Certifications (ISO 27001)</span><span class="fw-tag">Audit (SOC 2)</span></div>
+              <p>Your contact form is missing two basic protections. A developer can add these in under an hour. We have step-by-step instructions you can share with them.</p>
             </div>
           </div>
 
@@ -3725,6 +3732,20 @@
   // ── Tag colour map ───────────────────────────
   const TAG_COLOR = { 'FIX THIS WEEK': '#EF4444', 'QUICK WIN': '#10B981', 'REVIEW': '#D97706' };
 
+  // ── Framework reference tags by pillar ───────
+  const PILLAR_FW_TAGS = {
+    transparency: ['US (CCPA)', 'Global (GDPR)'],
+    safety:       ['Certifications (ISO 27001)', 'Audit (SOC 2)'],
+    ux:           [],
+    ai_trust:     [],
+  };
+
+  function buildFwTagsHTML(pillar) {
+    const tags = PILLAR_FW_TAGS[pillar] || [];
+    if (!tags.length) return '';
+    return `<div class="fw-tags">${tags.map(t => `<span class="fw-tag">${t}</span>`).join('')}</div>`;
+  }
+
   function buildFindingHTML(f) {
     const src = f.source === 'papaya'
       ? `<span style="font-size:10px;font-weight:600;color:var(--teal);opacity:.7;margin-left:6px;letter-spacing:.04em;">via Papaya</span>`
@@ -3735,6 +3756,7 @@
           <strong>${f.title}${src}</strong>
           ${f.tag ? `<span class="finding-tag" style="color:${TAG_COLOR[f.tag]||'#666'}">${f.tag}</span>` : ''}
         </div>
+        ${buildFwTagsHTML(f.pillar)}
         ${f.detail ? `<p>${f.detail}</p>` : ''}
       </div>`;
   }
