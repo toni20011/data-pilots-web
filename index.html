@@ -328,9 +328,45 @@
     border: none; border-radius: var(--r-sm); color: var(--white);
     font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 9px;
-    box-shadow: 0 4px 16px var(--green-glow); transition: all .17s;
+    box-shadow: 0 4px 16px var(--green-glow); transition: all .25s;
   }
-  .scan-go:hover { background: #0EA573; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(16,185,129,.45); }
+  .scan-go:hover:not(:disabled) { background: #0EA573; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(16,185,129,.45); }
+  .scan-go:disabled {
+    background: rgba(255,255,255,.08); color: rgba(255,255,255,.3);
+    cursor: not-allowed; box-shadow: none; transform: none;
+  }
+  .scan-go.ready {
+    background: var(--green); animation: pulse-ready 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse-ready {
+    0%, 100% { box-shadow: 0 4px 16px var(--green-glow); }
+    50% { box-shadow: 0 6px 28px rgba(16,185,129,.6); transform: translateY(-1px); }
+  }
+  .modal-cancel {
+    text-align: center; margin-top: 10px;
+    font-size: 11.5px; color: rgba(255,255,255,.25);
+  }
+  .modal-cancel button {
+    background: none; border: none; color: rgba(255,255,255,.3);
+    font-size: 11.5px; cursor: pointer; text-decoration: underline; padding: 0;
+  }
+  .modal-cancel button:hover { color: rgba(255,255,255,.55); }
+  .scan-progress-steps {
+    display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px;
+  }
+  .scan-progress-step {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12.5px; color: rgba(255,255,255,.35); transition: color .3s;
+  }
+  .scan-progress-step.done { color: rgba(255,255,255,.7); }
+  .scan-progress-step.active { color: rgba(255,255,255,.9); }
+  .scan-progress-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(255,255,255,.15); transition: background .3s;
+  }
+  .scan-progress-step.done .scan-progress-dot { background: var(--teal); }
+  .scan-progress-step.active .scan-progress-dot { background: var(--teal); animation: pulse-dot .9s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%,100% { opacity:1; } 50% { opacity:.4; } }
   .scan-fine { text-align: center; font-size: 11.5px; color: rgba(255,255,255,.27); margin-top: 10px; }
 
   /* wizard progress dots */
@@ -390,7 +426,15 @@
     font-size: 11.5px; font-weight: 600; cursor: pointer;
     background: transparent; color: rgba(255,255,255,.6);
     transition: all .18s; white-space: nowrap;
+    display: flex; align-items: center; justify-content: center; gap: 5px;
   }
+  .mtab-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+    background: rgba(255,255,255,.12); font-size: 9px; font-weight: 800;
+    color: rgba(255,255,255,.5);
+  }
+  .modal-tab.active .mtab-num { background: var(--teal); color: var(--navy); }
   .modal-tab.active {
     background: rgba(0,200,168,.15); color: var(--teal);
     border: 1px solid rgba(0,200,168,.25);
@@ -2209,8 +2253,28 @@
 
           <!-- Live scan status -->
           <div class="modal-scanning" id="modalScanStatus">
-            <div class="modal-spinner"></div>
-            <span id="modalScanMsg">AI consent audit running — usually 60–90 seconds</span>
+            <div class="modal-spinner" id="modalSpinner"></div>
+            <span id="modalScanMsg">Scanning your site — usually under 60 seconds</span>
+          </div>
+
+          <!-- Step-by-step progress -->
+          <div class="scan-progress-steps" id="scanProgressSteps">
+            <div class="scan-progress-step active" id="sprStep1">
+              <div class="scan-progress-dot"></div>
+              <span>Visiting your site as a buyer would</span>
+            </div>
+            <div class="scan-progress-step" id="sprStep2">
+              <div class="scan-progress-dot"></div>
+              <span>Checking UX, Transparency, Safety &amp; AI Trust</span>
+            </div>
+            <div class="scan-progress-step" id="sprStep3">
+              <div class="scan-progress-dot"></div>
+              <span>Running live consent audit (California visitor, reject-all)</span>
+            </div>
+            <div class="scan-progress-step" id="sprStep4">
+              <div class="scan-progress-dot"></div>
+              <span>Prioritising findings and building your brief</span>
+            </div>
           </div>
 
           <div class="scan-step" style="margin-top:16px;">Step 3 of 3 — while you wait</div>
@@ -2253,16 +2317,70 @@
           </div>
 
           <!-- Tab nav -->
-          <div class="modal-tabs">
-            <button class="modal-tab active" onclick="switchModalTab(this,'tab-scenarios')">Real Scenarios</button>
-            <button class="modal-tab" onclick="switchModalTab(this,'tab-stats')">The Numbers</button>
-            <button class="modal-tab" onclick="switchModalTab(this,'tab-next')">What's Next</button>
+          <div class="modal-tabs" id="modalTabNav">
+            <button class="modal-tab active" id="mtab-scenarios" onclick="switchModalTab(this,'tab-scenarios')">
+              <span class="mtab-num">1</span> What we're checking
+            </button>
+            <button class="modal-tab" id="mtab-stats" onclick="switchModalTab(this,'tab-stats')">
+              <span class="mtab-num">2</span> Why it matters
+            </button>
+            <button class="modal-tab" id="mtab-next" onclick="switchModalTab(this,'tab-next')">
+              <span class="mtab-num">3</span> Real numbers
+            </button>
           </div>
 
-          <!-- TAB 1: Scenarios -->
+          <!-- TAB 1: What we're checking -->
           <div id="tab-scenarios" class="modal-panel active">
-            <div class="scenario-list">
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);margin-bottom:14px;line-height:1.6;">
+              While your scan runs, here's exactly what we're looking at — and what you'll see in your results.
+            </p>
+            <div class="scan-progress-steps" style="gap:12px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:8px;background:#EBF2FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2C5AA0" stroke-width="2.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:2px;">User Experience</div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;">Does your site pass the buyer's first 10-second check? Navigation, contact details, credibility signals.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:8px;background:#D1FAE5;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:2px;">Transparency <span style="font-size:10px;color:rgba(255,255,255,.3);font-weight:400;">US (CCPA) · Global (GDPR)</span></div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;">Privacy page, data use notices, cookie consent, Terms of Use — what procurement teams look for first.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:8px;background:#FEF3C7;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:2px;">Safety &amp; Security <span style="font-size:10px;color:rgba(255,255,255,.3);font-weight:400;">ISO 27001 · SOC 2</span></div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;">HTTPS, security headers, HSTS — the technical signals an IT team checks before vendor approval.</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <div style="width:28px;height:28px;border-radius:8px;background:#EDE9FE;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:2px;">AI Trust</div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5;">Do you disclose how you use AI? The fastest-growing question in enterprise L&D procurement right now.</div>
+                </div>
+              </div>
+            </div>
+            <p style="font-size:11.5px;color:rgba(255,255,255,.3);margin-top:14px;line-height:1.5;">
+              We're also running a live site walkthrough — simulating a buyer visiting from California and clicking "reject all" on your cookie banner.
+            </p>
+          </div>
 
+          <!-- TAB 2: Why it matters (scenarios) -->
+          <div id="tab-stats" class="modal-panel">
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);margin-bottom:12px;line-height:1.6;">These are the trust gaps that actually cost L&D businesses deals. See which ones resonate.</p>
+            <div class="scenario-list">
               <div class="scenario-card" id="sc1">
                 <button class="scenario-trigger" onclick="toggleScenario('sc1')">
                   <span class="scenario-dot red"></span>
@@ -2270,17 +2388,14 @@
                   <span class="scenario-chevron">▾</span>
                 </button>
                 <div class="scenario-body">
-                  <p class="scenario-situation">You had a strong first meeting. The buyer said they'd be in touch. Then nothing — no reply, no explanation. What you didn't see: they googled you afterwards, and what they found didn't pass their quick trust check before forwarding to their team.</p>
+                  <p class="scenario-situation">A strong first meeting. The buyer said they'd be in touch. Then nothing. What you didn't see: they checked your site afterwards and something flagged before forwarding to their team.</p>
                   <div class="scenario-culprits">
                     <span class="culprit-tag">No privacy page</span>
                     <span class="culprit-tag">No HTTPS padlock</span>
-                    <span class="culprit-tag">No contact details</span>
                     <span class="culprit-tag">Trackers before consent</span>
                   </div>
-                  <div class="scenario-note">→ The #1 pattern we see in L&D sales pipelines</div>
                 </div>
               </div>
-
               <div class="scenario-card" id="sc2">
                 <button class="scenario-trigger" onclick="toggleScenario('sc2')">
                   <span class="scenario-dot amber"></span>
@@ -2288,132 +2403,62 @@
                   <span class="scenario-chevron">▾</span>
                 </button>
                 <div class="scenario-body">
-                  <p class="scenario-situation">The decision-maker loves you. But their legal or IT team needs to sign off, and it's been weeks. The blocker: they can't find your data handling documentation, and there's no Data Processing Agreement ready to sign. Every week of delay costs you momentum.</p>
+                  <p class="scenario-situation">The decision-maker is ready. But legal needs to sign off and they can't find your data handling documentation. Every week of delay costs momentum.</p>
                   <div class="scenario-culprits">
                     <span class="culprit-tag">No DPA language</span>
-                    <span class="culprit-tag">No sub-processor list</span>
                     <span class="culprit-tag">Terms page missing</span>
                     <span class="culprit-tag">GDPR not addressed</span>
                   </div>
-                  <div class="scenario-note">→ Where most enterprise L&D deals get stuck</div>
                 </div>
               </div>
-
               <div class="scenario-card" id="sc3">
                 <button class="scenario-trigger" onclick="toggleScenario('sc3')">
-                  <span class="scenario-dot blue"></span>
-                  <span class="scenario-headline">"They asked about AI. I wasn't ready."</span>
-                  <span class="scenario-chevron">▾</span>
-                </button>
-                <div class="scenario-body">
-                  <p class="scenario-situation">A prospect asked mid-demo: "Do you use AI in your content?" You said yes — but there was nothing on your site to back it up, nothing in your terms, and no clear policy. It planted doubt. AI questions are now standard in L&D procurement, especially in regulated sectors.</p>
-                  <div class="scenario-culprits">
-                    <span class="culprit-tag">No AI disclosure</span>
-                    <span class="culprit-tag">Terms silent on AI</span>
-                    <span class="culprit-tag">No governance policy</span>
-                  </div>
-                  <div class="scenario-note">→ Growing fast — especially NHS, finance, public sector</div>
-                </div>
-              </div>
-
-              <div class="scenario-card" id="sc4">
-                <button class="scenario-trigger" onclick="toggleScenario('sc4')">
                   <span class="scenario-dot purple"></span>
                   <span class="scenario-headline">"Their IT team flagged our site."</span>
                   <span class="scenario-chevron">▾</span>
                 </button>
                 <div class="scenario-body">
-                  <p class="scenario-situation">Your contact loved the pitch. Then their IT security team "quickly checked" your website as part of vendor due diligence — and came back with a list. Tracking cookies firing before consent. Missing security headers. No HSTS. Things that look minor but signal bigger risk to a technical reviewer.</p>
+                  <p class="scenario-situation">IT ran a quick check as part of vendor due diligence and came back with a list. Missing security headers, HSTS not set. Things that look minor but signal bigger risk to a technical reviewer.</p>
                   <div class="scenario-culprits">
-                    <span class="culprit-tag">Pre-consent trackers</span>
                     <span class="culprit-tag">No CSP header</span>
                     <span class="culprit-tag">No HSTS</span>
                     <span class="culprit-tag">Reject-all broken</span>
                   </div>
-                  <div class="scenario-note">→ Common in NHS, financial services, and education</div>
                 </div>
-              </div>
-
-            </div>
-
-            <!-- Personalise -->
-            <div class="scan-step" style="margin-bottom:8px;">Which fits your situation?</div>
-            <div class="modal-qs">
-              <div class="q-item">
-                <input type="checkbox" id="mq1"/>
-                <label for="mq1">I sell to corporate L&amp;D, HR, or enterprise teams</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="mq2"/>
-                <label for="mq2">I run a learning portal, LMS, or client-facing platform</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="mq3"/>
-                <label for="mq3">A buyer has asked me for compliance or security documentation</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="mq4"/>
-                <label for="mq4">I use AI tools in how I design, deliver, or market my services</label>
               </div>
             </div>
           </div>
 
-          <!-- TAB 2: Stats -->
-          <div id="tab-stats" class="modal-panel">
+          <!-- TAB 3: Real numbers -->
+          <div id="tab-next" class="modal-panel">
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);margin-bottom:12px;line-height:1.6;">The scale of the problem across L&D businesses like yours.</p>
             <div class="stat-pills">
               <div class="stat-pill">
                 <div class="stat-num">73%</div>
-                <div class="stat-text"><strong>of L&D sites have no privacy page visible to buyers</strong> — the single most common trust gap we find</div>
-              </div>
-              <div class="stat-pill">
-                <div class="stat-num">61%</div>
-                <div class="stat-text"><strong>have trackers firing before any consent is given</strong> — a direct GDPR compliance issue, often unfixed for years</div>
+                <div class="stat-text"><strong>of L&D sites have no privacy page visible to buyers</strong> — the most common trust gap we find</div>
               </div>
               <div class="stat-pill">
                 <div class="stat-num">4 in 5</div>
                 <div class="stat-text"><strong>enterprise buyers check your website before responding</strong> to an outreach message or accepting a meeting</div>
               </div>
               <div class="stat-pill">
-                <div class="stat-num">2 days</div>
-                <div class="stat-text"><strong>average time to fix the top 3 issues</strong> once you know what they are — most require no developer</div>
-              </div>
-              <div class="stat-pill">
                 <div class="stat-num">1 in 3</div>
                 <div class="stat-text"><strong>L&D businesses have been asked for a DPA</strong> by a client — and most didn't have one ready</div>
               </div>
+              <div class="stat-pill">
+                <div class="stat-num">61%</div>
+                <div class="stat-text"><strong>have trackers firing before any consent is given</strong> — a direct compliance issue, often unfixed for years</div>
+              </div>
             </div>
           </div>
 
-          <!-- TAB 3: What's next -->
-          <div id="tab-next" class="modal-panel">
-            <div class="sneak-steps">
-              <div class="sneak-step">
-                <div class="sneak-num">1</div>
-                <div class="sneak-text"><strong>Your trust score across 4 areas</strong>UX, Transparency, Safety, and AI Trust — each rated and explained in plain language.</div>
-              </div>
-              <div class="sneak-step">
-                <div class="sneak-num">2</div>
-                <div class="sneak-text"><strong>Your top 3 priority actions</strong>Tagged Fix This Week, Quick Win, or Review — so you know what to prioritise and who to hand it to.</div>
-              </div>
-              <div class="sneak-step">
-                <div class="sneak-num">3</div>
-                <div class="sneak-text"><strong>Live consent audit results</strong>Papaya's AI browser agent visited your site like a buyer would — findings appear automatically when ready.</div>
-              </div>
-              <div class="sneak-step">
-                <div class="sneak-num">4</div>
-                <div class="sneak-text"><strong>A clear next step</strong>Book a free Trust Check-In call to walk through your results with an expert — or start fixing on your own.</div>
-              </div>
-            </div>
-            <div class="sneak-upgrade">
-              <strong>Want the full picture?</strong> The free check covers your public website. Co-Pilot goes deeper — your learning portal, your contracts, your DPA readiness — plus a trust proof PDF you can share in proposals.
-            </div>
-          </div>
-
-          <button class="scan-go" id="modalBtn" onclick="submitModal()">
-            <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
-            View My Results →
+          <button class="scan-go" id="modalBtn" onclick="submitModal()" disabled>
+            <svg class="icon" width="15" height="15"><use href="#i-search"/></svg>
+            Scanning — results on their way…
           </button>
-          <p class="modal-note">Your AI consent audit is added to your report automatically when ready</p>
+          <div class="modal-cancel">
+            <button onclick="cancelScan()">Cancel and go back</button>
+          </div>
 
         </div>
       </div>
@@ -3608,17 +3653,142 @@
   const IS_LOCAL = ['localhost','127.0.0.1'].includes(window.location.hostname);
   const API_BASE  = IS_LOCAL ? 'http://localhost:3001' : null;
 
+  // ── Scan modal state ────────────────────────────
+  let _scanTimers = [];   // tab/progress timers so we can cancel them
+
+  function cancelScan() {
+    // Clear all timers
+    _scanTimers.forEach(t => clearTimeout(t));
+    _scanTimers = [];
+    // Hide modal and reset
+    document.getElementById('scan-modal').style.display = 'none';
+    const btn = document.getElementById('modalBtn');
+    btn.disabled = true;
+    btn.classList.remove('ready');
+    btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-search"/></svg> Scanning — results on their way…`;
+    // Reset scan promise so a fresh run is possible
+    _scanPromise = null;
+  }
+
+  function _advanceScanProgress(step) {
+    // Animate the left-side progress steps 1–4
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('sprStep' + i);
+      if (!el) continue;
+      el.classList.remove('active', 'done');
+      if (i < step) el.classList.add('done');
+      else if (i === step) el.classList.add('active');
+    }
+    // Update the scan status message
+    const msgs = [
+      'Visiting your site as a buyer would…',
+      'Checking 4 trust pillars…',
+      'Running live consent audit (California, reject-all)…',
+      'Prioritising findings and building your brief…',
+    ];
+    const msgEl = document.getElementById('modalScanMsg');
+    if (msgEl && msgs[step - 1]) msgEl.textContent = msgs[step - 1];
+  }
+
+  function _autoAdvanceTabs() {
+    // Auto-advance tabs every 14s: 1→2 at 14s, 2→3 at 28s
+    const tabs = [
+      { tabId: 'tab-stats',     btnId: 'mtab-stats',     delay: 14000 },
+      { tabId: 'tab-next',      btnId: 'mtab-next',      delay: 28000 },
+    ];
+    tabs.forEach(({ tabId, btnId, delay }) => {
+      const t = setTimeout(() => {
+        const btn = document.getElementById(btnId);
+        if (btn) switchModalTab(btn, tabId);
+      }, delay);
+      _scanTimers.push(t);
+    });
+  }
+
+  function _autoAdvanceScanSteps() {
+    // Advance scan progress steps visually while scan runs
+    const steps = [
+      { step: 1, delay: 0 },
+      { step: 2, delay: 8000 },
+      { step: 3, delay: 18000 },
+      { step: 4, delay: 32000 },
+    ];
+    steps.forEach(({ step, delay }) => {
+      const t = setTimeout(() => _advanceScanProgress(step), delay);
+      _scanTimers.push(t);
+    });
+  }
+
+  function _markScanReady(data) {
+    // Stop all timers
+    _scanTimers.forEach(t => clearTimeout(t));
+    _scanTimers = [];
+
+    // Mark all progress steps done
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('sprStep' + i);
+      if (el) { el.classList.remove('active'); el.classList.add('done'); }
+    }
+
+    // Update status area
+    const scanStatus = document.getElementById('modalScanStatus');
+    if (scanStatus) {
+      scanStatus.style.background = 'rgba(16,185,129,.1)';
+      scanStatus.style.borderColor = 'rgba(16,185,129,.3)';
+      const spinner = document.getElementById('modalSpinner');
+      if (spinner) spinner.style.display = 'none';
+      const msg = document.getElementById('modalScanMsg');
+      if (msg) msg.innerHTML = `<strong style="color:#10B981;">✓ Your results are ready</strong>`;
+    }
+
+    // Enable button with pulse
+    const btn = document.getElementById('modalBtn');
+    btn.disabled = false;
+    btn.classList.add('ready');
+    btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-play"/></svg> View My Results →`;
+
+    // Stash data for submitModal
+    btn._scanData = data;
+
+    // Switch to the "What you get" tab so they know what's coming
+    const nextBtn = document.getElementById('mtab-next');
+    if (nextBtn) switchModalTab(nextBtn, 'tab-next');
+  }
+
   function startScanAndModal() {
     const url = document.getElementById('scanUrl').value.trim();
     if (!url) return;
 
-    // Kick off scan in background — store promise
-    _scanPromise = callScanAPI(url).catch(() => demoResults(url));
+    // Reset button state
+    const btn = document.getElementById('modalBtn');
+    btn.disabled = true;
+    btn.classList.remove('ready');
+    btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-search"/></svg> Scanning — results on their way…`;
+    btn._scanData = null;
 
-    // Show step 3 modal
+    // Reset progress steps
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('sprStep' + i);
+      if (el) { el.classList.remove('active','done'); if (i === 1) el.classList.add('active'); }
+    }
+    const msgEl = document.getElementById('modalScanMsg');
+    if (msgEl) msgEl.textContent = 'Visiting your site as a buyer would…';
+    const scanStatus = document.getElementById('modalScanStatus');
+    if (scanStatus) {
+      scanStatus.style.background = '';
+      scanStatus.style.borderColor = '';
+    }
+    const spinner = document.getElementById('modalSpinner');
+    if (spinner) spinner.style.display = '';
+
+    // Switch to tab 1
+    const t1btn = document.getElementById('mtab-scenarios');
+    if (t1btn) switchModalTab(t1btn, 'tab-scenarios');
+
+    // Show modal
     document.getElementById('scan-modal').style.display = 'flex';
 
-    // Update progress to show step 3 active
+    // Update wizard progress dots
     for (let i = 1; i <= 5; i++) {
       const dot = document.getElementById('wpDot' + i);
       if (!dot) continue;
@@ -3628,21 +3798,33 @@
       const line = document.getElementById('wpLine' + i);
       if (line) line.classList.toggle('done', i < 3);
     }
+
+    // Kick off scan + guided UX in parallel
+    _autoAdvanceScanSteps();
+    _autoAdvanceTabs();
+
+    _scanPromise = callScanAPI(url)
+      .catch(() => demoResults(url))
+      .then(data => { _markScanReady(data); return data; });
   }
 
   async function submitModal() {
     const btn = document.getElementById('modalBtn');
-    btn.disabled = true;
-    btn.innerHTML = `<svg class="icon" width="15" height="15" style="animation:spin .7s linear infinite"><use href="#i-search"/></svg> Getting your results…`;
 
-    // Wait for scan to finish (may already be done)
-    let data;
-    try { data = await _scanPromise; } catch(e) { data = demoResults(document.getElementById('scanUrl').value.trim()); }
+    // Use pre-fetched data if available (scan already done)
+    let data = btn._scanData;
+    if (!data) {
+      btn.disabled = true;
+      btn.innerHTML = `<svg class="icon" width="15" height="15" style="animation:spin .7s linear infinite"><use href="#i-search"/></svg> Getting your results…`;
+      try { data = await _scanPromise; } catch(e) { data = demoResults(document.getElementById('scanUrl').value.trim()); }
+    }
 
-    // Close modal, show step 4
+    // Clear timers, close modal
+    _scanTimers.forEach(t => clearTimeout(t));
+    _scanTimers = [];
     document.getElementById('scan-modal').style.display = 'none';
 
-    // Update progress to step 4
+    // Update wizard progress to step 4
     for (let i = 1; i <= 5; i++) {
       const dot = document.getElementById('wpDot' + i);
       if (!dot) continue;
@@ -3654,9 +3836,6 @@
     }
 
     renderScanResults(data);
-
-    btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-play"/></svg> View My Results →`;
-    btn.disabled = false;
   }
 
   // Legacy handleScan kept for sticky bar submit
