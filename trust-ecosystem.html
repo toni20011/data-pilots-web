@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trust Ecosystem | Data Pilots</title>
+  <meta name="description" content="The trust and compliance landscape for B2B services and L&D companies — our partners, trust-forward brands, and the tools shaping how businesses build credibility with enterprise clients."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+  /* ─── TOKENS (same as main site) ─── */
+  :root {
+    --navy:       #0B1929;
+    --navy-mid:   #112238;
+    --navy-soft:  #1A3350;
+    --teal:       #00C8A8;
+    --teal-dim:   rgba(0,200,168,.12);
+    --teal-border:rgba(0,200,168,.22);
+    --cyan:       #00AFCC;
+    --green:      #10B981;
+    --slate-50:   #F8FAFC;
+    --slate-100:  #F1F5F9;
+    --slate-200:  #E2E8F0;
+    --slate-300:  #CBD5E1;
+    --slate-400:  #94A3B8;
+    --slate-600:  #475569;
+    --slate-700:  #334155;
+    --slate-800:  #1E293B;
+    --white:      #FFFFFF;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
+    --ease: cubic-bezier(.4,0,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--slate-50);
+    color: var(--slate-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 800;
+    background: var(--navy);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: 0 28px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-wordmark { font-size: 15px; font-weight: 800; letter-spacing: .04em; color: var(--white); }
+  .logo-wordmark span { color: var(--teal); }
+  nav ul { display: flex; gap: 28px; list-style: none; }
+  nav ul a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.7); transition: color .18s; }
+  nav ul a:hover { color: var(--white); }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 9px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all .2s var(--ease); cursor: pointer; border: none; }
+  .btn-teal { background: var(--teal); color: var(--navy); }
+  .btn-teal:hover { background: #00deba; }
+  .btn-ghost { background: transparent; color: rgba(255,255,255,.7); border: 1.5px solid rgba(255,255,255,.18); }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,.4); }
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── HERO ─── */
+  .te-hero {
+    background: var(--navy);
+    padding: 80px 0 72px;
+    position: relative; overflow: hidden;
+  }
+  .te-hero::before {
+    content: '';
+    position: absolute; top: -80px; right: -60px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(0,200,168,.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .te-hero-inner { max-width: 720px; }
+  .te-breadcrumb { font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 20px; }
+  .te-breadcrumb a { color: var(--teal); }
+  .te-kicker {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--teal); margin-bottom: 14px;
+  }
+  .te-h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900; color: var(--white);
+    line-height: 1.15; letter-spacing: -.025em; margin-bottom: 20px;
+  }
+  .te-h1 span {
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .te-lead { font-size: 17px; color: rgba(255,255,255,.7); line-height: 1.75; max-width: 620px; margin-bottom: 32px; }
+  .te-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .te-meta-item { font-size: 12.5px; color: rgba(255,255,255,.45); display: flex; align-items: center; gap: 6px; }
+  .te-meta-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); opacity: .6; }
+
+  /* ─── SECTION HEADERS ─── */
+  .te-section-header { margin-bottom: 48px; }
+  .te-section-header.centered { text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .te-kicker-sm {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--teal); margin-bottom: 10px;
+  }
+  .te-h2 {
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
+    font-weight: 800; line-height: 1.2; letter-spacing: -.02em;
+  }
+  .te-h2.dark { color: var(--white); }
+  .te-h2.light { color: var(--slate-800); }
+  .te-section-sub { font-size: 15.5px; line-height: 1.7; margin-top: 12px; }
+  .te-section-sub.dark { color: rgba(255,255,255,.65); }
+  .te-section-sub.light { color: var(--slate-600); }
+
+  /* ─── PARTNERS SECTION ─── */
+  .te-partners {
+    background: var(--navy-mid);
+    padding: 80px 0;
+    border-top: 1px solid rgba(255,255,255,.06);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .partners-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
+  .partner-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(0,200,168,.18);
+    border-radius: var(--r-xl);
+    padding: 36px 32px;
+    position: relative; overflow: hidden;
+  }
+  .partner-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), var(--cyan));
+  }
+  .partner-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,200,168,.12); border: 1px solid rgba(0,200,168,.25);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 20px;
+  }
+  .partner-name { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+  .partner-role { font-size: 13px; font-weight: 600; color: var(--teal); margin-bottom: 14px; letter-spacing: .03em; text-transform: uppercase; }
+  .partner-desc { font-size: 14.5px; color: rgba(255,255,255,.65); line-height: 1.75; }
+  .partner-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 18px; font-size: 13.5px; font-weight: 600; color: var(--teal); }
+  .partner-link:hover { opacity: .8; }
+  @media (max-width: 680px) { .partners-grid { grid-template-columns: 1fr; } }
+
+  /* ─── TRUST-FORWARD BRANDS ─── */
+  .te-trustforward { background: var(--slate-50); padding: 80px 0; }
+  .tf-disclaimer {
+    background: rgba(0,200,168,.06); border: 1px solid rgba(0,200,168,.15);
+    border-radius: var(--r-lg); padding: 16px 20px;
+    font-size: 13px; color: var(--slate-600); line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .tf-disclaimer strong { color: var(--slate-700); }
+  .tf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .tf-card {
+    background: var(--white); border: 1px solid var(--slate-200);
+    border-radius: var(--r-xl); padding: 28px 24px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .tf-card:hover { border-color: var(--slate-300); box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .tf-brand-name { font-size: 18px; font-weight: 800; color: var(--slate-800); margin-bottom: 6px; }
+  .tf-brand-tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .07em;
+    background: var(--slate-100); color: var(--slate-600);
+    padding: 3px 9px; border-radius: 20px; margin-bottom: 12px;
+  }
+  .tf-brand-desc { font-size: 13.5px; color: var(--slate-600); line-height: 1.7; }
+  @media (max-width: 768px) { .tf-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .tf-grid { grid-template-columns: 1fr; } }
+
+  /* ─── LANDSCAPE ─── */
+  .te-landscape { background: var(--white); padding: 80px 0; }
+  .landscape-disclaimer {
+    background: var(--slate-100); border-radius: var(--r-lg);
+    padding: 16px 20px; font-size: 13px; color: var(--slate-600);
+    line-height: 1.6; margin-bottom: 48px;
+  }
+  .landscape-categories { display: flex; flex-direction: column; gap: 48px; }
+  .land-cat-label {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--teal); margin-bottom: 6px;
+  }
+  .land-cat-title { font-size: 19px; font-weight: 800; color: var(--slate-800); margin-bottom: 6px; }
+  .land-cat-desc { font-size: 13.5px; color: var(--slate-600); line-height: 1.65; margin-bottom: 18px; max-width: 560px; }
+  .land-tools { display: flex; flex-wrap: wrap; gap: 10px; }
+  .land-tool {
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: var(--r-md); padding: 8px 16px;
+    font-size: 13.5px; font-weight: 600; color: var(--slate-700);
+    transition: border-color .18s, color .18s;
+  }
+  .land-tool:hover { border-color: var(--slate-300); color: var(--slate-800); }
+  .land-divider { border: none; border-top: 1px solid var(--slate-200); }
+
+  /* ─── TRENDS ─── */
+  .te-trends { background: var(--navy); padding: 80px 0; }
+  .trends-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
+  .trend-card {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-xl); padding: 28px 24px;
+  }
+  .trend-stat {
+    font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 900;
+    color: var(--teal); line-height: 1; margin-bottom: 10px;
+    letter-spacing: -.02em;
+  }
+  .trend-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.3; }
+  .trend-desc { font-size: 13.5px; color: rgba(255,255,255,.6); line-height: 1.7; }
+  .trend-source { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 12px; }
+  @media (max-width: 680px) { .trends-grid { grid-template-columns: 1fr; } }
+
+  /* ─── CTA BAND ─── */
+  .te-cta {
+    background: var(--navy-mid); padding: 72px 0;
+    border-top: 1px solid rgba(255,255,255,.07);
+    text-align: center;
+  }
+  .te-cta-h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 800; color: var(--white); margin-bottom: 14px; }
+  .te-cta-sub { font-size: 16px; color: rgba(255,255,255,.6); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
+  .te-cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* ─── FOOTER ─── */
+  footer { background: var(--navy); border-top: 1px solid rgba(255,255,255,.07); }
+  .footer-top { padding: 48px 0 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+  .footer-logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .footer-blurb { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.7; max-width: 240px; margin-bottom: 16px; }
+  .footer-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.35); margin-bottom: 14px; }
+  .footer-list { list-style: none; }
+  .footer-list li { margin-bottom: 8px; }
+  .footer-list a { font-size: 13.5px; color: rgba(255,255,255,.6); transition: color .18s; }
+  .footer-list a:hover { color: var(--white); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding: 20px 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,.3); }
+  @media (max-width: 768px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ NAV ════════════ -->
+<nav>
+  <a href="/" class="logo">
+    <svg width="36" height="36" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+      <defs>
+        <linearGradient id="eco-lg" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00F59D"/>
+          <stop offset="50%" stop-color="#00D4C0"/>
+          <stop offset="100%" stop-color="#00AAFF"/>
+        </linearGradient>
+      </defs>
+      <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#eco-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
+      <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#eco-lg)"/>
+      <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#eco-lg)"/>
+      <circle cx="100" cy="112" r="76" stroke="url(#eco-lg)" stroke-width="12" fill="none"/>
+      <circle cx="100" cy="112" r="69" fill="white"/>
+      <circle cx="76" cy="90" r="14" fill="url(#eco-lg)"/>
+      <circle cx="124" cy="90" r="14" fill="url(#eco-lg)"/>
+      <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#eco-lg)"/>
+      <path d="M 170 135 Q 163 158 148 166" stroke="url(#eco-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
+      <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#eco-lg)"/>
+    </svg>
+    <div class="logo-wordmark">DATA <span>PILOTS</span></div>
+  </a>
+  <ul>
+    <li><a href="/#results">How It Works</a></li>
+    <li><a href="/trust-ecosystem.html" style="color:var(--teal);">Trust Ecosystem</a></li>
+    <li><a href="framework.html">Our Framework</a></li>
+    <li><a href="/#pricing">Pricing</a></li>
+  </ul>
+  <div>
+    <a href="/#hero-scan" class="btn btn-teal">Free Trust Check →</a>
+  </div>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<section class="te-hero">
+  <div class="container">
+    <div class="te-hero-inner reveal">
+      <div class="te-breadcrumb"><a href="/">Data Pilots</a> / Trust Ecosystem</div>
+      <div class="te-kicker">The Trust Ecosystem</div>
+      <h1 class="te-h1">The landscape is full<br>of <span>good tools.</span><br>Here's how they fit.</h1>
+      <p class="te-lead">Trust and compliance is no longer optional for B2B services companies pursuing enterprise clients. This page maps the territory — our partners, brands getting it right, and the tools your business is probably already using — honestly, without ranking or recommending what we don't know firsthand.</p>
+      <div class="te-meta">
+        <span class="te-meta-item"><span class="te-meta-dot"></span>Updated April 2026</span>
+        <span class="te-meta-item"><span class="te-meta-dot"></span>Tool-agnostic by design</span>
+        <span class="te-meta-item"><span class="te-meta-dot"></span>No paid placements</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PARTNERS ════════════ -->
+<section class="te-partners">
+  <div class="container">
+    <div class="te-section-header reveal">
+      <div class="te-kicker-sm">Active Partners</div>
+      <h2 class="te-h2 dark">Who we work with</h2>
+      <p class="te-section-sub dark">These are the companies we actively partner with — the technology and platforms that power what Data Pilots does, and the networks we work alongside to serve our clients better.</p>
+    </div>
+
+    <div class="partners-grid reveal">
+
+      <div class="partner-card">
+        <div class="partner-badge">Scan Engine Partner</div>
+        <div class="partner-name">Papaya</div>
+        <div class="partner-role">AI Browser Agent Technology</div>
+        <p class="partner-desc">Papaya powers the live AI browser agent at the heart of the Data Pilots Trust Check. It visits your website exactly as a real buyer or auditor would — firing cookies, clicking consent options, checking whether tracking stops when it should — rather than just analysing static code. The result is a scan grounded in actual behaviour, not assumptions.</p>
+        <a href="https://papayaai.com" target="_blank" rel="noopener" class="partner-link">Learn more →</a>
+      </div>
+
+      <div class="partner-card">
+        <div class="partner-badge">Platform Partner</div>
+        <div class="partner-name">MyQuest</div>
+        <div class="partner-role">Professional Development & Coaching Platform</div>
+        <p class="partner-desc">MyQuest is a professional development and accountability platform used by coaches, consultants, and L&D providers to deliver structured learning journeys and track client progress. Our partnership means Data Pilots integrates naturally into the workflows of the professionals we serve — supporting not just trust visibility but the ongoing client relationships that depend on it.</p>
+        <a href="https://myquest.co" target="_blank" rel="noopener" class="partner-link">Learn more →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TRUST-FORWARD BRANDS ════════════ -->
+<section class="te-trustforward">
+  <div class="container">
+
+    <div class="te-section-header reveal">
+      <div class="te-kicker-sm">Acknowledged</div>
+      <h2 class="te-h2 light">Trust-forward brands</h2>
+      <p class="te-section-sub light">These are organisations whose public approach to privacy, transparency, and digital trust we genuinely respect — without a commercial relationship or formal endorsement. They demonstrate that trust can be a brand value, not just a compliance requirement.</p>
+    </div>
+
+    <div class="tf-disclaimer reveal">
+      <strong>A note on this section:</strong> We acknowledge these brands because their public stance on trust is clear and consistent. This is not a paid listing, a formal recommendation, or an endorsement of any specific product. As always, do your own evaluation for your business.
+    </div>
+
+    <div class="tf-grid reveal">
+
+      <div class="tf-card">
+        <div class="tf-brand-name">Apple</div>
+        <div class="tf-brand-tag">Consumer Tech</div>
+        <p class="tf-brand-desc">Consistently champions privacy as a fundamental right — App Tracking Transparency, on-device processing, and privacy nutrition labels set a public standard for what trust-first design can look like in practice.</p>
+      </div>
+
+      <div class="tf-card">
+        <div class="tf-brand-name">Mozilla</div>
+        <div class="tf-brand-tag">Open Web</div>
+        <p class="tf-brand-desc">As a non-profit whose mission is a healthy, open internet, Mozilla builds trust through radical transparency — open source code, public privacy policies, and active advocacy for user rights over commercial interests.</p>
+      </div>
+
+      <div class="tf-card">
+        <div class="tf-brand-name">DuckDuckGo</div>
+        <div class="tf-brand-tag">Search & Privacy</div>
+        <p class="tf-brand-desc">Built the case that a privacy-first business model is viable. No tracking, no user profiles, no data sold. A clear example of trust as a product differentiator — not just a compliance footnote.</p>
+      </div>
+
+      <div class="tf-card">
+        <div class="tf-brand-name">Proton</div>
+        <div class="tf-brand-tag">Encrypted Services</div>
+        <p class="tf-brand-desc">Email, VPN, and cloud storage built around encryption by default and zero-knowledge architecture. Swiss-based, independently audited, and consistently transparent about what they do and don't see.</p>
+      </div>
+
+      <div class="tf-card">
+        <div class="tf-brand-name">Basecamp / Hey</div>
+        <div class="tf-brand-tag">B2B Tools</div>
+        <p class="tf-brand-desc">Publicly committed to not tracking users, no ad networks, no surveillance capitalism. Hey specifically was built as a direct response to the email industry's data practices — and they publish their reasoning openly.</p>
+      </div>
+
+      <div class="tf-card">
+        <div class="tf-brand-name">Notion</div>
+        <div class="tf-brand-tag">Productivity</div>
+        <p class="tf-brand-desc">Transparent about data handling, GDPR-compliant with clear documentation, and increasingly used in enterprise environments where data governance matters. A good example of a consumer-origin tool that has grown into enterprise trust standards.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ THE LANDSCAPE ════════════ -->
+<section class="te-landscape">
+  <div class="container">
+
+    <div class="te-section-header reveal">
+      <div class="te-kicker-sm">The Landscape</div>
+      <h2 class="te-h2 light">Tools your business is probably already using</h2>
+      <p class="te-section-sub light">We don't replace any of these — we work alongside them. This is the territory: common tools by category, described neutrally. No rankings, no paid placement, no recommendations for tools we haven't vetted ourselves.</p>
+    </div>
+
+    <div class="landscape-disclaimer reveal">
+      <strong>Important:</strong> Listing a tool here is informational only. Data Pilots has not evaluated, tested, or formally assessed any tool listed in this section. Do your own research and take advice from the right professionals for your situation.
+    </div>
+
+    <div class="landscape-categories">
+
+      <div class="reveal">
+        <div class="land-cat-label">Consent & Cookie Management</div>
+        <div class="land-cat-title">Managing how tracking works on your site</div>
+        <p class="land-cat-desc">These tools control cookie consent banners and help you comply with GDPR, CCPA, and other privacy regulations. A consent tool is often the first compliance step — but passing the visible banner check is different from what a full trust assessment reveals underneath.</p>
+        <div class="land-tools">
+          <span class="land-tool">OneTrust</span>
+          <span class="land-tool">Cookiebot (Usercentrics)</span>
+          <span class="land-tool">CookieYes</span>
+          <span class="land-tool">Osano</span>
+          <span class="land-tool">Termly</span>
+          <span class="land-tool">Ketch</span>
+          <span class="land-tool">Didomi</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">Privacy Policy & Legal Documentation</div>
+        <div class="land-cat-title">Generating and maintaining compliant legal docs</div>
+        <p class="land-cat-desc">These tools help you create and maintain privacy policies, terms of service, and data processing agreements. They're an important foundation — but enterprise buyers increasingly look beyond whether a policy exists to whether it's accurate, current, and actually reflects what you do.</p>
+        <div class="land-tools">
+          <span class="land-tool">Termly</span>
+          <span class="land-tool">iubenda</span>
+          <span class="land-tool">Enzuzo</span>
+          <span class="land-tool">GetTerms</span>
+          <span class="land-tool">Privacypolicies.com</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">LMS & Training Delivery</div>
+        <div class="land-cat-title">Where your learning content lives</div>
+        <p class="land-cat-desc">If you deliver L&D services, your platform is handling sensitive personal data — learning records, assessments, progress tracking, sometimes HR and health data. Enterprise clients increasingly ask about the data practices of the tools their training providers use, not just the providers themselves.</p>
+        <div class="land-tools">
+          <span class="land-tool">Docebo</span>
+          <span class="land-tool">TalentLMS</span>
+          <span class="land-tool">LearnDash</span>
+          <span class="land-tool">Kajabi</span>
+          <span class="land-tool">Thinkific</span>
+          <span class="land-tool">Teachable</span>
+          <span class="land-tool">Moodle</span>
+          <span class="land-tool">360Learning</span>
+          <span class="land-tool">Absorb LMS</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">Coaching & Professional Development Platforms</div>
+        <div class="land-cat-title">Delivering 1:1 and group coaching programmes</div>
+        <p class="land-cat-desc">Coaching platforms handle some of the most sensitive personal data in any business relationship — development goals, performance challenges, sometimes medical or personal disclosures. Trust posture here is not just a compliance question; it's a professional one.</p>
+        <div class="land-tools">
+          <span class="land-tool">MyQuest</span>
+          <span class="land-tool">CoachAccountable</span>
+          <span class="land-tool">Satori</span>
+          <span class="land-tool">Practice</span>
+          <span class="land-tool">Simply.Coach</span>
+          <span class="land-tool">Quenza</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">Website & Digital Platforms</div>
+        <div class="land-cat-title">Where your business lives online</div>
+        <p class="land-cat-desc">Your website is the first thing an enterprise buyer or prospect checks — and it's where most trust signals are visible. The platform you build on affects what tracking happens by default, what compliance tools are available, and how easy it is to stay current.</p>
+        <div class="land-tools">
+          <span class="land-tool">WordPress</span>
+          <span class="land-tool">Webflow</span>
+          <span class="land-tool">Squarespace</span>
+          <span class="land-tool">Wix</span>
+          <span class="land-tool">Kajabi</span>
+          <span class="land-tool">Framer</span>
+          <span class="land-tool">Shopify</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">CRM & Client Management</div>
+        <div class="land-cat-title">Where your client relationships and data live</div>
+        <p class="land-cat-desc">CRMs hold contact data, communication history, and sometimes sensitive commercial information. Lawful basis for storing and processing that data — and your clients' rights to access or delete it — is something enterprise buyers increasingly want to know you've thought about.</p>
+        <div class="land-tools">
+          <span class="land-tool">HubSpot</span>
+          <span class="land-tool">Salesforce</span>
+          <span class="land-tool">ActiveCampaign</span>
+          <span class="land-tool">Pipedrive</span>
+          <span class="land-tool">Zoho CRM</span>
+          <span class="land-tool">Notion CRM</span>
+        </div>
+      </div>
+
+      <hr class="land-divider"/>
+
+      <div class="reveal">
+        <div class="land-cat-label">Formal Security Certifications</div>
+        <div class="land-cat-title">The bigger checks — when you're ready</div>
+        <p class="land-cat-desc">SOC 2, ISO 27001, Cyber Essentials — these are the formal certifications enterprise procurement teams look for at a certain scale. They're important, they're rigorous, and they take time and investment to achieve. Data Pilots helps you pass the checks that come before these — and builds the foundation that makes the formal path shorter and cheaper when you get there.</p>
+        <div class="land-tools">
+          <span class="land-tool">Secureframe</span>
+          <span class="land-tool">Drata</span>
+          <span class="land-tool">Vanta</span>
+          <span class="land-tool">Tugboat Logic</span>
+          <span class="land-tool">Cyber Essentials (NCSC)</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ EMERGING TRENDS ════════════ -->
+<section class="te-trends">
+  <div class="container">
+
+    <div class="te-section-header reveal">
+      <div class="te-kicker-sm">What's Changing</div>
+      <h2 class="te-h2 dark">Emerging trends shaping trust in B2B</h2>
+      <p class="te-section-sub dark">These aren't predictions — they're shifts already underway, backed by research from IBM, McKinsey, PwC, Deloitte, IAPP, and others. Updated quarterly.</p>
+    </div>
+
+    <div class="trends-grid reveal">
+
+      <div class="trend-card">
+        <div class="trend-stat">144</div>
+        <div class="trend-title">Countries now have national data privacy laws</div>
+        <p class="trend-desc">Up 7 in a single year. Privacy laws increasingly hold organisations accountable not just for their own data handling, but for how their third-party suppliers handle it too. If you work with enterprise clients, their compliance obligations extend to you.</p>
+        <div class="trend-source">Source: IAPP Privacy Governance Report, 2025</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">~50%</div>
+        <div class="trend-title">Of small enterprise buyers cite privacy & security as their #1 vendor selection factor</div>
+        <p class="trend-desc">Not price. Not capability. Data privacy and security. Among small enterprise buyers specifically, this is the leading consideration when selecting a supplier — ahead of cost and product features.</p>
+        <div class="trend-source">Source: McKinsey B2B Pulse Survey, 2024</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">61%</div>
+        <div class="trend-title">Of companies experienced a third-party breach in the past year</div>
+        <p class="trend-desc">A 49% increase year-on-year. Enterprise buyers know this. It's why vendor vetting is becoming more rigorous, not less — and why being a trusted supplier is increasingly about what you can demonstrate, not just what you claim.</p>
+        <div class="trend-source">Source: Deloitte Third-Party Risk Management Survey, 2024</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">97%</div>
+        <div class="trend-title">Of B2B buyers visit your website before any other touchpoint</div>
+        <p class="trend-desc">Before a call, before a proposal, before a formal assessment. The informal trust check starts the moment someone Googles you. And 80% of the buying journey is complete before they ever make contact.</p>
+        <div class="trend-source">Source: 6sense B2B Buyer Experience Report, 2025</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">$10.2M</div>
+        <div class="trend-title">Average cost of a data breach for US organisations in 2025</div>
+        <p class="trend-desc">An all-time high. For small businesses, direct costs are lower — but the reputational and relationship damage can be proportionally more severe. The organisations buying from you have this number front of mind when they vet their suppliers.</p>
+        <div class="trend-source">Source: IBM Cost of Data Breach Report, 2025</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">2×</div>
+        <div class="trend-title">ICO enforcement fines in the first half of 2025 vs. all of 2024</div>
+        <p class="trend-desc">UK enforcement is accelerating, not stabilising. Fines have been issued for errors as straightforward as a misdirected email. The ICO is increasingly focused on the private sector and companies of all sizes — not just large organisations.</p>
+        <div class="trend-source">Source: ICO Enforcement Data, 2025</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">↑ AI</div>
+        <div class="trend-title">AI disclosure is becoming expected, not optional</div>
+        <p class="trend-desc">Enterprise clients — particularly in regulated sectors — are increasingly asking whether AI is used in service delivery, how decisions are made, and what data is processed. In L&D and coaching, where AI is touching personal development data, this is already a procurement question.</p>
+        <div class="trend-source">Source: EdTech Digest / IAPP, 2025</div>
+      </div>
+
+      <div class="trend-card">
+        <div class="trend-stat">80%+</div>
+        <div class="trend-title">Of enterprise buyers require minimum privacy & security checks before progressing</div>
+        <p class="trend-desc">Most cite SOC 2 or equivalent as the formal standard. But the assessment starts long before any questionnaire — with the informal check that begins on your website. Most companies only prepare for the formal check. The informal one is already happening.</p>
+        <div class="trend-source">Source: Data Pilots primary research, 2025</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CTA ════════════ -->
+<section class="te-cta">
+  <div class="container">
+    <h2 class="te-cta-h2 reveal">Want to be part of the ecosystem?</h2>
+    <p class="te-cta-sub reveal">We're actively building partnerships with platforms, tools, and services that share our commitment to helping B2B businesses build trust — honestly and practically. If that sounds like you, let's talk.</p>
+    <div class="te-cta-actions reveal">
+      <a href="mailto:hello@datapilots.tech?subject=Trust Ecosystem Partnership" class="btn btn-teal">Get in touch →</a>
+      <a href="/#hero-scan" class="btn btn-ghost">Try the free Trust Check</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <div class="container footer-top">
+    <div class="footer-grid">
+      <div>
+        <a href="/" class="footer-logo">
+          <svg width="28" height="28" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="eco-ft-lg" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#00F59D"/>
+                <stop offset="50%" stop-color="#00D4C0"/>
+                <stop offset="100%" stop-color="#00AAFF"/>
+              </linearGradient>
+            </defs>
+            <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#eco-ft-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
+            <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#eco-ft-lg)"/>
+            <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#eco-ft-lg)"/>
+            <circle cx="100" cy="112" r="76" stroke="url(#eco-ft-lg)" stroke-width="12" fill="none"/>
+            <circle cx="100" cy="112" r="69" fill="white"/>
+            <circle cx="76" cy="90" r="14" fill="url(#eco-ft-lg)"/>
+            <circle cx="124" cy="90" r="14" fill="url(#eco-ft-lg)"/>
+            <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#eco-ft-lg)"/>
+            <path d="M 170 135 Q 163 158 148 166" stroke="url(#eco-ft-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
+            <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#eco-ft-lg)"/>
+          </svg>
+          <div class="logo-wordmark" style="font-size:14px; color:var(--white);">DATA <span style="color:var(--teal);">PILOTS</span></div>
+        </a>
+        <p class="footer-blurb">Helping B2B services businesses show up as trustworthy — so the best work wins the deal.</p>
+      </div>
+      <div>
+        <div class="footer-col-label">Product</div>
+        <ul class="footer-list">
+          <li><a href="/#results">How It Works</a></li>
+          <li><a href="/framework.html">Our Framework</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#trust-journey">About</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-label">Resources</div>
+        <ul class="footer-list">
+          <li><a href="/trust-ecosystem.html">Trust Ecosystem</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-label">Legal</div>
+        <ul class="footer-list">
+          <li><a href="/privacy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms of Use</a></li>
+          <li><a href="mailto:hello@datapilots.tech">hello@datapilots.tech</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Data Pilots · datapilots.tech · All rights reserved.</p>
+      <p>Made for businesses. Not for lawyers.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>
