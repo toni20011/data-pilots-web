@@ -3741,9 +3741,12 @@
     if (e.key === 'Enter') wizNext(1);
   });
 
-  // Use real API only when running locally — deployed HTTPS site can't call HTTP localhost
-  const IS_LOCAL = ['localhost','127.0.0.1'].includes(window.location.hostname);
-  const API_BASE  = IS_LOCAL ? 'http://localhost:3001' : null;
+  // ── API endpoint ──────────────────────────────────────────────────────────
+  // Local dev:   runs against python3 api/scan_server.py on port 3001
+  // Production:  update DEPLOYED_API_URL to your Render/Railway URL after deploying
+  const IS_LOCAL       = ['localhost','127.0.0.1'].includes(window.location.hostname);
+  const DEPLOYED_API_URL = null; // ← REPLACE with 'https://data-pilots-scan-api.onrender.com' after deploy
+  const API_BASE       = IS_LOCAL ? 'http://localhost:3001' : DEPLOYED_API_URL;
 
   // ── Scan modal state ────────────────────────────
   let _scanTimers = [];      // tab/progress timers so we can cancel them

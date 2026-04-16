@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: data-pilots-scan-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: echo "stdlib only — no build needed"
+    startCommand: python3 api/scan_server.py
+    envVars:
+      - key: PAPAYA_API_KEY
+        sync: false   # set manually in Render dashboard — do not commit the key

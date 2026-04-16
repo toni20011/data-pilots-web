@@ -17,6 +17,7 @@ Papaya proxy endpoints (authenticated pass-through — no caching or transformat
 """
 
 import json
+import os
 import sys
 import re
 import ssl
@@ -29,14 +30,14 @@ from datetime import datetime
 
 
 # ─────────────────────────────────────────────
-# Config
+# Config — use environment variables in production
 # ─────────────────────────────────────────────
-PORT             = 3001
+PORT             = int(os.environ.get("PORT", 3001))   # Render/Railway assign PORT via env
 TIMEOUT          = 6            # seconds per individual HTTP check
 MAX_HTML_BYTES   = 80_000       # bytes for content checks (keywords, etc.)
 MAX_FOOTER_BYTES = 400_000      # enough to reach footer on large CMS-built sites
 PAPAYA_API_BASE  = "https://papaya-consent-check-be11a0846ed5.herokuapp.com/api/v1"
-PAPAYA_API_KEY   = "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX"
+PAPAYA_API_KEY   = os.environ.get("PAPAYA_API_KEY", "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX")
 
 PRIVACY_PATHS = ["/privacy-policy", "/privacy", "/privacy.html",
                  "/data-protection", "/data-privacy", "/cookie-policy", "/gdpr"]
@@ -711,7 +712,7 @@ class ScanHandler(BaseHTTPRequestHandler):
 
 def main():
     port = PORT
-    if "--port" in sys.argv:
+    if "--port" in sys.argv:  # local override still works: python3 scan_server.py --port 3002
         port = int(sys.argv[sys.argv.index("--port") + 1])
 
     server = HTTPServer(("0.0.0.0", port), ScanHandler)
