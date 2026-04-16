@@ -406,7 +406,15 @@
     background: rgba(0,200,168,.1); border: 1px solid rgba(0,200,168,.2);
     border-radius: 20px; padding: 3px 10px; white-space: nowrap;
   }
-  .ro-domain { font-size: 14px; color: rgba(255,255,255,.6); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ro-domain { font-size: 13px; color: rgba(255,255,255,.55); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ro-domain strong { color: rgba(255,255,255,.85); font-weight: 700; }
+  .ro-header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .ro-download {
+    background: rgba(0,200,168,.12); border: 1px solid rgba(0,200,168,.25);
+    color: var(--teal); border-radius: 8px; padding: 7px 14px;
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s; white-space: nowrap;
+  }
+  .ro-download:hover { background: rgba(0,200,168,.22); }
   .ro-close {
     background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
     color: rgba(255,255,255,.55); border-radius: 8px; padding: 7px 14px;
@@ -451,6 +459,24 @@
   .ro-upgrade-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
   .ro-upgrade-sub { font-size: 13px; color: rgba(255,255,255,.45); margin-bottom: 22px; line-height: 1.6; max-width: 420px; margin-left: auto; margin-right: auto; }
   .ro-upgrade-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* Method strip inside results overlay */
+  .ro-method { margin-bottom: 28px; }
+  .ro-method-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.35); margin-bottom: 12px; }
+  .ro-method-steps { border: 1px solid rgba(255,255,255,.08); border-radius: 12px; overflow: hidden; }
+  .ro-method-step { padding: 14px 16px 14px 19px; background: rgba(255,255,255,.02); border-bottom: 1px solid rgba(255,255,255,.06); }
+  .ro-method-step:last-child { border-bottom: none; }
+  .ro-method-step.active { background: rgba(0,200,168,.06); border-left: 3px solid var(--teal); padding-left: 16px; }
+  .ro-method-step p { font-size: 12px; color: rgba(255,255,255,.38); line-height: 1.55; margin: 5px 0 0; }
+  .ro-method-step.active p { color: rgba(255,255,255,.52); }
+  .ro-method-label { display: flex; align-items: center; gap: 9px; }
+  .ro-method-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,.07); color: rgba(255,255,255,.35); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ro-method-step.active .ro-method-num { background: var(--teal); color: #fff; }
+  .ro-method-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.55); }
+  .ro-method-step.active .ro-method-name { color: rgba(255,255,255,.9); }
+  .ro-method-tier { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; margin-left: 2px; }
+  .ro-method-tier.free { background: rgba(0,200,168,.15); color: var(--teal); }
+  .ro-method-tier.paid { background: rgba(255,255,255,.06); color: rgba(255,255,255,.3); }
 
   /* scan modal overlay */
   .scan-modal {
@@ -3721,6 +3747,7 @@
   // ── Scan modal state ────────────────────────────
   let _scanTimers = [];      // tab/progress timers so we can cancel them
   let _scanAbortCtrl = null; // AbortController for the in-flight fetch
+  let _lastScanData  = null; // latest scan results — used by downloadResultsPDF()
 
   function cancelScan() {
     // Abort in-flight API call
@@ -4121,11 +4148,12 @@
   }
 
   function showResultsOverlay(data) {
+    _lastScanData = data;  // store for PDF download
     const overlay = document.getElementById('results-overlay');
     const domain = (data.url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
 
     // Header domain
-    document.getElementById('ro-domain').textContent = domain || 'your site';
+    document.getElementById('ro-domain').innerHTML = `Your website: <strong>${domain || 'your site'}</strong>`;
 
     // Score ring
     const ring = document.getElementById('ro-ringFill');
@@ -4166,9 +4194,9 @@
     const findings = data.free_findings || [];
     const titleEl  = document.getElementById('ro-findings-title');
     if (data.is_preview) {
-      titleEl.innerHTML = `Typical findings <span style="font-size:10px;font-weight:400;text-transform:none;color:rgba(255,255,255,.3);letter-spacing:0">(illustrative example)</span>`;
+      titleEl.innerHTML = `Scan Highlights <span style="font-size:10px;font-weight:400;text-transform:none;color:rgba(255,255,255,.3);letter-spacing:0">(illustrative example)</span>`;
     } else {
-      titleEl.innerHTML = `Top issues found &nbsp;·&nbsp; <span style="color:rgba(255,255,255,.35)">${data.total_issues} total</span>`;
+      titleEl.innerHTML = `Scan Highlights &nbsp;·&nbsp; <span style="color:rgba(255,255,255,.35)">${data.total_issues} issues found</span>`;
     }
     document.getElementById('ro-findings-list').innerHTML = findings.map(f => {
       const tc = TAG_COLOR[f.tag] || '#888';
@@ -4221,6 +4249,113 @@
   function closeResultsOverlay() {
     document.getElementById('results-overlay').style.display = 'none';
     document.body.style.overflow = '';
+  }
+
+  function downloadResultsPDF() {
+    const data = _lastScanData;
+    if (!data) return;
+
+    const domain  = (data.url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const date    = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    const score   = data.score || 0;
+    const label   = data.score_label || '';
+
+    const PILLAR_LABELS = {
+      ux:           { label:'User Experience',    color:'#2C5AA0' },
+      transparency: { label:'Transparency',       color:'#10B981' },
+      safety:       { label:'Safety & Security',  color:'#D97706' },
+      ai_trust:     { label:'AI Trust',           color:'#7C3AED' },
+    };
+    const TAG_BG = { 'FIX THIS WEEK':'#FEE2E2', 'QUICK WIN':'#FEF3C7', 'REVIEW':'#E0F2FE', 'MONITOR':'#F0FDF4' };
+    const TAG_FG = { 'FIX THIS WEEK':'#DC2626', 'QUICK WIN':'#B45309', 'REVIEW':'#0369A1', 'MONITOR':'#166534' };
+
+    const pillarsHTML = Object.entries(PILLAR_LABELS).map(([key, p]) => {
+      const val = data.pillars?.[key];
+      const s = val?.score ?? '—';
+      const pct = val?.score ?? 0;
+      return `<tr>
+        <td style="padding:9px 0;font-size:13px;font-weight:600;color:#374151;border-bottom:1px solid #F3F4F6">${p.label}</td>
+        <td style="padding:9px 0;border-bottom:1px solid #F3F4F6">
+          <div style="background:#F3F4F6;border-radius:99px;height:6px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:${p.color};border-radius:99px"></div>
+          </div>
+        </td>
+        <td style="padding:9px 0;text-align:right;font-size:14px;font-weight:800;color:${p.color};border-bottom:1px solid #F3F4F6;white-space:nowrap;padding-left:12px">${s}<span style="font-size:11px;font-weight:400;color:#9CA3AF">/100</span></td>
+      </tr>`;
+    }).join('');
+
+    const findingsHTML = (data.free_findings || []).map(f => {
+      const bg = TAG_BG[f.tag] || '#F9FAFB';
+      const fg = TAG_FG[f.tag] || '#374151';
+      return `<div style="border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#FAFAFA">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:${f.detail ? '6px' : '0'}">
+          <div style="font-size:13px;font-weight:700;color:#111827">${f.title}</div>
+          ${f.tag ? `<span style="font-size:10px;font-weight:700;color:${fg};background:${bg};padding:2px 9px;border-radius:99px;white-space:nowrap;flex-shrink:0">${f.tag}</span>` : ''}
+        </div>
+        ${f.detail ? `<div style="font-size:12px;color:#6B7280;line-height:1.55">${f.detail}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Quick Trust Check — ${domain}</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#111827; background:#fff; padding:40px; max-width:700px; margin:0 auto; }
+    @media print { body { padding:24px; } @page { margin:1.2cm; } }
+    table { width:100%; border-collapse:collapse; }
+    td { vertical-align:middle; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:3px solid #00C8A8;margin-bottom:28px">
+    <div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#00C8A8;margin-bottom:5px">Data Pilots · Quick Trust Check</div>
+      <div style="font-size:11px;color:#6B7280">Your website: <strong style="color:#111827">${domain}</strong></div>
+      <div style="font-size:11px;color:#9CA3AF;margin-top:2px">${date}</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:52px;font-weight:900;color:#111827;line-height:1">${score}</div>
+      <div style="font-size:11px;color:#9CA3AF;margin-bottom:2px">/100</div>
+      <div style="font-size:11px;font-weight:700;color:#00C8A8;text-transform:uppercase;letter-spacing:.06em">${label}</div>
+    </div>
+  </div>
+
+  <!-- Pillars -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#00C8A8;margin-bottom:12px">Trust Pillar Breakdown</div>
+  <table style="margin-bottom:28px">
+    <col style="width:160px"><col><col style="width:70px">
+    ${pillarsHTML}
+  </table>
+
+  <!-- Findings -->
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#00C8A8;margin-bottom:12px">Scan Highlights${data.total_issues ? ` · ${data.total_issues} issues found` : ''}</div>
+  ${findingsHTML}
+
+  <!-- Next step -->
+  <div style="margin-top:24px;padding:16px 18px;background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px">
+    <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px">Next step: Co-Pilot — Treat &amp; Strengthen</div>
+    <div style="font-size:12px;color:#047857;line-height:1.55">Every finding with exact fix instructions for your owner, developer, and compliance team. Plus a trust proof PDF for proposals and monthly re-scans to track progress.</div>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid #F3F4F6">
+    <div style="font-size:10px;color:#9CA3AF">Generated by Data Pilots · datapilots.tech</div>
+    <div style="font-size:10px;color:#9CA3AF">team@datapilots.tech</div>
+  </div>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank', 'width=780,height=960');
+    if (!win) { alert('Please allow pop-ups to save your results.'); return; }
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    // Small delay so browser renders the page before print dialog
+    setTimeout(() => win.print(), 600);
   }
 
   // ── Papaya findings live-update ─────────────────
@@ -4462,7 +4597,10 @@
   <div class="ro-header">
     <span class="ro-badge">Quick Trust Check</span>
     <span class="ro-domain" id="ro-domain">your site</span>
-    <button class="ro-close" onclick="closeResultsOverlay()">✕ Close</button>
+    <div class="ro-header-actions">
+      <button class="ro-download" id="ro-downloadBtn" onclick="downloadResultsPDF()">↓ Save Results</button>
+      <button class="ro-close" onclick="closeResultsOverlay()">✕ Close</button>
+    </div>
   </div>
   <div class="ro-body">
 
@@ -4489,14 +4627,45 @@
     <div class="ro-pillars" id="ro-pillars"><!-- populated by JS --></div>
 
     <div class="ro-findings-section">
-      <div class="ro-findings-title" id="ro-findings-title">Top issues found</div>
+      <div class="ro-findings-title" id="ro-findings-title">Scan Highlights</div>
       <div id="ro-findings-list"><!-- populated by JS --></div>
       <div id="ro-papaya-area"></div>
     </div>
 
+    <!-- Method strip: Check → Treat → Strengthen -->
+    <div class="ro-method">
+      <div class="ro-method-title">How your score was built — and what comes next</div>
+      <div class="ro-method-steps">
+        <div class="ro-method-step active">
+          <div class="ro-method-label">
+            <span class="ro-method-num">1</span>
+            <span class="ro-method-name">Check</span>
+            <span class="ro-method-tier free">FREE — done</span>
+          </div>
+          <p>Enter your URL and answer a few short questions. We combine a live site walkthrough, direct website analysis, and your business context to give you a plain-English trust score across UX, Transparency, Safety, and AI Trust. About 5 minutes, no account needed.</p>
+        </div>
+        <div class="ro-method-step">
+          <div class="ro-method-label">
+            <span class="ro-method-num">2</span>
+            <span class="ro-method-name">Treat</span>
+            <span class="ro-method-tier paid">CO-PILOT</span>
+          </div>
+          <p>Every finding comes with exact fix instructions — plain language for your business owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap, every person has their part.</p>
+        </div>
+        <div class="ro-method-step">
+          <div class="ro-method-label">
+            <span class="ro-method-num">3</span>
+            <span class="ro-method-name">Strengthen</span>
+            <span class="ro-method-tier paid">CO-PILOT</span>
+          </div>
+          <p>Export a trust proof PDF for proposals and procurement. Re-scan monthly to track your progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="ro-upgrade">
-      <div class="ro-upgrade-title">Get the full fix roadmap</div>
-      <p class="ro-upgrade-sub">Co-Pilot runs a Deep Trust Check — every finding with step-by-step guides your team can act on, plus a trust proof PDF for proposals and procurement.</p>
+      <div class="ro-upgrade-title">Ready to treat and strengthen?</div>
+      <p class="ro-upgrade-sub">Co-Pilot gives you every finding with step-by-step fix guides, a trust proof PDF for proposals, and monthly re-scans to track progress.</p>
       <div class="ro-upgrade-actions">
         <a href="#pricing" class="btn btn-teal" onclick="closeResultsOverlay()" style="padding:12px 26px;">See Co-Pilot →</a>
         <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:11px 20px;font-size:13px;">
