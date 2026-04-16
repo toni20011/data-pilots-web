@@ -438,6 +438,7 @@
     background: rgba(0,200,168,.06); border: 1px solid rgba(0,200,168,.14);
     border-radius: 10px; padding: 12px 16px; font-size: 12px;
     color: rgba(255,255,255,.45); line-height: 1.55; margin-bottom: 28px;
+    transition: background .3s, border-color .3s;
   }
   .ro-pillars { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
   .ro-p-row { display: grid; grid-template-columns: 32px 1fr 44px; gap: 12px; align-items: center; }
@@ -3902,9 +3903,17 @@
     _autoAdvanceScanSteps();
     _autoAdvanceTabs();
 
-    _scanPromise = callScanAPI(url)
-      .catch(() => demoResults(url))
-      .then(data => { _markScanReady(data); return data; });
+    // Run scan + a minimum wait in parallel.
+    // The minimum (14s) lets the guided tabs play through at least once.
+    // If the API fails for any reason, fall back to illustrative demo (is_preview:true).
+    _scanPromise = Promise.all([
+      callScanAPI(url).catch(err => {
+        // Don't swallow user-initiated cancels
+        if (err && err.name === 'AbortError') throw err;
+        return demoResults(url, true); // mark as illustrative, not real
+      }),
+      new Promise(resolve => setTimeout(resolve, 14000)) // minimum 14s
+    ]).then(([data]) => { _markScanReady(data); return data; });
   }
 
   async function submitModal() {
@@ -3942,7 +3951,7 @@
     const urlInput = document.getElementById('scanUrl') || document.getElementById('stickyUrl');
     const url = (urlInput ? urlInput.value : '').trim();
     if (!url) return;
-    _scanPromise = callScanAPI(url).catch(() => demoResults(url));
+    _scanPromise = callScanAPI(url).catch(() => demoResults(url, true));
     submitModal();
   }
 
@@ -4152,8 +4161,28 @@
     const overlay = document.getElementById('results-overlay');
     const domain = (data.url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
 
-    // Header domain
+    // Header domain + download button visibility
     document.getElementById('ro-domain').innerHTML = `Your website: <strong>${domain || 'your site'}</strong>`;
+    const dlBtn = document.getElementById('ro-downloadBtn');
+    if (dlBtn) dlBtn.style.display = data.is_preview ? 'none' : '';
+
+    // Privacy / preview notice
+    const privacyEl = document.getElementById('ro-privacy');
+    if (privacyEl) {
+      if (data.is_preview) {
+        privacyEl.style.background = 'rgba(251,191,36,.06)';
+        privacyEl.style.borderColor = 'rgba(251,191,36,.2)';
+        privacyEl.innerHTML = `
+          <span style="font-size:16px;flex-shrink:0;margin-top:1px;">◎</span>
+          <span><strong style="color:#FBBF24;">Illustrative example</strong> — we couldn't reach <strong>${domain}</strong> from your local environment, so these are typical findings for a similar business. <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" style="color:var(--teal);text-decoration:underline;">Book a live check</a> to get your real score.</span>`;
+      } else {
+        privacyEl.style.background = '';
+        privacyEl.style.borderColor = '';
+        privacyEl.innerHTML = `
+          <span style="font-size:16px;flex-shrink:0;margin-top:1px;">🔒</span>
+          <span>Your results are shown only to you. Nothing is stored on our servers unless you choose to save them.</span>`;
+      }
+    }
 
     // Score ring
     const ring = document.getElementById('ro-ringFill');
@@ -4619,7 +4648,7 @@
       <div class="ro-score-label" id="ro-score-label">Scanning…</div>
     </div>
 
-    <div class="ro-privacy">
+    <div class="ro-privacy" id="ro-privacy">
       <span style="font-size:16px;flex-shrink:0;margin-top:1px;">🔒</span>
       <span>Your results are shown only to you. Nothing is stored on our servers unless you choose to save them.</span>
     </div>
