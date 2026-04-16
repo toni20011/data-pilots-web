@@ -37,10 +37,10 @@ PAPAYA_API_KEY    = "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX"
 PAPAYA_MAX_WAIT   = 180          # max seconds to wait for a Papaya run to complete
 PAPAYA_POLL_SLEEP = 6            # seconds between status polls
 
-PRIVACY_PATHS = ["/privacy-policy", "/privacy", "/data-protection",
-                 "/data-privacy", "/cookie-policy", "/gdpr"]
+PRIVACY_PATHS = ["/privacy-policy", "/privacy", "/privacy.html",
+                 "/data-protection", "/data-privacy", "/cookie-policy", "/gdpr"]
 TERMS_PATHS   = ["/terms", "/terms-of-service", "/terms-and-conditions",
-                 "/legal", "/tos"]
+                 "/legal", "/tos", "/terms.html"]
 CONTACT_PATHS = ["/contact", "/contact-us", "/about", "/get-in-touch", "/about-us"]
 
 AI_KEYWORDS = [

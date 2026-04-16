@@ -4004,21 +4004,26 @@
             if (papayaHTML) list.insertAdjacentHTML('beforeend', papayaHTML);
           }
 
-          // Show screenshot if available
-          if (report.screenshot_url) {
+          // Show walkthrough link if available
+          // Note: Papaya returns a Browserbase DevTools debug URL (not a static image),
+          // so we link to it rather than embedding as <img>.
+          const walkthroughUrl = report.report_url || report.screenshot_url || '';
+          if (walkthroughUrl) {
             const screenshotWrap = document.getElementById('papaya-screenshot');
             if (screenshotWrap) {
               screenshotWrap.innerHTML = `
-                <div style="margin:16px 0 8px;font-size:12px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;">
-                  Site walkthrough — California visitor, reject-all cookies
-                </div>
-                <img src="${report.screenshot_url}" alt="Site walkthrough screenshot"
-                  style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.08);"/>
-                <p style="font-size:12px;color:rgba(255,255,255,.4);margin-top:8px;line-height:1.6;">
-                  Simulating a real visitor in California clicking "reject all" — the most protective
-                  option under CCPA and the increasingly common default for privacy-conscious users.
-                  This is also the scenario most likely to trigger consent violations.
-                </p>`;
+                <div style="margin-top:14px;padding:12px 14px;
+                  background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.18);
+                  border-radius:8px;font-size:12px;line-height:1.7;color:rgba(255,255,255,.5);">
+                  <strong style="color:rgba(255,255,255,.75);display:block;margin-bottom:4px;">
+                    Site walkthrough complete — California visitor · reject-all cookies
+                  </strong>
+                  This simulates a real visitor in California clicking "reject all" on your cookie banner —
+                  the most protective option under CCPA and the scenario most likely to reveal consent violations.
+                  ${walkthroughUrl ? `<br><a href="${walkthroughUrl}" target="_blank" rel="noopener"
+                    style="color:var(--teal);text-decoration:underline;margin-top:6px;display:inline-block;">
+                    View full walkthrough report →</a>` : ''}
+                </div>`;
               screenshotWrap.style.display = 'block';
             }
           }
