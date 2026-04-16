@@ -3945,6 +3945,7 @@
     let attempts = 0;
     const maxAttempts = 24; // 24 × 7s ≈ 2.8 min max
 
+    // Poll GET /papaya/{id}  →  proxied directly to Papaya GET /runs/{id}
     function pollStatus() {
       attempts++;
       fetch(`${API_BASE}/papaya/${sessionId}`)
@@ -3954,16 +3955,15 @@
           const msg   = document.getElementById('papaya-strip-msg');
 
           if (statusData.status === 'completed') {
-            // Step 2: fetch full report + screenshot now scan is done
-            fetchPapayaReport(sessionId);
+            // Fetch screenshots from Papaya's screenshots endpoint (real public image URLs)
+            fetchScreenshots(sessionId);
 
-          } else if (statusData.status === 'failed') {
+          } else if (statusData.status === 'failed' || statusData.status === 'error') {
             if (strip && msg) {
               strip.style.opacity = '.4';
-              msg.textContent = 'Papaya site walkthrough unavailable — continuing with standard checks.';
+              msg.textContent = 'Site walkthrough unavailable — continuing with standard checks.';
             }
           } else {
-            // Pending / running — keep polling, slightly longer interval to avoid hammering
             if (attempts < maxAttempts) setTimeout(pollStatus, attempts < 6 ? 5000 : 10000);
             else if (strip && msg) msg.textContent = 'Site walkthrough still running — results will update when ready.';
           }
@@ -3973,69 +3973,75 @@
         });
     }
 
-    function fetchPapayaReport(sessionId) {
-      fetch(`${API_BASE}/papaya/${sessionId}/report`)
-        .then(r => r.ok ? r.json() : Promise.reject('no-report'))
-        .then(report => {
+    // Fetch GET /papaya/{id}/screenshots  →  Papaya GET /runs/{id}/screenshots
+    // Returns array of { public_url, label, name, screenshot_type }
+    function fetchScreenshots(sessionId) {
+      fetch(`${API_BASE}/papaya/${sessionId}/screenshots`)
+        .then(r => r.ok ? r.json() : Promise.reject('no-screenshots'))
+        .then(shots => {
           const strip = document.getElementById('papaya-strip');
-          const list  = document.getElementById('live-findings-list');
+          const wrap  = document.getElementById('papaya-screenshot');
 
-          // Inject findings into findings list
-          const findings = report.findings || report.results || [];
-          if (findings.length && list) {
-            const papayaHTML = findings
-              .filter(f => f.status === 'fail' || f.status === 'warn')
-              .map(buildFindingHTML).join('');
-            if (papayaHTML) list.insertAdjacentHTML('beforeend', papayaHTML);
+          // Papaya returns array; find the most useful screenshot
+          // Prefer 'final' or 'after_interaction' type; fall back to first
+          const shot = (Array.isArray(shots) ? shots : [])
+            .sort((a, b) => {
+              // Prefer post-interaction screenshots; Papaya uses 'type' field
+              const order = { after_interaction: 0, final: 1, cookie_banner: 2, initial: 3 };
+              return (order[a.type] ?? 9) - (order[b.type] ?? 9);
+            })[0];
+
+          // Papaya screenshot objects use 'url' for the public Supabase image URL
+          if (shot && (shot.url || shot.public_url) && wrap) {
+            const imgUrl = shot.url || shot.public_url;
+            wrap.innerHTML = `
+              <div style="margin-top:12px;">
+                <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;
+                  color:rgba(255,255,255,.35);margin-bottom:8px;">
+                  Site walkthrough — California visitor · reject-all
+                  ${shot.label ? ` · ${shot.label}` : ''}
+                </div>
+                <img src="${imgUrl}" alt="Site walkthrough screenshot"
+                  style="width:100%;border-radius:8px;border:1px solid rgba(255,255,255,.08);
+                  display:block;" loading="lazy"/>
+                <p style="font-size:11px;color:rgba(255,255,255,.35);margin-top:8px;line-height:1.6;">
+                  Simulating a visitor in California clicking "reject all" — the most protective
+                  option under CCPA, and the scenario most likely to surface consent violations.
+                </p>
+              </div>`;
+            wrap.style.display = 'block';
           }
 
-          // Show walkthrough link if available
-          // Note: Papaya returns a Browserbase DevTools debug URL (not a static image),
-          // so we link to it rather than embedding as <img>.
-          const walkthroughUrl = report.report_url || report.screenshot_url || '';
-          if (walkthroughUrl) {
-            const screenshotWrap = document.getElementById('papaya-screenshot');
-            if (screenshotWrap) {
-              screenshotWrap.innerHTML = `
-                <div style="margin-top:14px;padding:12px 14px;
-                  background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.18);
-                  border-radius:8px;font-size:12px;line-height:1.7;color:rgba(255,255,255,.5);">
-                  <strong style="color:rgba(255,255,255,.75);display:block;margin-bottom:4px;">
-                    Site walkthrough complete — California visitor · reject-all cookies
-                  </strong>
-                  This simulates a real visitor in California clicking "reject all" on your cookie banner —
-                  the most protective option under CCPA and the scenario most likely to reveal consent violations.
-                  ${walkthroughUrl ? `<br><a href="${walkthroughUrl}" target="_blank" rel="noopener"
-                    style="color:var(--teal);text-decoration:underline;margin-top:6px;display:inline-block;">
-                    View full walkthrough report →</a>` : ''}
-                </div>`;
-              screenshotWrap.style.display = 'block';
-            }
-          }
-
-          // Update strip to show completion
+          // Update completion strip
           if (strip) {
             strip.style.background = 'rgba(16,185,129,.08)';
             strip.style.borderColor = 'rgba(16,185,129,.25)';
             strip.innerHTML = `
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                 stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                style="flex-shrink:0;">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
+                style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
               <span style="color:rgba(255,255,255,.6);">
-                Site walkthrough complete — California visitor, reject-all cookies
-                ${report.report_url ? `· <a href="${report.report_url}" target="_blank"
-                  style="color:var(--teal);text-decoration:underline;">view full walkthrough</a>` : ''}
+                Site walkthrough complete — California visitor, reject-all
+                · <a href="${`https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/${sessionId}`}"
+                  target="_blank" rel="noopener"
+                  style="color:var(--teal);text-decoration:underline;">view full report</a>
               </span>`;
           }
         })
         .catch(() => {
-          // Report fetch failed — still mark status complete with what we have
           const strip = document.getElementById('papaya-strip');
           if (strip) {
             strip.style.background = 'rgba(16,185,129,.06)';
-            strip.innerHTML = `<span style="color:rgba(255,255,255,.5);">Site walkthrough complete — report loading shortly.</span>`;
+            strip.innerHTML = `
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+              <span style="color:rgba(255,255,255,.5);">
+                Site walkthrough complete
+                · <a href="${`https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/${sessionId}`}"
+                  target="_blank" rel="noopener"
+                  style="color:var(--teal);text-decoration:underline;">view full report</a>
+              </span>`;
           }
         });
     }

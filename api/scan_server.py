@@ -1,23 +1,25 @@
 #!/usr/bin/env python3
 """
-Data Pilots - Trust Scan API  v2
-Partial (free-tier) website trust check + Papaya consent analysis.
+Data Pilots - Trust Scan API  v3
+Website trust check (our own checks) + authenticated proxy to Papaya consent API.
 
 Usage:
     python3 api/scan_server.py [--port 3001]
 
-Endpoints:
-    POST /scan                     { "url": "https://example.com" }
-    GET  /papaya/<session_id>      Poll for Papaya findings after initial scan
+Endpoints (ours):
+    POST /scan                           { "url": "https://example.com" }
     GET  /health
+
+Papaya proxy endpoints (authenticated pass-through — no caching or transformation):
+    GET  /papaya/<session_id>            → GET /api/v1/runs/<session_id>
+    GET  /papaya/<session_id>/screenshots → GET /api/v1/runs/<session_id>/screenshots
+    GET  /papaya/<session_id>/report      → GET /api/v1/runs/<session_id>/report
 """
 
 import json
 import sys
 import re
 import ssl
-import time
-import threading
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -29,14 +31,12 @@ from datetime import datetime
 # ─────────────────────────────────────────────
 # Config
 # ─────────────────────────────────────────────
-PORT              = 3001
-TIMEOUT           = 6            # seconds per individual HTTP check
-MAX_HTML_BYTES    = 80_000        # bytes for content checks (keywords, etc.)
-MAX_FOOTER_BYTES  = 400_000       # enough to reach footer on large CMS-built sites
-PAPAYA_API_BASE   = "https://papaya-consent-check-be11a0846ed5.herokuapp.com/api/v1"
-PAPAYA_API_KEY    = "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX"
-PAPAYA_MAX_WAIT   = 180          # max seconds to wait for a Papaya run to complete
-PAPAYA_POLL_SLEEP = 6            # seconds between status polls
+PORT             = 3001
+TIMEOUT          = 6            # seconds per individual HTTP check
+MAX_HTML_BYTES   = 80_000       # bytes for content checks (keywords, etc.)
+MAX_FOOTER_BYTES = 400_000      # enough to reach footer on large CMS-built sites
+PAPAYA_API_BASE  = "https://papaya-consent-check-be11a0846ed5.herokuapp.com/api/v1"
+PAPAYA_API_KEY   = "cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX"
 
 PRIVACY_PATHS = ["/privacy-policy", "/privacy", "/privacy.html",
                  "/data-protection", "/data-privacy", "/cookie-policy", "/gdpr"]
@@ -75,10 +75,6 @@ POLICY_REQUIRED_TOPICS = {
     "contact details":     ["contact us", "data controller", "data protection officer", "dpo@", "privacy@", "info@"],
 }
 COOKIE_POLICY_PATHS = ["/cookie-policy", "/cookie-notice", "/cookies", "/cookie-disclosure"]
-
-# In-memory cache: session_id → { status, findings, error, started_at }
-_papaya_cache = {}
-_papaya_lock  = threading.Lock()
 
 
 # ─────────────────────────────────────────────
@@ -136,9 +132,9 @@ def page_exists(base: str, paths: list) -> tuple:
 
 
 # ─────────────────────────────────────────────
-# Papaya API helpers
+# Papaya API — thin authenticated calls
 # ─────────────────────────────────────────────
-def papaya_call(method: str, path: str, body=None, max_bytes=100_000) -> dict:
+def papaya_call(method: str, path: str, body=None, max_bytes=200_000) -> dict:
     """Authenticated call to Papaya API. Returns fetch-style dict."""
     url = PAPAYA_API_BASE + path
     return fetch(
@@ -148,8 +144,12 @@ def papaya_call(method: str, path: str, body=None, max_bytes=100_000) -> dict:
     )
 
 
-def papaya_start_run(url: str):
-    """Start a Papaya consent check run. Returns session_id or None on failure."""
+def papaya_start_run(url: str) -> dict:
+    """
+    Start a Papaya consent check run (reject_all, California).
+    Returns the full Papaya run object on success, or {} on failure.
+    The caller can use run['session_id'] and run['links'] as needed.
+    """
     resp = papaya_call("POST", "/runs", {
         "url": url,
         "task": "reject_all",
@@ -158,423 +158,10 @@ def papaya_start_run(url: str):
     })
     if not resp["ok"] or not resp["data"]:
         print(f"  [Papaya] start failed: {resp.get('error')} status={resp.get('status')}", flush=True)
-        return None
-    sid = resp["data"].get("session_id")
-    print(f"  [Papaya] run started  session_id={sid}", flush=True)
-    return sid
-
-
-def papaya_poll_until_done(session_id: str) -> dict:
-    """
-    Block until the Papaya run is complete.
-    Returns the final run data dict on success, or {} on timeout/failure.
-    The run data may include screenshot_url / debug_url from Papaya's response.
-    """
-    deadline = time.time() + PAPAYA_MAX_WAIT
-    while time.time() < deadline:
-        resp = papaya_call("GET", f"/runs/{session_id}")
-        if not resp["ok"] or not resp["data"]:
-            print(f"  [Papaya] poll error: {resp.get('error')}", flush=True)
-            return {}
-        run_data = resp["data"]
-        status   = run_data.get("status", "")
-        progress = run_data.get("progress", 0)
-        print(f"  [Papaya] status={status} progress={progress}%", flush=True)
-        if status == "completed":
-            return run_data
-        if status in ("failed", "error"):
-            return {}
-        time.sleep(PAPAYA_POLL_SLEEP)
-    print(f"  [Papaya] timed out after {PAPAYA_MAX_WAIT}s", flush=True)
-    return {}
-
-
-def papaya_fetch_report(session_id: str) -> str:
-    """Fetch the markdown report for a completed run."""
-    resp = papaya_call("GET", f"/runs/{session_id}/report", max_bytes=200_000)
-    if resp["ok"] and resp["text"]:
-        print(f"  [Papaya] report fetched  {len(resp['text'])} chars", flush=True)
-        return resp["text"]
-    return ""
-
-
-def papaya_fetch_analysis(session_id: str) -> str:
-    """
-    Kick off and wait for the AI analysis summary HTML.
-    Returns the summary HTML string or empty string.
-    """
-    # Start background generation
-    papaya_call("POST", f"/runs/{session_id}/analysis", {"force_regenerate": False})
-    # Poll until complete (shorter timeout — analysis is optional)
-    deadline = time.time() + 60
-    while time.time() < deadline:
-        resp = papaya_call("GET", f"/runs/{session_id}/analysis")
-        if resp["ok"] and resp["data"]:
-            st  = resp["data"].get("status", "")
-            sum = resp["data"].get("summary") or ""
-            if st == "completed" and sum:
-                print(f"  [Papaya] analysis ready  {len(sum)} chars", flush=True)
-                return sum
-            if st in ("failed", "error"):
-                return ""
-        time.sleep(5)
-    return ""
-
-
-def papaya_delete_run(session_id: str) -> bool:
-    """
-    Request deletion of a Papaya run.
-    Called immediately after we have parsed results — Papaya's copy is no longer needed.
-    Returns True if deletion was confirmed, False if the endpoint is unavailable or errors.
-    Failures are non-fatal: results are already in local cache regardless.
-    """
-    resp = papaya_call("DELETE", f"/runs/{session_id}")
-    if resp["ok"] or resp.get("status") in (200, 204):
-        print(f"  [Papaya] run deleted  session={session_id}", flush=True)
-        return True
-    # Some APIs return 404 if already deleted — treat as success
-    if resp.get("status") == 404:
-        print(f"  [Papaya] run already gone  session={session_id}", flush=True)
-        return True
-    print(f"  [Papaya] delete failed (non-fatal)  status={resp.get('status')}  session={session_id}", flush=True)
-    return False
-
-
-# ─────────────────────────────────────────────
-# Papaya report parser → trust findings
-# ─────────────────────────────────────────────
-def _extract_tracker_count(text: str, section_keyword: str) -> int:
-    """Pull 'Trackers Detected: N' from a named section of the report."""
-    idx = text.lower().find(section_keyword.lower())
-    if idx == -1:
-        return -1
-    snippet = text[idx: idx + 600]
-    m = re.search(r"trackers detected[:\s]+(\d+)", snippet, re.IGNORECASE)
-    return int(m.group(1)) if m else -1
-
-
-def _extract_tracking_companies(text: str) -> list:
-    """Extract named tracking companies from the report."""
-    companies = re.findall(r"\*\*([^*]+)\*\*\s*\n\s*\n", text)
-    # Also look for '- **Company Name**' pattern
-    companies += re.findall(r"[-•]\s+\*\*([^*]+)\*\*", text)
-    # Deduplicate, ignore section headers
-    seen, result = set(), []
-    for c in companies:
-        c = c.strip()
-        if c and c not in seen and len(c) < 80:
-            seen.add(c)
-            result.append(c)
-    return result
-
-
-def _extract_cmp_name(text: str) -> str:
-    """Try to identify the Consent Management Platform from the Papaya report."""
-    cmp_map = {
-        "OneTrust":    r"onetrust",
-        "Cookiebot":   r"cookiebot|cybot",
-        "Quantcast":   r"quantcast",
-        "TrustArc":    r"trustarc",
-        "Didomi":      r"didomi",
-        "Usercentrics":r"usercentrics",
-        "Osano":       r"osano",
-        "CookieYes":   r"cookieyes",
-        "Borlabs":     r"borlabs",
-        "CookiePro":   r"cookiepro",
-    }
-    lower = text.lower()
-    for name, pattern in cmp_map.items():
-        if re.search(pattern, lower):
-            return name
-    return ""
-
-
-def _extract_consent_categories(text: str) -> list:
-    """Extract consent category names offered in the consent banner."""
-    lower = text.lower()
-    # Common consent category names
-    standard = [
-        "necessary", "essential", "strictly necessary",
-        "analytics", "performance", "statistics",
-        "marketing", "advertising", "targeting",
-        "preferences", "functional",
-        "social media",
-    ]
-    found = [c for c in standard if c in lower]
-    return found[:6]
-
-
-def parse_papaya_report(report_md: str, analysis_html: str = "") -> list:
-    """
-    Convert a Papaya markdown report into Data Pilots trust findings.
-    Parses the actual Papaya report format: tracker counts pre/post consent,
-    action log, banner detection, company names.
-    """
-    findings = []
-    text = report_md  # keep original case for regex; use .lower() for keywords
-
-    # ── 1. Cookie consent banner ──────────────
-    # Papaya report has "Cookie Banner Analysis" section + action log entries
-    has_banner = bool(re.search(
-        r"(cookie banner analysis|consent banner|decline all|reject all button|accept.*button.*external)",
-        text, re.IGNORECASE
-    ))
-    reject_btn_found = bool(re.search(
-        r"(reject all button.*✅|successfully clicked reject|decline all.*button|reject_all_button)",
-        text, re.IGNORECASE
-    ))
-
-    if has_banner:
-        findings.append({
-            "id": "papaya_banner", "pillar": "transparency", "status": "pass",
-            "title": "Cookie consent banner confirmed (Papaya)",
-            "detail": (
-                "Papaya's AI browser agent visited your site and confirmed a cookie consent "
-                "banner is present with Accept, Decline All, and Settings options."
-            ),
-            "tag": None, "source": "papaya",
-        })
-    else:
-        findings.append({
-            "id": "papaya_banner", "pillar": "transparency", "status": "fail",
-            "title": "No cookie consent banner detected (Papaya)",
-            "detail": (
-                "Papaya's browser agent found no cookie consent mechanism. "
-                "GDPR and CCPA require most sites to give visitors a clear choice "
-                "about data collection before it starts."
-            ),
-            "tag": "FIX THIS WEEK", "source": "papaya",
-        })
-
-    # ── 2. Reject-all effectiveness ───────────
-    # Compare pre-consent vs post-consent tracker counts
-    pre_count  = _extract_tracker_count(text, "Initial Page Load (Before Consent)")
-    post_count = _extract_tracker_count(text, "Post-Consent Analysis")
-
-    if pre_count >= 0 and post_count >= 0:
-        if post_count >= pre_count * 0.9:
-            # Trackers barely changed after rejection — not honoured
-            findings.append({
-                "id": "papaya_reject", "pillar": "transparency", "status": "fail",
-                "title": f"Reject-all not honoured — {post_count} trackers still active (Papaya)",
-                "detail": (
-                    f"Papaya found {pre_count} trackers before consent and {post_count} after "
-                    f"a visitor clicked 'Decline All'. Tracking should stop on rejection. "
-                    f"This is a GDPR violation and the kind of issue that gets flagged in "
-                    f"enterprise procurement security reviews."
-                ),
-                "tag": "FIX THIS WEEK", "source": "papaya",
-            })
-        elif post_count == 0 or post_count < pre_count * 0.2:
-            findings.append({
-                "id": "papaya_reject", "pillar": "transparency", "status": "pass",
-                "title": "Reject-all correctly honoured (Papaya)",
-                "detail": (
-                    f"Papaya confirmed tracking dropped from {pre_count} to {post_count} "
-                    f"after a visitor clicked 'Decline All'. Well handled."
-                ),
-                "tag": None, "source": "papaya",
-            })
-        else:
-            findings.append({
-                "id": "papaya_reject", "pillar": "transparency", "status": "warn",
-                "title": f"Partial tracking reduction after rejection — {post_count} trackers remain (Papaya)",
-                "detail": (
-                    f"Papaya found {pre_count} trackers before consent. After 'Decline All', "
-                    f"{post_count} were still active. All non-essential tracking should stop "
-                    f"on rejection to meet GDPR requirements."
-                ),
-                "tag": "FIX THIS WEEK", "source": "papaya",
-            })
-
-    # ── 3. Pre-consent tracking volume ────────
-    if pre_count > 20:
-        companies = _extract_tracking_companies(text)
-        company_str = ", ".join(companies[:3]) if companies else "third-party services"
-        findings.append({
-            "id": "papaya_preload", "pillar": "transparency", "status": "warn",
-            "title": f"{pre_count} trackers active before any consent is given (Papaya)",
-            "detail": (
-                f"Papaya detected {pre_count} tracking requests firing on page load — "
-                f"before a visitor has accepted anything. "
-                f"Tracking companies include: {company_str}. "
-                f"GDPR requires consent to be collected before non-essential tracking starts."
-            ),
-            "tag": "FIX THIS WEEK" if pre_count > 50 else "REVIEW",
-            "source": "papaya",
-        })
-    elif pre_count == 0:
-        findings.append({
-            "id": "papaya_preload", "pillar": "transparency", "status": "pass",
-            "title": "No trackers active before consent (Papaya)",
-            "detail": "Papaya found no third-party tracking firing before a visitor gives consent. Good privacy practice.",
-            "tag": None, "source": "papaya",
-        })
-
-    # ── 4. CMP identification ─────────────────
-    cmp = _extract_cmp_name(text)
-    if cmp:
-        findings.append({
-            "id": "papaya_cmp", "pillar": "transparency", "status": "pass",
-            "title": f"Consent managed via {cmp} (Papaya)",
-            "detail": (
-                f"Papaya identified {cmp} as your Consent Management Platform. "
-                f"Using a recognised CMP signals mature data governance — enterprise "
-                f"procurement teams often verify this."
-            ),
-            "tag": None, "source": "papaya",
-        })
-    else:
-        findings.append({
-            "id": "papaya_cmp", "pillar": "transparency", "status": "info",
-            "title": "Consent platform vendor not identified (Papaya)",
-            "detail": (
-                "Papaya could not identify a standard CMP on your site. "
-                "If you are self-building consent logic, make sure it meets GDPR requirements "
-                "for explicit, granular, withdrawable consent."
-            ),
-            "tag": None, "source": "papaya",
-        })
-
-    # ── 5. Consent categories ─────────────────
-    categories = _extract_consent_categories(text)
-    if categories:
-        findings.append({
-            "id": "papaya_categories", "pillar": "transparency", "status": "pass",
-            "title": f"{len(categories)} consent categories detected in banner (Papaya)",
-            "detail": (
-                f"Categories offered: {', '.join(c.title() for c in categories)}. "
-                f"Granular consent categories are required under GDPR and signal to "
-                f"enterprise clients that your consent framework is properly structured."
-            ),
-            "tag": None, "source": "papaya",
-        })
-    elif has_banner:
-        findings.append({
-            "id": "papaya_categories", "pillar": "transparency", "status": "warn",
-            "title": "Consent banner found but no granular categories detected (Papaya)",
-            "detail": (
-                "Your consent banner exists but may not offer category-level choice. "
-                "GDPR requires separate consent for analytics, marketing, and functional cookies "
-                "— a blanket accept/reject may not be sufficient."
-            ),
-            "tag": "REVIEW", "source": "papaya",
-        })
-
-    return findings
-
-
-# ─────────────────────────────────────────────
-# Papaya background worker
-# ─────────────────────────────────────────────
-def _papaya_worker(session_id: str, target_url: str, tier: str = "free"):
-    """
-    Runs in a background thread.
-    Polls until Papaya completes, fetches report + analysis, parses findings,
-    stores everything in _papaya_cache.
-
-    tier="free"  → Papaya run deleted immediately after parsing (privacy-first).
-    tier="paid"  → Papaya run preserved; session_id stays valid for deeper access
-                   by the user's account. Deletion happens explicitly on account
-                   request or after the paid retention TTL.
-    """
-    try:
-        run_data = papaya_poll_until_done(session_id)
-        if not run_data:
-            with _papaya_lock:
-                _papaya_cache[session_id] = {
-                    "status": "failed", "findings": [], "error": "Papaya timed out or failed",
-                    "cached_at": time.time(), "tier": tier,
-                }
-            return
-
-        # Extract screenshot URL from run data (Papaya may return screenshot_url or debug_url)
-        screenshot_url = (
-            run_data.get("screenshot_url") or
-            run_data.get("debug_url") or
-            run_data.get("screenshot") or
-            ""
-        )
-
-        report_md     = papaya_fetch_report(session_id)
-        analysis_html = papaya_fetch_analysis(session_id)
-        findings      = parse_papaya_report(report_md, analysis_html)
-
-        # ── Privacy: free scans → delete from Papaya immediately ──
-        # Paid scans → preserve Papaya session for account-level access
-        deleted = False
-        if tier == "free":
-            deleted = papaya_delete_run(session_id)
-        else:
-            print(f"  [Papaya] paid scan — run preserved  session={session_id}", flush=True)
-
-        results_url = f"https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/{session_id}"
-
-        with _papaya_lock:
-            _papaya_cache[session_id] = {
-                "status":               "completed",
-                "findings":             findings,
-                "screenshot_url":       screenshot_url,
-                "results_url":          results_url,
-                "report_len":           len(report_md),
-                "tier":                 tier,
-                "papaya_data_deleted":  deleted,
-                "cached_at":            time.time(),
-                "error":                None,
-            }
-        print(f"  [Papaya] worker done  tier={tier}  {len(findings)} findings  screenshot={'yes' if screenshot_url else 'no'}  deleted={deleted}  session={session_id}", flush=True)
-
-    except Exception as e:
-        print(f"  [Papaya] worker error: {e}", flush=True)
-        with _papaya_lock:
-            _papaya_cache[session_id] = {
-                "status": "failed", "findings": [], "error": str(e),
-                "cached_at": time.time(), "tier": tier,
-            }
-
-
-def launch_papaya_background(target_url: str, tier: str = "free"):
-    """
-    Start a Papaya run and kick off a background thread to wait for it.
-    Returns the session_id immediately (or None on failure to start).
-    tier is passed through to _papaya_worker to control deletion behaviour.
-    """
-    session_id = papaya_start_run(target_url)
-    if not session_id:
-        return None
-
-    with _papaya_lock:
-        _papaya_cache[session_id] = {
-            "status": "running", "findings": [], "error": None,
-            "cached_at": time.time(), "tier": tier,
-        }
-
-    t = threading.Thread(target=_papaya_worker, args=(session_id, target_url, tier), daemon=True)
-    t.start()
-    return session_id
-
-
-# ── Local cache TTL cleanup ──────────────────────────────────────────────────
-# Papaya's copy is deleted immediately after parsing (above).
-# Our local in-memory cache is cleared after 1 hour so the server doesn't
-# accumulate stale sessions across a long uptime.
-_CACHE_TTL_SECONDS = 3600  # 1 hour
-
-def _cache_cleanup_worker():
-    """Background thread: remove _papaya_cache entries older than TTL."""
-    while True:
-        time.sleep(600)  # run every 10 minutes
-        cutoff = time.time() - _CACHE_TTL_SECONDS
-        with _papaya_lock:
-            stale = [sid for sid, v in _papaya_cache.items()
-                     if v.get("cached_at", 0) < cutoff]
-            for sid in stale:
-                del _papaya_cache[sid]
-        if stale:
-            print(f"  [Cache] evicted {len(stale)} stale session(s)", flush=True)
-
-_cleanup_thread = threading.Thread(target=_cache_cleanup_worker, daemon=True)
-_cleanup_thread.start()
+        return {}
+    run = resp["data"]
+    print(f"  [Papaya] run started  session_id={run.get('session_id')}", flush=True)
+    return run
 
 
 # ─────────────────────────────────────────────
@@ -706,11 +293,9 @@ def check_footer_policy_links(html: str, full_html: str = "") -> list:
     full_html may be a larger fetch of the page used only for footer detection.
     """
     findings = []
-    # Prefer the larger full_html for footer search if provided
     search_html = full_html if full_html else html
     lower = search_html.lower()
 
-    # Prefer footer section; fall back to last 8000 chars of whatever we have
     footer_start = lower.rfind("<footer")
     footer_text  = lower[footer_start:] if footer_start != -1 else lower[-8000:]
 
@@ -755,33 +340,22 @@ def check_footer_policy_links(html: str, full_html: str = "") -> list:
 
 
 def check_policy_content(base: str) -> list:
-    """
-    Fetch the privacy policy page and analyse its content for:
-    - GDPR/CCPA language
-    - Coverage of required topics (what, why, sharing, rights, contact)
-    - Data Processing Agreement language
-    - Cookie policy existence
-    - Last-updated date
-    """
     findings = []
 
-    # Find the privacy policy URL
     privacy_url = None
     for path in PRIVACY_PATHS:
-        r = fetch(base + path, method="HEAD")
+        r = fetch(base + path, method="GET", max_bytes=500)
         if r["ok"] and r["status"] and r["status"] < 400:
             privacy_url = base + path
             break
     if not privacy_url:
-        return findings  # check_privacy_page already reports this
+        return findings
 
-    # Fetch full content (larger limit for policy pages)
     r    = fetch(privacy_url, method="GET", max_bytes=200_000)
     text = r.get("text", "").lower()
     if not text:
         return findings
 
-    # ── GDPR language ──
     has_gdpr = any(kw in text for kw in GDPR_KEYWORDS)
     has_ccpa = any(kw in text for kw in CCPA_KEYWORDS)
 
@@ -814,7 +388,6 @@ def check_policy_content(base: str) -> list:
             "tag": None,
         })
 
-    # ── Required topic coverage ──
     missing = []
     for topic, keywords in POLICY_REQUIRED_TOPICS.items():
         if not any(kw in text for kw in keywords):
@@ -852,7 +425,6 @@ def check_policy_content(base: str) -> list:
             "tag": "FIX THIS WEEK",
         })
 
-    # ── DPA language ──
     has_dpa = any(kw in text for kw in DPA_KEYWORDS)
     if has_dpa:
         findings.append({
@@ -877,7 +449,6 @@ def check_policy_content(base: str) -> list:
             "tag": None,
         })
 
-    # ── Last updated date ──
     has_date = bool(re.search(
         r"(last updated|last revised|effective date|updated:)\s*[:\-]?\s*\w+\s+\d{4}",
         text, re.IGNORECASE
@@ -894,7 +465,6 @@ def check_policy_content(base: str) -> list:
             "tag": "QUICK WIN",
         })
 
-    # ── Separate cookie policy ──
     found_cookie_policy, _ = page_exists(base, COOKIE_POLICY_PATHS)
     if found_cookie_policy:
         findings.append({
@@ -908,7 +478,7 @@ def check_policy_content(base: str) -> list:
 
 
 def check_sitemap(base: str) -> dict:
-    r = fetch(base + "/sitemap.xml", method="HEAD")
+    r = fetch(base + "/sitemap.xml", method="GET", max_bytes=500)
     if r["ok"] and r["status"] and r["status"] < 400:
         return {"id": "sitemap", "pillar": "ux", "status": "pass",
                 "title": "sitemap.xml found",
@@ -962,32 +532,28 @@ def normalise_url(raw: str) -> str:
 
 
 def run_scan(raw_url: str, tier: str = "free") -> dict:
-    """
-    tier = "free"  → Papaya run deleted immediately after parsing (privacy-first)
-    tier = "paid"  → Papaya run preserved; session_id returned for deeper client use
-    """
     base = normalise_url(raw_url)
 
     # Fetch home page: standard read for content checks, larger read for footer
-    home         = fetch(base, method="GET", max_bytes=MAX_HTML_BYTES)
-    home_full    = fetch(base, method="GET", max_bytes=MAX_FOOTER_BYTES)
-    html         = home.get("text", "")
-    html_full    = home_full.get("text", html)   # fallback to standard if larger fetch fails
-    headers      = home.get("headers", {})
+    home      = fetch(base, method="GET", max_bytes=MAX_HTML_BYTES)
+    home_full = fetch(base, method="GET", max_bytes=MAX_FOOTER_BYTES)
+    html      = home.get("text", "")
+    html_full = home_full.get("text", html)
+    headers   = home.get("headers", {})
 
     findings = []
 
     with ThreadPoolExecutor(max_workers=8) as ex:
         futures = {
-            ex.submit(check_https,          base, home): "https",
-            ex.submit(check_privacy_page,   base):       "privacy",
-            ex.submit(check_terms_page,     base):       "terms",
-            ex.submit(check_contact_page,   base):       "contact",
-            ex.submit(check_ai_disclosure,  html):       "ai",
-            ex.submit(check_cookie_consent, html):       "cookies",
-            ex.submit(check_sitemap,        base):       "sitemap",
-            ex.submit(check_footer_policy_links, html, html_full): "footer_links",
-            ex.submit(check_policy_content,      base): "policy_content",
+            ex.submit(check_https,               base, home):          "https",
+            ex.submit(check_privacy_page,        base):                "privacy",
+            ex.submit(check_terms_page,          base):                "terms",
+            ex.submit(check_contact_page,        base):                "contact",
+            ex.submit(check_ai_disclosure,       html):                "ai",
+            ex.submit(check_cookie_consent,      html):                "cookies",
+            ex.submit(check_sitemap,             base):                "sitemap",
+            ex.submit(check_footer_policy_links, html, html_full):     "footer_links",
+            ex.submit(check_policy_content,      base):                "policy_content",
         }
         for future in as_completed(futures, timeout=TIMEOUT + 4):
             try:
@@ -999,42 +565,38 @@ def run_scan(raw_url: str, tier: str = "free") -> dict:
             except Exception:
                 pass
 
-    # Security headers (uses already-fetched headers — no extra request)
     findings.extend(check_security_headers(headers))
 
     scores = compute_scores(findings)
 
-    # Surface actionable findings (fail/warn with a tag), priority-sorted
     actionable = [f for f in findings if f["status"] in ("fail", "warn") and f.get("tag")]
     actionable.sort(key=lambda f: {"FIX THIS WEEK": 0, "QUICK WIN": 1, "REVIEW": 2}.get(f.get("tag", ""), 3))
 
-    # Start Papaya in background — don't wait
-    papaya_session_id = launch_papaya_background(base, tier=tier)
+    # Start Papaya run — returns the full Papaya run object (includes session_id, links, debug_url)
+    papaya_run = papaya_start_run(base)
+    papaya_session_id = papaya_run.get("session_id")
 
     return {
-        "url":              base,
-        "scanned_at":       datetime.utcnow().isoformat() + "Z",
-        "score":            scores["overall"],
-        "score_label":      scores["label"],
-        "tier":             tier,
+        "url":               base,
+        "scanned_at":        datetime.utcnow().isoformat() + "Z",
+        "score":             scores["overall"],
+        "score_label":       scores["label"],
+        "tier":              tier,
         "pillars": {
             "ux":           {"score": scores["pillars"]["ux"],           "label": "User Experience"},
             "transparency": {"score": scores["pillars"]["transparency"], "label": "Transparency"},
             "safety":       {"score": scores["pillars"]["safety"],       "label": "Safety"},
             "ai_trust":     {"score": scores["pillars"]["ai_trust"],     "label": "AI Trust"},
         },
-        "free_findings":    actionable[:3],
-        "total_issues":     len([f for f in findings if f["status"] in ("fail", "warn")]),
+        "free_findings":     actionable[:3],
+        "total_issues":      len([f for f in findings if f["status"] in ("fail", "warn")]),
         "papaya_session_id": papaya_session_id,
-        "papaya_retained":  (tier == "paid"),   # tells frontend whether Papaya data is kept
-        "partial":          True,
-        "powered_by":       "Papaya",
         "note": (
             "Free check covers your public-facing website. "
             "Upgrade to Co-Pilot to scan your learning portal or platform "
             "and unlock full step-by-step fix guides."
             if tier == "free" else
-            "Full Co-Pilot scan. Papaya consent data retained for your account."
+            "Full Co-Pilot scan."
         ),
     }
 
@@ -1061,6 +623,25 @@ class ScanHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _proxy_papaya(self, papaya_path: str):
+        """Proxy a request to Papaya API, forwarding the response as-is."""
+        resp = papaya_call("GET", papaya_path, max_bytes=500_000)
+        if not resp["ok"]:
+            self._send_json({"error": f"Papaya returned {resp.get('status')}"}, resp.get("status") or 502)
+            return
+        # Return as JSON if parsed, otherwise raw text
+        if resp["data"] is not None:
+            self._send_json(resp["data"])
+        else:
+            # e.g. markdown report (text/markdown)
+            body = resp["text"].encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type",   "text/plain; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self._cors()
+            self.end_headers()
+            self.wfile.write(body)
+
     def do_HEAD(self):
         self.send_response(200)
         self._cors()
@@ -1073,39 +654,26 @@ class ScanHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/health":
-            self._send_json({"status": "ok", "service": "Data Pilots Scan API", "version": "2.0"})
-
-        elif self.path.startswith("/papaya/") and self.path.endswith("/report"):
-            # GET /papaya/<session_id>/report  →  full results: findings + screenshot
-            # Only available once status = completed
-            session_id = self.path[len("/papaya/"):][:-len("/report")].strip("/")
-            with _papaya_lock:
-                cached = _papaya_cache.get(session_id)
-            if cached is None:
-                self._send_json({"error": "Session not found"}, 404)
-            elif cached.get("status") != "completed":
-                self._send_json({"error": "Report not ready", "status": cached.get("status", "running")}, 202)
-            else:
-                self._send_json({
-                    "status":        "completed",
-                    "findings":      cached.get("findings", []),
-                    "screenshot_url": cached.get("screenshot_url", ""),
-                    "report_url":    cached.get("results_url", ""),
-                })
+            self._send_json({"status": "ok", "service": "Data Pilots Scan API", "version": "3.0"})
 
         elif self.path.startswith("/papaya/"):
-            # GET /papaya/<session_id>  →  status only (lightweight poll)
-            session_id = self.path[len("/papaya/"):].strip("/")
-            with _papaya_lock:
-                cached = _papaya_cache.get(session_id)
-            if cached is None:
-                self._send_json({"error": "Session not found"}, 404)
-            else:
-                # Return minimal status response — no findings in status poll
-                self._send_json({
-                    "status":  cached.get("status", "running"),
-                    "error":   cached.get("error"),
-                })
+            # Parse session_id and optional sub-path
+            # Supported:
+            #   /papaya/<id>              → /runs/<id>              (status)
+            #   /papaya/<id>/screenshots  → /runs/<id>/screenshots  (image URLs)
+            #   /papaya/<id>/report       → /runs/<id>/report       (markdown)
+            rest = self.path[len("/papaya/"):]          # e.g. "abc123" or "abc123/screenshots"
+            parts = rest.strip("/").split("/", 1)
+            session_id = parts[0]
+            sub = parts[1] if len(parts) > 1 else ""
+
+            allowed_subs = {"", "screenshots", "report"}
+            if sub not in allowed_subs:
+                self._send_json({"error": "Not found"}, 404)
+                return
+
+            papaya_path = f"/runs/{session_id}" + (f"/{sub}" if sub else "")
+            self._proxy_papaya(papaya_path)
 
         else:
             self._send_json({"error": "Not found"}, 404)
@@ -1147,10 +715,11 @@ def main():
         port = int(sys.argv[sys.argv.index("--port") + 1])
 
     server = HTTPServer(("0.0.0.0", port), ScanHandler)
-    print(f"Data Pilots Scan API v2  http://localhost:{port}", flush=True)
-    print(f"  POST /scan                  {{\"url\":\"https://example.com\"}}", flush=True)
-    print(f"  GET  /papaya/<id>           poll status (lightweight — no findings)", flush=True)
-    print(f"  GET  /papaya/<id>/report    full results: findings + screenshot (completed only)", flush=True)
+    print(f"Data Pilots Scan API v3  http://localhost:{port}", flush=True)
+    print(f"  POST /scan", flush=True)
+    print(f"  GET  /papaya/<id>             → proxies to Papaya GET /runs/<id>", flush=True)
+    print(f"  GET  /papaya/<id>/screenshots → proxies to Papaya GET /runs/<id>/screenshots", flush=True)
+    print(f"  GET  /papaya/<id>/report      → proxies to Papaya GET /runs/<id>/report", flush=True)
     print(f"  GET  /health", flush=True)
     server.serve_forever()
 
