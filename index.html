@@ -2051,8 +2051,8 @@
   </symbol>
 </svg>
 
-<!-- SVG gradient defs for ring score -->
-<svg style="display:none" width="0" height="0">
+<!-- SVG gradient defs for ring score — must NOT use display:none or gradients won't render in Chrome -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
   <defs>
     <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00C8A8"/>
@@ -2122,7 +2122,7 @@
         <a href="#pricing" class="btn btn-ghost">See Plans</a>
         <a href="#hero-scan" class="btn btn-teal">
           <svg class="icon" width="13" height="13"><use href="#i-search"/></svg>
-          Free Check
+          Quick Check
         </a>
       </div>
     </div>
@@ -2154,7 +2154,7 @@
         <div class="hero-actions">
           <a href="#hero-scan" class="btn btn-green" style="font-size:16px; padding:16px 32px;">
             <svg class="icon" width="16" height="16"><use href="#i-search"/></svg>
-            Check My Business Free
+            Run My Quick Trust Check
           </a>
           <a href="#results" class="btn btn-outline">
             See a sample report
@@ -2584,11 +2584,11 @@
     <div class="results-header reveal">
       <div class="results-kicker">Audit &nbsp;·&nbsp; Assess &nbsp;·&nbsp; Act</div>
       <h2 class="results-h2">
-        Free gives you the <span>big picture.</span><br>
-        Paid gives you the full picture and how to fix it.
+        Quick Trust Check gives you the <span>big picture.</span><br>
+        Deep Trust Check gives you the full picture and how to fix it.
       </h2>
       <p class="results-sub">
-        Your free check scans your <strong>public-facing website</strong> and shows where you stand across four trust areas. No jargon, no 40-page PDFs. To go deeper into your <span class="term" data-tip="Your LMS, client portal, or training platform. The private side of your business that buyers and procurement teams may request access to review.">learning portal or platform</span>, upgrade to Co-Pilot for the full picture and a step-by-step fix plan.
+        Your Quick Trust Check scans your <strong>public-facing website</strong> and shows where you stand across four trust areas — no jargon, no 40-page PDFs. Upgrade to Co-Pilot for the Deep Trust Check: every finding, step-by-step fix guides, and a trust proof PDF for proposals.
       </p>
     </div>
 
@@ -2608,14 +2608,20 @@
       <div class="report-panel reveal reveal-delay-1">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Your Trust Score</div>
-            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourcoachingbiz.com</div>
+            <div class="panel-title">Quick Trust Check</div>
+            <div id="scanDomain" style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourcoachingbiz.com</div>
           </div>
           <div class="panel-status status-free">Free</div>
         </div>
         <div class="panel-body">
           <div class="score-wrap">
             <svg class="score-ring-svg" viewBox="0 0 110 110" style="transform:rotate(-90deg)">
+              <defs>
+                <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#00C8A8"/>
+                  <stop offset="100%" stop-color="#00AFCC"/>
+                </linearGradient>
+              </defs>
               <circle class="ring-track" cx="55" cy="55" r="49"/>
               <circle class="ring-fill" cx="55" cy="55" r="49" id="ringFill"/>
             </svg>
@@ -2677,8 +2683,8 @@
       <div class="report-panel reveal reveal-delay-2">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Your Fix Roadmap</div>
-            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">What you get with Co-Pilot</div>
+            <div class="panel-title">Deep Trust Check</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Co-Pilot</div>
           </div>
           <div class="panel-status status-paid">Co-Pilot</div>
         </div>
@@ -2735,7 +2741,7 @@
         <span>Free check takes about 5 minutes. No account, no credit card.</span>
       </div>
       <div class="cta-strip-actions">
-        <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Get My Free Score</a>
+        <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Run Quick Trust Check</a>
         <div>
           <a href="#pricing" class="btn btn-blue" style="padding:12px 20px;font-size:14px;">See Full Roadmap</a>
           <div class="price-note">from <strong>$29</strong>/month</div>
@@ -2766,7 +2772,7 @@
           We're running free Trust Checks with a select group of L&amp;D founders and coaches. Results, feedback, and early stories coming soon.
         </p>
         <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:24px;">
-          Want to be in the first cohort? Run your free check above — or get in touch directly.
+          Want to be in the first cohort? Run your Quick Trust Check above — or get in touch directly.
         </p>
         <a href="mailto:team@datapilots.tech?subject=Early Access" class="btn btn-teal" style="font-size:14px;padding:12px 24px;display:inline-flex;width:auto;">
           Apply for early access
@@ -3318,7 +3324,7 @@
 
       <!-- Free -->
       <div class="plan reveal reveal-delay-1">
-        <div class="plan-tier">Free Pilot</div>
+        <div class="plan-tier">Quick Trust Check</div>
         <div class="plan-price-row">
           <div class="plan-price">$0</div>
           <div class="plan-period"> always</div>
@@ -3335,7 +3341,7 @@
           <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Team delegation — buyer, exec &amp; expert views</li>
         </ul>
         <a href="#hero-scan" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
-          Check My Site Free
+          Run Quick Trust Check — Free
         </a>
         <p class="plan-foot">Takes about 5 minutes. No account needed.</p>
       </div>
@@ -3350,8 +3356,8 @@
         </div>
         <p class="plan-tagline">From knowing your gaps to fixing them — and proving it to enterprise clients.</p>
         <ul class="plan-feats">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in the free plan</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Every issue with step-by-step fix guides for your team</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Quick Trust Check</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Deep Trust Check — deeper scan + every finding with fix guides</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF — designed to go into proposals &amp; RFPs</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Delegate findings across buyer, exec &amp; expert views</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan — track your progress over time</li>
@@ -3379,9 +3385,9 @@
 
   <div class="footer-cta">
     <h2 class="footer-cta-h">Ready for <span>takeoff?</span></h2>
-    <p class="footer-cta-sub">Your free check takes about 5 minutes. Your next deal might depend on it.</p>
+    <p class="footer-cta-sub">Your Quick Trust Check takes about 5 minutes. Your next deal might depend on it.</p>
     <div class="footer-cta-actions">
-      <a href="#hero-scan" class="btn btn-green" style="padding:16px 34px;font-size:15px;">Start Free Check</a>
+      <a href="#hero-scan" class="btn btn-green" style="padding:16px 34px;font-size:15px;">Run Quick Trust Check</a>
       <a href="https://calendly.com/toni-datapilots/trust-check-in" class="btn btn-white" style="padding:14px 24px;font-size:14px;">
         <svg class="icon" width="14" height="14"><use href="#i-clock"/></svg>
         Book a 20-min call
@@ -3650,20 +3656,27 @@
   const API_BASE  = IS_LOCAL ? 'http://localhost:3001' : null;
 
   // ── Scan modal state ────────────────────────────
-  let _scanTimers = [];   // tab/progress timers so we can cancel them
+  let _scanTimers = [];      // tab/progress timers so we can cancel them
+  let _scanAbortCtrl = null; // AbortController for the in-flight fetch
 
   function cancelScan() {
+    // Abort in-flight API call
+    if (_scanAbortCtrl) { _scanAbortCtrl.abort(); _scanAbortCtrl = null; }
     // Clear all timers
     _scanTimers.forEach(t => clearTimeout(t));
     _scanTimers = [];
-    // Hide modal and reset
+    // Hide modal
     document.getElementById('scan-modal').style.display = 'none';
+    // Reset button state for next time
     const btn = document.getElementById('modalBtn');
     btn.disabled = true;
     btn.classList.remove('ready');
     btn.innerHTML = `<svg class="icon" width="15" height="15"><use href="#i-search"/></svg> Scanning — results on their way…`;
-    // Reset scan promise so a fresh run is possible
+    // Reset scan promise
     _scanPromise = null;
+    // Scroll back to the scan form so they can try again or explore
+    const scanForm = document.getElementById('hero') || document.getElementById('hero-scan');
+    if (scanForm) scanForm.scrollIntoView({ behavior: 'smooth' });
   }
 
   function _advanceScanProgress(step) {
@@ -3847,6 +3860,10 @@
     // If no API available (deployed site), return rich demo immediately
     if (!API_BASE) return demoResults(url, true);
 
+    // Create fresh abort controller so cancelScan() can stop the fetch
+    _scanAbortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => _scanAbortCtrl.abort(), 25000);
+
     const resp = await fetch(`${API_BASE}/scan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -3858,8 +3875,9 @@
           screenshot: true               // capture screenshot of post-interaction state
         }
       }),
-      signal: AbortSignal.timeout(25000)
+      signal: _scanAbortCtrl.signal
     });
+    clearTimeout(timeoutId);
     if (!resp.ok) throw new Error('API error');
     return resp.json();
   }
@@ -4037,10 +4055,18 @@
     // Persist parsed results to localStorage (free scans only, 24h TTL)
     persistScanResults(data);
 
-    // Score ring
+    // Update scanned domain in panel header
+    const domainEl = document.getElementById('scanDomain');
+    if (domainEl) domainEl.textContent = (data.url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+    // Score ring — reset to 308 first so CSS transition fires on next frame
     const ring = document.getElementById('ringFill');
     if (ring) {
       const circumference = 2 * Math.PI * 49;
+      ring.style.transition = 'none';
+      ring.style.strokeDashoffset = circumference; // reset
+      ring.getBoundingClientRect();                // force reflow
+      ring.style.transition = '';                  // restore CSS transition
       ring.style.strokeDashoffset = circumference * (1 - data.score / 100);
     }
 
