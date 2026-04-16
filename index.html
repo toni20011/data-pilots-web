@@ -1159,6 +1159,142 @@
   }
   .faq-a p:first-child { margin-top: 12px; }
   .faq-a strong { color: var(--slate-800); }
+
+/* ───────────────────────────────────────────
+   MODAL JOURNEY STRIP
+─────────────────────────────────────────── */
+.journey-strip {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+  border-radius: var(--r-md); padding: 12px 10px; margin-bottom: 18px; gap: 2px;
+}
+.js-stage {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  flex: 1; opacity: .28; transition: opacity .4s;
+}
+.js-stage.js-active  { opacity: 1; }
+.js-stage.js-done    { opacity: .6; }
+.js-icon-wrap {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: background .3s, border .3s;
+}
+.js-stage.js-active .js-icon-wrap {
+  background: rgba(0,200,168,.15);
+  border: 1.5px solid rgba(0,200,168,.4);
+  animation: js-pulse 2.2s ease-in-out infinite;
+}
+.js-stage.js-done .js-icon-wrap {
+  background: rgba(0,200,168,.08);
+  border: 1px solid rgba(0,200,168,.2);
+}
+@keyframes js-pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,200,168,0); }
+  50%      { box-shadow: 0 0 0 6px rgba(0,200,168,.15); }
+}
+.js-label { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,.7); letter-spacing: .02em; }
+.js-sub   { font-size: 8.5px; color: rgba(255,255,255,.3); text-align: center; line-height: 1.3; }
+.js-stage.js-active .js-label { color: var(--teal); }
+.js-connector {
+  flex-shrink: 0; width: 16px; height: 1px;
+  background: linear-gradient(90deg, rgba(0,200,168,.15), rgba(0,200,168,.15));
+  position: relative; margin-bottom: 14px;
+}
+.js-connector::after {
+  content: '›'; position: absolute; right: -4px; top: -7px;
+  font-size: 11px; color: rgba(255,255,255,.15);
+}
+
+/* ───────────────────────────────────────────
+   TRUST JOURNEY SECTION (main page)
+─────────────────────────────────────────── */
+.journey-section {
+  background: var(--navy); padding: 80px 0 72px; overflow: hidden;
+  position: relative;
+}
+.journey-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg,
+    transparent 5%,
+    rgba(0,200,168,.15) 20%,
+    rgba(0,200,168,.35) 50%,
+    rgba(0,174,255,.15) 80%,
+    transparent 95%);
+  transform: translateY(-50%);
+}
+.journey-header {
+  text-align: center; max-width: 560px; margin: 0 auto 52px; position: relative; z-index: 1;
+}
+.journey-kicker {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 12px;
+}
+.journey-h2 {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 900; color: var(--white); line-height: 1.2;
+}
+.journey-h2 span {
+  background: linear-gradient(135deg, var(--teal), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.journey-stages {
+  display: grid; grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: start; gap: 0; max-width: 960px; margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.journey-stage-card {
+  background: var(--navy-mid); border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--r-xl); padding: 28px 24px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  transition: border-color .3s, transform .3s;
+}
+.journey-stage-card:hover { transform: translateY(-4px); }
+.journey-stage-card.js-current {
+  border-color: rgba(0,200,168,.4);
+  background: linear-gradient(160deg, rgba(0,200,168,.07) 0%, var(--navy-mid) 60%);
+  box-shadow: 0 0 0 1px rgba(0,200,168,.15), 0 20px 60px rgba(0,0,0,.4);
+}
+.js-stage-badge {
+  font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; margin-bottom: 14px;
+}
+.js-badge-warn  { background: rgba(248,113,113,.12); color: #F87171; border: 1px solid rgba(248,113,113,.25); }
+.js-badge-now   { background: rgba(0,200,168,.15);   color: var(--teal); border: 1px solid rgba(0,200,168,.3); }
+.js-badge-win   { background: rgba(16,185,129,.12);  color: #34D399;     border: 1px solid rgba(52,211,153,.25); }
+.js-stage-icon {
+  width: 56px; height: 56px; border-radius: 50%; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+}
+.js-icon-warn   { background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.2); }
+.js-icon-now    {
+  background: linear-gradient(135deg, rgba(0,200,168,.2), rgba(0,174,255,.2));
+  border: 1px solid rgba(0,200,168,.35);
+}
+.js-icon-win    { background: rgba(16,185,129,.1); border: 1px solid rgba(52,211,153,.2); }
+.js-stage-name  { font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 6px; }
+.journey-stage-card.js-current .js-stage-name { color: var(--teal); }
+.js-stage-title { font-size: 17px; font-weight: 800; color: var(--white); margin-bottom: 10px; line-height: 1.25; }
+.js-stage-desc  { font-size: 12.5px; color: rgba(255,255,255,.4); line-height: 1.65; margin-bottom: 14px; }
+.js-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.js-bullets li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: rgba(255,255,255,.45); text-align: left;
+}
+.js-bullets li::before { content: '—'; color: rgba(255,255,255,.2); flex-shrink: 0; }
+.journey-stage-card.js-current .js-bullets li { color: rgba(255,255,255,.6); }
+.journey-stage-card.js-current .js-bullets li::before { content: '✓'; color: var(--teal); }
+.journey-arrow-wrap {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 8px; margin-top: 80px;
+}
+.journey-arrow-svg { color: rgba(0,200,168,.3); }
+@media (max-width: 768px) {
+  .journey-stages { grid-template-columns: 1fr; gap: 16px; }
+  .journey-arrow-wrap { transform: rotate(90deg); margin: 0 auto; }
+  .journey-section::before { display: none; }
+}
   </style>
 </head>
 <body>
@@ -1449,6 +1585,33 @@
           <div class="modal-title">Sound familiar? See what we find most often.</div>
           <div class="modal-sub" style="margin-bottom:14px;">Tap a scenario to see what's usually behind it — and whether it might apply to you.</div>
 
+          <!-- Journey progress strip -->
+          <div class="journey-strip">
+            <div class="js-stage js-active" id="jstage-1">
+              <div class="js-icon-wrap">🔍</div>
+              <div class="js-label">Scanning</div>
+              <div class="js-sub">AI audit live</div>
+            </div>
+            <div class="js-connector"></div>
+            <div class="js-stage" id="jstage-2">
+              <div class="js-icon-wrap">💡</div>
+              <div class="js-label">Clarity</div>
+              <div class="js-sub">Your score</div>
+            </div>
+            <div class="js-connector"></div>
+            <div class="js-stage" id="jstage-3">
+              <div class="js-icon-wrap">✅</div>
+              <div class="js-label">Action</div>
+              <div class="js-sub">Fix what matters</div>
+            </div>
+            <div class="js-connector"></div>
+            <div class="js-stage" id="jstage-4">
+              <div class="js-icon-wrap">📈</div>
+              <div class="js-label">Growth</div>
+              <div class="js-sub">Win more deals</div>
+            </div>
+          </div>
+
           <!-- Tab nav -->
           <div class="modal-tabs">
             <button class="modal-tab active" onclick="switchModalTab(this,'tab-scenarios')">Real Scenarios</button>
@@ -1658,6 +1821,81 @@
         <h3>Compliance &amp; lawsuit exposure</h3>
         <p>GDPR, AI transparency, data handling — your clients have legal expectations, and so does the law. Gaps here aren't just lost deals, they're liability.</p>
       </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ TRUST JOURNEY ════════════ -->
+<section class="journey-section" id="journey">
+  <div class="container">
+
+    <div class="journey-header reveal">
+      <div class="journey-kicker">Your Trust Journey</div>
+      <h2 class="journey-h2">From blind spot to<br><span>business growth</span></h2>
+    </div>
+
+    <div class="journey-stages reveal">
+
+      <!-- Stage 1 -->
+      <div class="journey-stage-card">
+        <div class="js-stage-badge js-badge-warn">Where most start</div>
+        <div class="js-stage-icon js-icon-warn">🌫️</div>
+        <div class="js-stage-name">Ground Check Needed</div>
+        <div class="js-stage-title">Flying blind to what buyers see</div>
+        <p class="js-stage-desc">You're pitching well but losing deals you can't explain. Buyers are checking your site before they reply — and what they find is creating silent doubt.</p>
+        <ul class="js-bullets">
+          <li>Deals go quiet after a strong first call</li>
+          <li>Procurement asks questions you can't answer</li>
+          <li>Compliance gaps you don't know exist</li>
+          <li>No visibility into what buyers actually see</li>
+        </ul>
+      </div>
+
+      <!-- Arrow -->
+      <div class="journey-arrow-wrap">
+        <svg class="journey-arrow-svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Stage 2 — highlighted -->
+      <div class="journey-stage-card js-current">
+        <div class="js-stage-badge js-badge-now">Data Pilots Trust Check</div>
+        <div class="js-stage-icon js-icon-now">🎯</div>
+        <div class="js-stage-name">Pre-Flight → Pilot Ready</div>
+        <div class="js-stage-title">Full visibility. Clear priorities.</div>
+        <p class="js-stage-desc">In 5 minutes, you see exactly what buyers and procurement teams find when they check you — and exactly what to fix, in the order that matters most.</p>
+        <ul class="js-bullets">
+          <li>Trust score across 4 pillars</li>
+          <li>Live AI consent audit of your site</li>
+          <li>Top 3 priorities tagged Fix This Week</li>
+          <li>Plain-English fixes — no developer needed</li>
+        </ul>
+      </div>
+
+      <!-- Arrow -->
+      <div class="journey-arrow-wrap">
+        <svg class="journey-arrow-svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="journey-stage-card">
+        <div class="js-stage-badge js-badge-win">Where you're headed</div>
+        <div class="js-stage-icon js-icon-win">🚀</div>
+        <div class="js-stage-name">Mission Ready</div>
+        <div class="js-stage-title">Trusted supplier. Faster deals.</div>
+        <p class="js-stage-desc">Your site signals credibility before the first call. Procurement signs off without the back-and-forth. You spend less time chasing trust and more time delivering value.</p>
+        <ul class="js-bullets">
+          <li>Pass enterprise procurement confidently</li>
+          <li>Share a trust proof PDF in proposals</li>
+          <li>Close deals without the legal stall</li>
+          <li>Grow on the strength of the work, not luck</li>
+        </ul>
+      </div>
+
     </div>
 
   </div>
