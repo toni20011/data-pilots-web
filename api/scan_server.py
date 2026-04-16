@@ -460,13 +460,16 @@ def parse_papaya_report(report_md: str, analysis_html: str = "") -> list:
 # ─────────────────────────────────────────────
 # Papaya background worker
 # ─────────────────────────────────────────────
-def _papaya_worker(session_id: str, target_url: str):
+def _papaya_worker(session_id: str, target_url: str, tier: str = "free"):
     """
     Runs in a background thread.
     Polls until Papaya completes, fetches report + analysis, parses findings,
-    stores everything in _papaya_cache, then immediately requests deletion
-    of the run from Papaya's servers — their copy is no longer needed once
-    we have parsed the findings locally.
+    stores everything in _papaya_cache.
+
+    tier="free"  → Papaya run deleted immediately after parsing (privacy-first).
+    tier="paid"  → Papaya run preserved; session_id stays valid for deeper access
+                   by the user's account. Deletion happens explicitly on account
+                   request or after the paid retention TTL.
     """
     try:
         ok = papaya_poll_until_done(session_id)
@@ -474,7 +477,7 @@ def _papaya_worker(session_id: str, target_url: str):
             with _papaya_lock:
                 _papaya_cache[session_id] = {
                     "status": "failed", "findings": [], "error": "Papaya timed out or failed",
-                    "cached_at": time.time(),
+                    "cached_at": time.time(), "tier": tier,
                 }
             return
 
@@ -482,8 +485,13 @@ def _papaya_worker(session_id: str, target_url: str):
         analysis_html = papaya_fetch_analysis(session_id)
         findings      = parse_papaya_report(report_md, analysis_html)
 
-        # ── Privacy: delete from Papaya immediately — we have everything we need locally ──
-        deleted = papaya_delete_run(session_id)
+        # ── Privacy: free scans → delete from Papaya immediately ──
+        # Paid scans → preserve Papaya session for account-level access
+        deleted = False
+        if tier == "free":
+            deleted = papaya_delete_run(session_id)
+        else:
+            print(f"  [Papaya] paid scan — run preserved  session={session_id}", flush=True)
 
         results_url = f"https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/{session_id}"
 
@@ -493,25 +501,27 @@ def _papaya_worker(session_id: str, target_url: str):
                 "findings":             findings,
                 "results_url":          results_url,
                 "report_len":           len(report_md),
-                "papaya_data_deleted":  deleted,   # audit flag
+                "tier":                 tier,
+                "papaya_data_deleted":  deleted,
                 "cached_at":            time.time(),
                 "error":                None,
             }
-        print(f"  [Papaya] worker done  {len(findings)} findings  deleted={deleted}  session={session_id}", flush=True)
+        print(f"  [Papaya] worker done  tier={tier}  {len(findings)} findings  deleted={deleted}  session={session_id}", flush=True)
 
     except Exception as e:
         print(f"  [Papaya] worker error: {e}", flush=True)
         with _papaya_lock:
             _papaya_cache[session_id] = {
                 "status": "failed", "findings": [], "error": str(e),
-                "cached_at": time.time(),
+                "cached_at": time.time(), "tier": tier,
             }
 
 
-def launch_papaya_background(target_url: str):
+def launch_papaya_background(target_url: str, tier: str = "free"):
     """
     Start a Papaya run and kick off a background thread to wait for it.
     Returns the session_id immediately (or None on failure to start).
+    tier is passed through to _papaya_worker to control deletion behaviour.
     """
     session_id = papaya_start_run(target_url)
     if not session_id:
@@ -520,10 +530,10 @@ def launch_papaya_background(target_url: str):
     with _papaya_lock:
         _papaya_cache[session_id] = {
             "status": "running", "findings": [], "error": None,
-            "cached_at": time.time(),
+            "cached_at": time.time(), "tier": tier,
         }
 
-    t = threading.Thread(target=_papaya_worker, args=(session_id, target_url), daemon=True)
+    t = threading.Thread(target=_papaya_worker, args=(session_id, target_url, tier), daemon=True)
     t.start()
     return session_id
 
@@ -930,7 +940,11 @@ def normalise_url(raw: str) -> str:
     return raw.rstrip("/")
 
 
-def run_scan(raw_url: str) -> dict:
+def run_scan(raw_url: str, tier: str = "free") -> dict:
+    """
+    tier = "free"  → Papaya run deleted immediately after parsing (privacy-first)
+    tier = "paid"  → Papaya run preserved; session_id returned for deeper client use
+    """
     base = normalise_url(raw_url)
 
     # Fetch home page first (used by multiple checks)
@@ -972,13 +986,14 @@ def run_scan(raw_url: str) -> dict:
     actionable.sort(key=lambda f: {"FIX THIS WEEK": 0, "QUICK WIN": 1, "REVIEW": 2}.get(f.get("tag", ""), 3))
 
     # Start Papaya in background — don't wait
-    papaya_session_id = launch_papaya_background(base)
+    papaya_session_id = launch_papaya_background(base, tier=tier)
 
     return {
         "url":              base,
         "scanned_at":       datetime.utcnow().isoformat() + "Z",
         "score":            scores["overall"],
         "score_label":      scores["label"],
+        "tier":             tier,
         "pillars": {
             "ux":           {"score": scores["pillars"]["ux"],           "label": "User Experience"},
             "transparency": {"score": scores["pillars"]["transparency"], "label": "Transparency"},
@@ -987,13 +1002,16 @@ def run_scan(raw_url: str) -> dict:
         },
         "free_findings":    actionable[:3],
         "total_issues":     len([f for f in findings if f["status"] in ("fail", "warn")]),
-        "papaya_session_id": papaya_session_id,   # browser polls this for live Papaya findings
+        "papaya_session_id": papaya_session_id,
+        "papaya_retained":  (tier == "paid"),   # tells frontend whether Papaya data is kept
         "partial":          True,
         "powered_by":       "Papaya",
         "note": (
             "Free check covers your public-facing website. "
             "Upgrade to Co-Pilot to scan your learning portal or platform "
             "and unlock full step-by-step fix guides."
+            if tier == "free" else
+            "Full Co-Pilot scan. Papaya consent data retained for your account."
         ),
     }
 
@@ -1066,9 +1084,13 @@ class ScanHandler(BaseHTTPRequestHandler):
             self._send_json({"error": "url is required"}, 400)
             return
 
-        print(f"  Scanning: {raw_url}", flush=True)
+        tier = payload.get("tier", "free")
+        if tier not in ("free", "paid"):
+            tier = "free"
+
+        print(f"  Scanning: {raw_url}  tier={tier}", flush=True)
         try:
-            result = run_scan(raw_url)
+            result = run_scan(raw_url, tier=tier)
             self._send_json(result)
         except Exception as e:
             self._send_json({"error": f"Scan failed: {str(e)}"}, 500)

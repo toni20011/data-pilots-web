@@ -2947,8 +2947,106 @@
       </div>`;
   }
 
+  // ── Scan result persistence ─────────────────────────────────────────────
+  // Stores parsed results in localStorage for 24 h so the user can:
+  //   a) download/share within the session or on return
+  //   b) attach results to a new paid account without re-scanning
+  // Papaya's own copy is already deleted server-side (free tier).
+  // This stores only our parsed output — no raw Papaya data.
+  const SCAN_STORAGE_KEY = 'dp-last-scan';
+  const SCAN_TTL_MS      = 24 * 60 * 60 * 1000; // 24 hours
+
+  function persistScanResults(data) {
+    if (data.is_preview) return; // don't save illustrative demo data
+    try {
+      localStorage.setItem(SCAN_STORAGE_KEY, JSON.stringify({
+        saved_at:   Date.now(),
+        expires_at: Date.now() + SCAN_TTL_MS,
+        url:        data.url,
+        scanned_at: data.scanned_at || new Date().toISOString(),
+        score:      data.score,
+        score_label:data.score_label,
+        pillars:    data.pillars,
+        findings:   data.free_findings || [],
+        total_issues: data.total_issues,
+        tier:       data.tier || 'free',
+      }));
+    } catch(e) { /* storage unavailable — non-fatal */ }
+  }
+
+  function loadPersistedScan() {
+    try {
+      const raw = localStorage.getItem(SCAN_STORAGE_KEY);
+      if (!raw) return null;
+      const saved = JSON.parse(raw);
+      if (Date.now() > saved.expires_at) {
+        localStorage.removeItem(SCAN_STORAGE_KEY);
+        return null;
+      }
+      return saved;
+    } catch(e) { return null; }
+  }
+
+  function clearPersistedScan() {
+    try { localStorage.removeItem(SCAN_STORAGE_KEY); } catch(e) {}
+  }
+
+  // ── Save-to-account prompt ───────────────────────────────────────────────
+  // Shown after results load — nudges free users to save before signing up.
+  // When paid accounts are live, the "Save & Sign Up" button passes the
+  // scan token (URL + timestamp) to the account creation endpoint.
+  function showSavePrompt(data) {
+    if (data.is_preview || data.tier === 'paid') return;
+    const existing = document.getElementById('dp-save-prompt');
+    if (existing) return;
+
+    const scannedDomain = (data.url || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const expiresIn = '24 hours';
+
+    const prompt = document.createElement('div');
+    prompt.id = 'dp-save-prompt';
+    prompt.innerHTML = `
+      <div style="
+        display:flex;align-items:flex-start;gap:14px;
+        background:rgba(16,185,129,.08);
+        border:1px solid rgba(16,185,129,.22);
+        border-radius:10px;padding:16px 18px;margin-top:18px;
+        font-size:13px;color:rgba(255,255,255,.65);line-height:1.55;">
+        <span style="font-size:20px;flex-shrink:0;margin-top:1px;">💾</span>
+        <div style="flex:1;">
+          <strong style="color:var(--white);display:block;margin-bottom:4px;">
+            Want to save these results?
+          </strong>
+          Your free scan for <strong style="color:rgba(255,255,255,.85);">${scannedDomain}</strong>
+          is stored in your browser for ${expiresIn}. Create a Co-Pilot account to save it permanently,
+          get full fix instructions, and track your progress over time.
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+            <a href="#pricing" onclick="document.getElementById('dp-save-prompt').dataset.intent='save'"
+              style="display:inline-flex;align-items:center;gap:6px;
+                background:var(--green);color:var(--white);font-weight:700;font-size:12.5px;
+                padding:8px 16px;border-radius:7px;text-decoration:none;">
+              Save results &amp; upgrade →
+            </a>
+            <button onclick="document.getElementById('dp-save-prompt').remove()"
+              style="background:none;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);
+                font-size:12px;padding:8px 14px;border-radius:7px;cursor:pointer;">
+              I'll re-scan when I sign up
+            </button>
+          </div>
+        </div>
+      </div>`;
+
+    // Insert after the free-note area inside the results section
+    const freeNote = document.querySelector('.free-note');
+    if (freeNote) freeNote.parentNode.insertBefore(prompt, freeNote.nextSibling);
+    else document.getElementById('results').appendChild(prompt);
+  }
+
   function renderScanResults(data) {
     document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+
+    // Persist parsed results to localStorage (free scans only, 24h TTL)
+    persistScanResults(data);
 
     // Score ring
     const ring = document.getElementById('ringFill');
@@ -3037,6 +3135,11 @@
     // Start polling for Papaya findings if we have a session
     if (data.papaya_session_id) {
       pollPapayaFindings(data.papaya_session_id);
+    }
+
+    // Show save-to-account prompt for real free scans (not preview/paid)
+    if (!data.is_preview) {
+      setTimeout(() => showSavePrompt(data), 1200);
     }
   }
 
