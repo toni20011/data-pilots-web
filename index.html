@@ -892,6 +892,54 @@
      FOOTER
   ─────────────────────────────────────────── */
   footer { background: var(--navy); }
+
+  /* ── COOKIE TRANSPARENCY STRIP ── */
+  #cookie-strip {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 9000;
+    background: var(--navy-mid);
+    border-top: 1px solid rgba(0,200,168,.2);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: rgba(255,255,255,.55);
+    line-height: 1.45;
+    transition: transform .3s var(--ease), opacity .3s var(--ease);
+  }
+  #cookie-strip.hidden {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .cs-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    opacity: .8;
+  }
+  .cs-text { flex: 1; }
+  .cs-text strong { color: rgba(255,255,255,.8); font-weight: 600; }
+  .cs-text a { color: var(--teal); text-decoration: none; white-space: nowrap; }
+  .cs-text a:hover { text-decoration: underline; }
+  .cs-dismiss {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 6px;
+    color: rgba(255,255,255,.45);
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: border-color .14s, color .14s;
+    white-space: nowrap;
+  }
+  .cs-dismiss:hover { border-color: rgba(255,255,255,.35); color: rgba(255,255,255,.75); }
+  @media (max-width: 520px) {
+    #cookie-strip { flex-wrap: wrap; gap: 8px; }
+    .cs-dismiss { width: 100%; text-align: center; }
+  }
   .footer-cta {
     background: linear-gradient(135deg, var(--navy-mid), var(--navy-soft));
     border-bottom: 1px solid rgba(255,255,255,.06);
@@ -2625,7 +2673,7 @@
           <p class="footer-blurb">Helping L&D businesses show up as trustworthy, so the best work wins the deal.</p>
           <div class="privacy-notice">
             <svg class="icon" width="14" height="14" style="color:var(--teal);flex-shrink:0;margin-top:1px;"><use href="#i-lock"/></svg>
-            <span><strong>Nothing stored by default.</strong> We do not store, sell, or share your site data unless you choose to save your results. You are always in control.</span>
+            <span><strong>Nothing stored by default.</strong> We use no tracking or analytics cookies — no banner needed. Scan results are not saved unless you choose to. <a href="/privacy.html#cookies" style="color:var(--teal);text-decoration:none;">See our cookie policy →</a></span>
           </div>
         </div>
 
@@ -3150,6 +3198,31 @@
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
   `;
   document.head.appendChild(style);
+</script>
+
+<!-- ════════════ COOKIE TRANSPARENCY STRIP ════════════ -->
+<div id="cookie-strip" role="note" aria-label="Cookie information">
+  <span class="cs-icon">🍪</span>
+  <span class="cs-text">
+    <strong>No cookie banner?</strong> That's intentional.
+    We use no tracking or analytics cookies — only a strictly necessary security cookie from Cloudflare.
+    <a href="/privacy.html#cookies">See exactly what we use and why →</a>
+  </span>
+  <button class="cs-dismiss" onclick="dismissCookieStrip()" aria-label="Dismiss">Got it</button>
+</div>
+
+<script>
+  (function() {
+    if (localStorage.getItem('dp-cookie-strip') === 'dismissed') {
+      var el = document.getElementById('cookie-strip');
+      if (el) el.classList.add('hidden');
+    }
+  })();
+  function dismissCookieStrip() {
+    var el = document.getElementById('cookie-strip');
+    if (el) el.classList.add('hidden');
+    try { localStorage.setItem('dp-cookie-strip', 'dismissed'); } catch(e) {}
+  }
 </script>
 
 </body>
