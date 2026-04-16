@@ -840,6 +840,117 @@
   .fw-layer-sub { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 2px; }
 
   /* ───────────────────────────────────────────
+     WHY DATA PILOTS
+  ─────────────────────────────────────────── */
+  .wdp-section {
+    background: var(--navy);
+    padding: 96px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .wdp-section::before {
+    content: '';
+    position: absolute;
+    top: -140px; right: -100px;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(0,200,168,.055) 0%, transparent 68%);
+    pointer-events: none;
+  }
+  .wdp-section::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; left: -80px;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(0,175,204,.04) 0%, transparent 68%);
+    pointer-events: none;
+  }
+  .wdp-header {
+    text-align: center;
+    max-width: 660px;
+    margin: 0 auto 64px;
+  }
+  .wdp-kicker {
+    font-size: 11.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--teal); margin-bottom: 12px;
+  }
+  .wdp-h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 900; color: var(--white);
+    line-height: 1.2; margin-bottom: 18px;
+    letter-spacing: -.02em;
+  }
+  .wdp-h2 span {
+    background: linear-gradient(135deg, var(--teal), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .wdp-sub {
+    font-size: 16.5px; color: rgba(255,255,255,.68);
+    line-height: 1.75;
+  }
+  .wdp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  .wdp-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--r-xl);
+    padding: 32px 28px;
+    transition: border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .wdp-card:hover {
+    background: rgba(0,200,168,.06);
+    border-color: rgba(0,200,168,.22);
+  }
+  .wdp-icon {
+    width: 48px; height: 48px;
+    background: rgba(0,200,168,.12);
+    border: 1.5px solid rgba(0,200,168,.22);
+    border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .wdp-card-title {
+    font-size: 17px; font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px; line-height: 1.3;
+  }
+  .wdp-card-desc {
+    font-size: 14.5px; color: rgba(255,255,255,.65);
+    line-height: 1.75;
+  }
+  .wdp-statement {
+    background: rgba(0,200,168,.07);
+    border: 1px solid rgba(0,200,168,.2);
+    border-radius: var(--r-xl);
+    padding: 40px 48px;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .wdp-stmt-label {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: rgba(0,200,168,.7); margin-bottom: 16px;
+  }
+  .wdp-stmt-text {
+    font-size: clamp(1rem, 1.9vw, 1.2rem);
+    font-weight: 600; color: rgba(255,255,255,.88);
+    line-height: 1.65;
+  }
+  .wdp-stmt-text em {
+    font-style: normal;
+    color: var(--teal);
+  }
+  @media (max-width: 860px) {
+    .wdp-grid { grid-template-columns: 1fr; gap: 16px; }
+    .wdp-statement { padding: 28px 24px; }
+  }
+
+  /* ───────────────────────────────────────────
      PRICING
   ─────────────────────────────────────────── */
   #pricing { padding: 88px 0; background: var(--white); }
@@ -3178,6 +3289,52 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ════════════ WHY DATA PILOTS ════════════ -->
+<section class="wdp-section" id="why-dp">
+  <div class="container">
+
+    <div class="wdp-header reveal">
+      <div class="wdp-kicker">Why Data Pilots</div>
+      <h2 class="wdp-h2">Built for the check<br><span>that's already happening</span></h2>
+      <p class="wdp-sub">Most compliance tools are designed for formal certifications and procurement questionnaires. Those matter — but they come later, and they're built for companies already past the starting line. We solve for the check happening right now.</p>
+    </div>
+
+    <div class="wdp-grid reveal">
+
+      <div class="wdp-card">
+        <div class="wdp-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><circle cx="12" cy="12" r="3.5"/><path d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8-10-8-10-8z"/></svg>
+        </div>
+        <div class="wdp-card-title">The first check — not the last one</div>
+        <div class="wdp-card-desc">By the time a formal compliance questionnaire arrives, a prospect has already assessed you — from your website, your privacy policy, your first impression. We show you what they find before they do, so you can fix it and own it.</div>
+      </div>
+
+      <div class="wdp-card">
+        <div class="wdp-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="wdp-card-title">Translated for every person who needs to act</div>
+        <div class="wdp-card-desc">A score in a report nobody reads changes nothing. We translate every finding into plain language for the founder, the ops lead, the legal contact, and the day-to-day team — so the right person knows exactly what to do.</div>
+      </div>
+
+      <div class="wdp-card">
+        <div class="wdp-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="wdp-card-title">Ready now. Built for what comes next.</div>
+        <div class="wdp-card-desc">You don't need SOC 2 today. You need to pass the check already in front of you — and build the foundation so when formal certifications become the next step, you're already most of the way there.</div>
+      </div>
+
+    </div>
+
+    <div class="wdp-statement reveal">
+      <div class="wdp-stmt-label">The difference</div>
+      <p class="wdp-stmt-text">Most compliance tools help you pass the big formal checks —<br>procurement questionnaires, security certifications, legal frameworks.<br><em>We help you pass the first one. And get you ready for what follows.</em></p>
+    </div>
+
   </div>
 </section>
 
