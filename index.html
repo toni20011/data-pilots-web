@@ -922,11 +922,12 @@
     border: 1.5px dashed rgba(0,200,168,.22);
   }
   .step-num {
-    position: absolute; top: -4px; right: -4px;
-    width: 20px; height: 20px; border-radius: 50%;
+    position: absolute; top: -6px; right: -6px;
+    width: 26px; height: 26px; border-radius: 50%;
     background: var(--navy); border: 2px solid var(--slate-50);
-    font-size: 10px; font-weight: 800; color: var(--white);
+    font-size: 12px; font-weight: 900; color: var(--white);
     display: flex; align-items: center; justify-content: center; z-index: 1;
+    letter-spacing: -.02em;
   }
   .step-name { font-size: 16px; font-weight: 800; color: var(--slate-800); margin-bottom: 8px; }
   .step-desc { font-size: 13.5px; color: var(--slate-600); line-height: 1.65; max-width: 220px; margin: 0 auto; }
@@ -1675,110 +1676,58 @@
   font-size: 1rem; color: rgba(255,255,255,.6); line-height: 1.7;
 }
 
-/* Two-column layout */
-.vs-inner {
+/* 3-card layout */
+.journey-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  max-width: 1120px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1080px;
   margin: 0 auto;
-  align-items: start;
+  padding: 0 0 80px;
 }
-
-/* LEFT: stacked text panels */
-.vs-panels {
-  padding: 0 48px 120px 24px;
-}
-.vs-panel {
-  min-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 40px 0;
-  opacity: .25;
-  transition: opacity .5s var(--ease);
-}
-.vs-panel.vs-active { opacity: 1; }
-.vs-step-num {
-  font-size: 10px; font-weight: 800; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--teal);
-  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
-}
-.vs-step-num::before {
-  content: ''; width: 24px; height: 1.5px;
-  background: var(--teal); display: block;
-}
-.vs-panel h3 {
-  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
-  font-weight: 800; color: var(--white);
-  line-height: 1.25; margin-bottom: 16px; letter-spacing: -.02em;
-}
-.vs-panel p {
-  font-size: .95rem; color: rgba(255,255,255,.65);
-  line-height: 1.75; margin-bottom: 12px;
-}
-.vs-panel p:last-child { margin-bottom: 0; }
-.vs-panel strong { color: rgba(255,255,255,.9); font-weight: 600; }
-.vs-free-note {
-  display: inline-flex; align-items: center; gap: 7px;
-  margin-top: 18px;
-  font-size: 12px; color: rgba(255,255,255,.5);
+.journey-card {
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.09);
-  border-radius: 6px; padding: 7px 12px;
-}
-.vs-free-note span { color: var(--teal); font-weight: 700; }
-
-/* RIGHT: sticky display */
-.vs-display {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.vs-scenes {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  min-height: 380px;
-}
-.vs-scene {
-  position: absolute;
-  inset: 0;
+  border-radius: 18px;
+  padding: 36px 32px 32px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity .5s var(--ease), transform .5s var(--ease);
-  pointer-events: none;
+  gap: 16px;
+  position: relative;
 }
-.vs-scene.vs-active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+.journey-card-highlight {
+  background: rgba(0,200,168,.06);
+  border-color: rgba(0,200,168,.22);
 }
-
-/* Progress dots */
-.vs-dots {
-  position: absolute;
-  bottom: -48px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
+.journey-card-num {
+  font-size: 11px; font-weight: 800; letter-spacing: .1em;
+  color: rgba(255,255,255,.2);
 }
-.vs-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(255,255,255,.2);
-  transition: background .3s, transform .3s;
+.journey-card-icon-wrap {
+  width: 52px; height: 52px; border-radius: 14px;
+  border: 1px solid;
+  display: flex; align-items: center; justify-content: center;
 }
-.vs-dot.vs-active {
-  background: var(--teal);
-  transform: scale(1.4);
+.journey-card-h3 {
+  font-size: 1.1rem; font-weight: 800; color: var(--white);
+  line-height: 1.3; letter-spacing: -.01em; margin: 0;
+}
+.journey-card-p {
+  font-size: .9rem; color: rgba(255,255,255,.6);
+  line-height: 1.75; flex: 1; margin: 0;
+}
+.journey-card-phase {
+  display: inline-block;
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px;
+  background: rgba(255,255,255,.07); color: rgba(255,255,255,.38);
+  align-self: flex-start; margin-top: 4px;
+}
+.journey-card-phase-teal { background: rgba(0,200,168,.12); color: var(--teal); }
+.journey-card-phase-green { background: rgba(16,185,129,.1); color: var(--green); }
+@media (max-width: 600px) {
+  .journey-cards { grid-template-columns: 1fr; gap: 14px; padding: 0 0 48px; }
+  .journey-card { padding: 28px 24px 24px; }
 }
 
 /* ── Scene visuals ── */
@@ -3069,16 +3018,53 @@
 
 <!-- ════════════ VALUE STORY ════════════ -->
 <section id="value-story" class="vs-section">
+  <div class="container">
 
   <div class="vs-section-header reveal">
     <div class="vs-kicker">Your Trust Journey</div>
     <h2 class="vs-headline">From where you are<br>to where you want to be</h2>
-    <p class="vs-sub">See exactly how Data Pilots helps — step by step, in plain language.</p>
+    <p class="vs-sub">Three moments that shape every L&amp;D business targeting enterprise clients — and how Trust Snapshot changes each one.</p>
   </div>
 
-  <div class="vs-inner">
+  <div class="journey-cards">
 
-    <!-- LEFT: text panels -->
+    <div class="journey-card">
+      <div class="journey-card-num">01</div>
+      <div class="journey-card-icon-wrap" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);">
+        <svg class="icon" width="22" height="22" style="color:#F87171;"><use href="#i-eye"/></svg>
+      </div>
+      <h3 class="journey-card-h3">Buyers check before they reply</h3>
+      <p class="journey-card-p">Before a corporate buyer responds to your pitch, they've already visited your site — not to read your case studies, but to check the basics. If something gives them pause, they move on quietly. You never find out why.</p>
+      <div class="journey-card-phase">The challenge</div>
+    </div>
+
+    <div class="journey-card journey-card-highlight">
+      <div class="journey-card-num">02</div>
+      <div class="journey-card-icon-wrap" style="background:rgba(0,200,168,.12);border-color:rgba(0,200,168,.25);">
+        <svg class="icon" width="22" height="22" style="color:var(--teal);"><use href="#i-search"/></svg>
+      </div>
+      <h3 class="journey-card-h3">You see exactly what they see</h3>
+      <p class="journey-card-p">Trust Snapshot scans your site the way a buyer would — privacy signals, security basics, AI disclosure — then combines it with your questionnaire answers to produce a personalised score across four trust pillars. Five minutes. No account needed.</p>
+      <div class="journey-card-phase journey-card-phase-teal">The Snapshot</div>
+    </div>
+
+    <div class="journey-card">
+      <div class="journey-card-num">03</div>
+      <div class="journey-card-icon-wrap" style="background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.2);">
+        <svg class="icon" width="22" height="22" style="color:var(--green);"><use href="#i-trend"/></svg>
+      </div>
+      <h3 class="journey-card-h3">Trust becomes a measurable edge</h3>
+      <p class="journey-card-p">You get your three highest-impact fixes, a compliance context brief, and a clear picture of where you stand. Not a 40-page audit — just what matters most, in language you can hand to whoever needs to act.</p>
+      <div class="journey-card-phase journey-card-phase-green">The outcome</div>
+    </div>
+
+  </div><!-- /vs-cards -->
+
+  </div><!-- /container -->
+</section>
+
+<!-- hidden placeholder keeps old scroll-scene markup out of the DOM -->
+<div style="display:none" aria-hidden="true">
     <div class="vs-panels">
 
       <div class="vs-panel vs-active" data-step="1">
@@ -3226,10 +3212,7 @@
 
       </div><!-- /vs-scenes -->
     </div><!-- /vs-display -->
-
-  </div><!-- /vs-inner -->
-
-</section>
+</div><!-- /hidden placeholder -->
 
 <!-- ════════════ JOURNEY / HOW IT WORKS ════════════ -->
 <section id="journey">
@@ -3248,8 +3231,8 @@
           <svg class="icon" width="24" height="24" style="color:var(--teal);"><use href="#i-search"/></svg>
           <div class="step-num">1</div>
         </div>
-        <div class="step-name">Check <span style="font-size:10.5px;font-weight:700;background:rgba(16,185,129,.15);color:var(--green);border-radius:4px;padding:2px 7px;margin-left:6px;letter-spacing:.04em;vertical-align:middle;">FREE</span></div>
-        <div class="step-desc">Enter your URL and answer a few short questions about your business. We combine a live site walkthrough, direct website analysis, and your business context to give you a plain-English trust score across UX, Transparency, Safety, and AI Trust. About 5 minutes, no account needed.</div>
+        <div class="step-name">Check</div>
+        <div class="step-desc">Enter your URL and answer a few short questions. We combine a live site walkthrough with direct analysis and your business context to give you a plain-English trust score across four pillars. About 5 minutes, no account needed.</div>
       </div>
 
       <div class="step-arrow">
@@ -3266,8 +3249,8 @@
           <svg class="icon" width="24" height="24" style="color:var(--green);"><use href="#i-zap"/></svg>
           <div class="step-num" style="background:var(--green);">2</div>
         </div>
-        <div class="step-name">Treat <span style="font-size:10.5px;font-weight:700;background:rgba(0,200,168,.12);color:var(--teal);border-radius:4px;padding:2px 7px;margin-left:6px;letter-spacing:.04em;vertical-align:middle;">CO-PILOT</span></div>
-        <div class="step-desc">Every finding comes with exact fix instructions — plain language for your business owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap, every person has their part.</div>
+        <div class="step-name">Treat</div>
+        <div class="step-desc">Every finding comes with plain-language fix instructions for your business owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap — every person has their part.</div>
       </div>
 
       <div class="step-arrow">
@@ -3284,24 +3267,10 @@
           <svg class="icon" width="24" height="24" style="color:#8B5CF6;"><use href="#i-trend"/></svg>
           <div class="step-num" style="background:#8B5CF6;">3</div>
         </div>
-        <div class="step-name">Strengthen <span style="font-size:10.5px;font-weight:700;background:rgba(139,92,246,.12);color:#A78BFA;border-radius:4px;padding:2px 7px;margin-left:6px;letter-spacing:.04em;vertical-align:middle;">CO-PILOT</span></div>
-        <div class="step-desc">Export a trust proof PDF to put in proposals and procurement responses. Re-scan monthly to track your progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</div>
+        <div class="step-name">Strengthen</div>
+        <div class="step-desc">Export a trust proof PDF for proposals and procurement. Re-scan monthly to track your progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</div>
       </div>
 
-    </div>
-
-    <!-- Mission / Vision -->
-    <div class="mv-grid reveal">
-      <div class="mv-card mission">
-        <div class="mv-label">Mission</div>
-        <div class="mv-headline">Empower small businesses with confidence.</div>
-        <div class="mv-body">We take the stuff big companies have legal teams for and turn it into a plain checklist that any business owner can act on. No expertise needed.</div>
-      </div>
-      <div class="mv-card vision">
-        <div class="mv-label">Vision</div>
-        <div class="mv-headline">Stronger leaders through trusted growth.</div>
-        <div class="mv-body">The best L&D providers should win on the quality of their work, not on who has a bigger compliance department.</div>
-      </div>
     </div>
 
     <!-- Integration voting -->
@@ -3676,6 +3645,12 @@
             <div class="logo-wordmark" style="font-size:14px;">DATA <span>PILOTS</span></div>
           </a>
           <p class="footer-blurb">Helping L&D businesses show up as trustworthy, so the best work wins the deal.</p>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);">
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:6px;">Mission</p>
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:12px;">Empower small businesses with confidence — no legal team required.</p>
+            <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:6px;">Vision</p>
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;">The best L&amp;D providers should win on quality, not compliance department size.</p>
+          </div>
           <div class="privacy-notice">
             <svg class="icon" width="14" height="14" style="color:var(--teal);flex-shrink:0;margin-top:1px;"><use href="#i-lock"/></svg>
             <span><strong>Nothing stored by default.</strong> We use no tracking or analytics cookies — no banner needed. Scan results are not saved unless you choose to. <a href="/privacy.html#cookies" style="color:var(--teal);text-decoration:none;">See our cookie policy →</a></span>
