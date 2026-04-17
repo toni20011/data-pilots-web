@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Data Pilots | Free Trust Check for L&D Businesses</title>
+  <title>Data Pilots | Trust Snapshot for L&D Businesses</title>
   <meta name="description" content="Find out how trustworthy your business looks to clients in about 5 minutes. Free trust score for L&D providers and coaches."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -323,6 +323,43 @@
   .q-item:hover { border-color: rgba(0,200,168,.3); background: rgba(0,200,168,.05); }
   .q-item input { accent-color: var(--teal); width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
   .q-item label { font-size: 12.5px; color: rgba(255,255,255,.6); cursor: pointer; flex: 1; }
+
+  /* ── New questionnaire styles ── */
+  .q-group { display: flex; flex-direction: column; gap: 8px; }
+  .q-label {
+    font-size: 12px; font-weight: 600; color: rgba(255,255,255,.55);
+    text-transform: uppercase; letter-spacing: .05em; line-height: 1.5;
+  }
+  .q-hint { font-weight: 400; text-transform: none; letter-spacing: 0; color: rgba(255,255,255,.35); font-size: 11px; }
+  .q-radio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .q-radio-stack { display: flex; flex-direction: column; gap: 6px; }
+  .q-check-grid { display: flex; flex-direction: column; gap: 6px; }
+  .q-radio-opt, .q-check-opt {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 12px; border-radius: var(--r-sm);
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+    font-size: 12.5px; color: rgba(255,255,255,.6); cursor: pointer;
+    transition: all .12s; line-height: 1.45;
+  }
+  .q-radio-opt:hover, .q-check-opt:hover { border-color: rgba(0,200,168,.3); background: rgba(0,200,168,.05); color: rgba(255,255,255,.8); }
+  .q-radio-opt input, .q-check-opt input { accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
+  .q-radio-opt:has(input:checked), .q-check-opt:has(input:checked) {
+    border-color: rgba(0,200,168,.45); background: rgba(0,200,168,.09); color: rgba(255,255,255,.9);
+  }
+  /* Scale (F6) */
+  .q-scale-row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  .q-scale-label { font-size: 11px; color: rgba(255,255,255,.35); flex-shrink: 0; }
+  .q-scale-opts { display: flex; gap: 6px; flex: 1; }
+  .q-scale-opt { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+  .q-scale-opt input { accent-color: var(--teal); }
+  .q-scale-opt span {
+    width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: rgba(255,255,255,.45);
+    background: rgba(255,255,255,.04); transition: all .12s;
+  }
+  .q-scale-opt:has(input:checked) span { border-color: var(--teal); background: rgba(0,200,168,.15); color: var(--teal); }
+  .q-scale-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
   .scan-go {
     width: 100%; padding: 15px; background: var(--green);
     border: none; border-radius: var(--r-sm); color: var(--white);
@@ -2212,7 +2249,7 @@
         <a href="#pricing" class="btn btn-ghost">See Plans</a>
         <a href="#hero-scan" class="btn btn-teal">
           <svg class="icon" width="13" height="13"><use href="#i-search"/></svg>
-          Quick Check
+          Take the Snapshot
         </a>
       </div>
     </div>
@@ -2228,7 +2265,7 @@
       <div class="hero-copy">
         <div class="hero-live">
           <div class="live-dot"></div>
-          <span>Free Trust Check Now Open</span>
+          <span>Trust Snapshot · Free</span>
         </div>
 
         <h1 class="hero-h1">
@@ -2238,16 +2275,16 @@
         <p class="hero-h1-sub">From clients to regulators, that's the only question that matters — and your website is the easiest place to get it wrong.</p>
 
         <p class="hero-p">
-          Your website is the first place every prospect, client, and enterprise buyer checks when deciding whether to trust you. We give you a clear picture of what it signals — and a plain-language brief you can hand to whoever needs to act on it. Free, in about five minutes.
+          Your website is the first place every prospect, client, and enterprise buyer checks when deciding whether to trust you. We give you a clear picture of what it signals — and a plain-language brief you can hand to whoever needs to act on it. The free Trust Snapshot, in about five minutes.
         </p>
 
         <div class="hero-actions">
           <a href="#hero-scan" class="btn btn-green" style="font-size:16px; padding:16px 32px;">
             <svg class="icon" width="16" height="16"><use href="#i-search"/></svg>
-            Run My Quick Trust Check
+            Take your Trust Snapshot
           </a>
           <a href="#results" class="btn btn-outline">
-            See a sample report
+            See a sample Snapshot
           </a>
         </div>
 
@@ -2304,34 +2341,159 @@
             <p class="scan-fine">Free · No account needed · We don't store data unless you save your results</p>
           </div>
 
-          <!-- Step 2: Basic questions -->
+          <!-- Step 2: Your business (F1 + F2) -->
           <div class="wizard-step hidden" id="wiz-step-2">
             <button class="step-back" onclick="wizBack(2)">← Back</button>
-            <div class="scan-step" style="margin-top:6px;">Step 2 — Quick questions</div>
-            <div class="scan-title">Tell us a little about your business</div>
-            <div class="scan-qs open" style="margin-bottom:18px;">
-              <div class="q-item">
-                <input type="checkbox" id="q1"/>
-                <label for="q1">I pitch to companies or corporate L&amp;D teams</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="q2"/>
-                <label for="q2">I collect or store information about my learners</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="q3"/>
-                <label for="q3">A client has asked about data privacy or security</label>
-              </div>
-              <div class="q-item">
-                <input type="checkbox" id="q4"/>
-                <label for="q4">I use tools like Zoom, HubSpot, or a learning platform</label>
+            <div class="scan-step" style="margin-top:6px;">Step 2 of 5 — Your business</div>
+            <div class="scan-title">What best describes you?</div>
+
+            <div class="q-group">
+              <label class="q-label">F1 — Your role</label>
+              <div class="q-radio-grid">
+                <label class="q-radio-opt"><input type="radio" name="f1" value="coach"/> Independent coach or consultant</label>
+                <label class="q-radio-opt"><input type="radio" name="f1" value="small_team"/> Small L&D team or training provider</label>
+                <label class="q-radio-opt"><input type="radio" name="f1" value="agency"/> Multi-person consultancy or agency</label>
+                <label class="q-radio-opt"><input type="radio" name="f1" value="other"/> Other</label>
               </div>
             </div>
-            <button class="scan-go" id="scanBtn" onclick="startScanAndModal()">
-              <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
-              Run My Free Trust Check
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F2 — Who do you sell to? <span class="q-hint">tick all that apply</span></label>
+              <div class="q-check-grid">
+                <label class="q-check-opt"><input type="checkbox" name="f2" value="consumer"/> Consumers — individuals buying for themselves</label>
+                <label class="q-check-opt"><input type="checkbox" name="f2" value="b2b_sme"/> B2B — SMEs and mid-sized companies</label>
+                <label class="q-check-opt"><input type="checkbox" name="f2" value="b2b_enterprise"/> B2B — enterprise (large corporates)</label>
+                <label class="q-check-opt"><input type="checkbox" name="f2" value="government"/> Government and public sector</label>
+                <label class="q-check-opt"><input type="checkbox" name="f2" value="other"/> Other or not sure</label>
+              </div>
+            </div>
+
+            <button class="scan-go" style="margin-top:20px;" onclick="wizNext(2)">
+              Next → <span style="font-weight:400;opacity:.7;font-size:12px;">3 more quick steps</span>
             </button>
-            <p class="scan-fine">Takes about 30 seconds · Scan starts immediately</p>
+            <p class="scan-fine">Your answers stay in your browser — nothing is sent until you run the scan</p>
+          </div>
+
+          <!-- Step 3: Your practices (F3 + F5) -->
+          <div class="wizard-step hidden" id="wiz-step-3">
+            <button class="step-back" onclick="wizBack(3)">← Back</button>
+            <div class="scan-step" style="margin-top:6px;">Step 3 of 5 — Your practices</div>
+            <div class="scan-title">A few things we can't see from your site</div>
+
+            <div class="q-group">
+              <label class="q-label">F3 — Do you use AI tools in your work?</label>
+              <div class="q-radio-stack">
+                <label class="q-radio-opt"><input type="radio" name="f3" value="no"/> No, not at all</label>
+                <label class="q-radio-opt"><input type="radio" name="f3" value="own_drafts"/> Yes, but only for my own drafts and productivity</label>
+                <label class="q-radio-opt"><input type="radio" name="f3" value="client_facing"/> Yes, and AI touches client-facing content (summaries, materials)</label>
+                <label class="q-radio-opt"><input type="radio" name="f3" value="processes_data"/> Yes, and AI processes client or learner data (names, transcripts, assessments)</label>
+                <label class="q-radio-opt"><input type="radio" name="f3" value="unsure"/> I'm not sure</label>
+              </div>
+            </div>
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F5 — What's the state of your privacy policy?</label>
+              <div class="q-radio-stack">
+                <label class="q-radio-opt"><input type="radio" name="f5" value="legal_current"/> Written or reviewed by a legal professional and kept current</label>
+                <label class="q-radio-opt"><input type="radio" name="f5" value="self_recent"/> I wrote it myself or used a template, reviewed in the last 12 months</label>
+                <label class="q-radio-opt"><input type="radio" name="f5" value="old_unsure"/> I have one but it's old or I'm not sure it's current</label>
+                <label class="q-radio-opt"><input type="radio" name="f5" value="none"/> I don't have one</label>
+              </div>
+            </div>
+
+            <button class="scan-go" style="margin-top:20px;" onclick="wizNext(3)">
+              Next → <span style="font-weight:400;opacity:.7;font-size:12px;">2 more quick steps</span>
+            </button>
+          </div>
+
+          <!-- Step 4: Self-assessment (F6 + F7 + F8) -->
+          <div class="wizard-step hidden" id="wiz-step-4">
+            <button class="step-back" onclick="wizBack(4)">← Back</button>
+            <div class="scan-step" style="margin-top:6px;">Step 4 of 5 — Your confidence</div>
+            <div class="scan-title">How are you feeling about this?</div>
+
+            <div class="q-group">
+              <label class="q-label">F6 — How confident are you that your website would pass a quick buyer trust review right now?</label>
+              <div class="q-scale-row">
+                <span class="q-scale-label">Not at all</span>
+                <div class="q-scale-opts">
+                  <label class="q-scale-opt"><input type="radio" name="f6" value="1"/><span>1</span></label>
+                  <label class="q-scale-opt"><input type="radio" name="f6" value="2"/><span>2</span></label>
+                  <label class="q-scale-opt"><input type="radio" name="f6" value="3"/><span>3</span></label>
+                  <label class="q-scale-opt"><input type="radio" name="f6" value="4"/><span>4</span></label>
+                  <label class="q-scale-opt"><input type="radio" name="f6" value="5"/><span>5</span></label>
+                </div>
+                <span class="q-scale-label">Very confident</span>
+              </div>
+            </div>
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F7 — In the last 12 months, has a buyer asked unexpected questions about privacy, security, or AI?</label>
+              <div class="q-radio-stack">
+                <label class="q-radio-opt"><input type="radio" name="f7" value="yes_multiple"/> Yes, multiple times</label>
+                <label class="q-radio-opt"><input type="radio" name="f7" value="yes_once"/> Yes, once</label>
+                <label class="q-radio-opt"><input type="radio" name="f7" value="not_noticed"/> Not that I've noticed</label>
+                <label class="q-radio-opt"><input type="radio" name="f7" value="dont_know"/> I don't know</label>
+              </div>
+            </div>
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F8 — If you could fix one thing before your next proposal, which would it be?</label>
+              <div class="q-radio-stack">
+                <label class="q-radio-opt"><input type="radio" name="f8" value="ux"/> How professional the site looks and feels (User Experience)</label>
+                <label class="q-radio-opt"><input type="radio" name="f8" value="transparency"/> Being clearer about my data practices (Transparency)</label>
+                <label class="q-radio-opt"><input type="radio" name="f8" value="safety"/> Adding missing security basics (Safety &amp; Security)</label>
+                <label class="q-radio-opt"><input type="radio" name="f8" value="ai_trust"/> Being clearer about my AI use (AI Trust)</label>
+              </div>
+            </div>
+
+            <button class="scan-go" style="margin-top:20px;" onclick="wizNext(4)">
+              Next → <span style="font-weight:400;opacity:.7;font-size:12px;">Last step</span>
+            </button>
+          </div>
+
+          <!-- Step 5: Context (F9 + F10 + F11) -->
+          <div class="wizard-step hidden" id="wiz-step-5">
+            <button class="step-back" onclick="wizBack(5)">← Back</button>
+            <div class="scan-step" style="margin-top:6px;">Step 5 of 5 — Your clients</div>
+            <div class="scan-title">Almost there — a little context</div>
+
+            <div class="q-group">
+              <label class="q-label">F9 — Does your work involve any of these? <span class="q-hint">tick all that apply</span></label>
+              <div class="q-check-grid">
+                <label class="q-check-opt"><input type="checkbox" name="f9" value="children"/> Children or under-18s</label>
+                <label class="q-check-opt"><input type="checkbox" name="f9" value="health"/> Health, mental health, or clinical information</label>
+                <label class="q-check-opt"><input type="checkbox" name="f9" value="financial"/> Financial account or payment data</label>
+                <label class="q-check-opt"><input type="checkbox" name="f9" value="other_regulated"/> Other specially regulated data</label>
+                <label class="q-check-opt q-check-none" id="f9-none-opt"><input type="checkbox" name="f9" value="none" id="f9-none"/> None of these</label>
+              </div>
+            </div>
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F10 — Where are most of your clients based?</label>
+              <div class="q-radio-grid">
+                <label class="q-radio-opt"><input type="radio" name="f10" value="us"/> Primarily United States</label>
+                <label class="q-radio-opt"><input type="radio" name="f10" value="europe"/> Primarily Europe (UK and EU)</label>
+                <label class="q-radio-opt"><input type="radio" name="f10" value="global"/> Global / multiple regions</label>
+                <label class="q-radio-opt"><input type="radio" name="f10" value="unsure"/> I'm not sure</label>
+              </div>
+            </div>
+
+            <div class="q-group" style="margin-top:18px;">
+              <label class="q-label">F11 — Annual business revenue (USD equivalent)</label>
+              <div class="q-radio-grid">
+                <label class="q-radio-opt"><input type="radio" name="f11" value="lt1m"/> Under $1M</label>
+                <label class="q-radio-opt"><input type="radio" name="f11" value="1m_25m"/> $1M – $25M</label>
+                <label class="q-radio-opt"><input type="radio" name="f11" value="gt25m"/> Over $25M</label>
+                <label class="q-radio-opt"><input type="radio" name="f11" value="withheld"/> Prefer not to say</label>
+              </div>
+            </div>
+
+            <button class="scan-go" id="scanBtn" style="margin-top:20px;" onclick="startScanAndModal()">
+              <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
+              View My Trust Snapshot
+            </button>
+            <p class="scan-fine">Scan takes about 30–60 seconds · No account needed</p>
           </div>
 
         </div>
@@ -2344,7 +2506,7 @@
           <!-- Live scan status -->
           <div class="modal-scanning" id="modalScanStatus">
             <div class="modal-spinner" id="modalSpinner"></div>
-            <span id="modalScanMsg">Scanning your site — usually under 60 seconds</span>
+            <span id="modalScanMsg">Scanning your site — combining live audit with your answers…</span>
           </div>
 
           <!-- Step-by-step progress -->
@@ -2674,11 +2836,11 @@
     <div class="results-header reveal">
       <div class="results-kicker">Audit &nbsp;·&nbsp; Assess &nbsp;·&nbsp; Act</div>
       <h2 class="results-h2">
-        Quick Trust Check gives you the <span>big picture.</span><br>
-        Deep Trust Check gives you the full picture and how to fix it.
+        Trust Snapshot gives you the <span>big picture.</span><br>
+        Trust Deep Check gives you the full picture and how to fix it.
       </h2>
       <p class="results-sub">
-        Your Quick Trust Check scans your <strong>public-facing website</strong> and shows where you stand across four trust areas — no jargon, no 40-page PDFs. Upgrade to Co-Pilot for the Deep Trust Check: every finding, step-by-step fix guides, and a trust proof PDF for proposals.
+        Your Trust Snapshot scans your <strong>public-facing website</strong> and shows where you stand across four trust areas — no jargon, no 40-page PDFs. Upgrade to Co-Pilot for the Trust Deep Check: every finding, step-by-step fix guides, and a trust proof PDF for proposals.
       </p>
     </div>
 
@@ -2698,7 +2860,7 @@
       <div class="report-panel reveal reveal-delay-1">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Quick Trust Check</div>
+            <div class="panel-title">Trust Snapshot</div>
             <div id="scanDomain" style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourcoachingbiz.com</div>
           </div>
           <div class="panel-status status-free">Free</div>
@@ -2773,7 +2935,7 @@
       <div class="report-panel reveal reveal-delay-2">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Deep Trust Check</div>
+            <div class="panel-title">Trust Deep Check</div>
             <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Co-Pilot</div>
           </div>
           <div class="panel-status status-paid">Co-Pilot</div>
@@ -2831,7 +2993,7 @@
         <span>Free check takes about 5 minutes. No account, no credit card.</span>
       </div>
       <div class="cta-strip-actions">
-        <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Run Quick Trust Check</a>
+        <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Take your Trust Snapshot</a>
         <div>
           <a href="#pricing" class="btn btn-blue" style="padding:12px 20px;font-size:14px;">See Full Roadmap</a>
           <div class="price-note">from <strong>$29</strong>/month</div>
@@ -2862,7 +3024,7 @@
           We're running free Trust Checks with a select group of L&amp;D founders and coaches. Results, feedback, and early stories coming soon.
         </p>
         <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:24px;">
-          Want to be in the first cohort? Run your Quick Trust Check above — or get in touch directly.
+          Want to be in the first cohort? Take your Trust Snapshot above — or get in touch directly.
         </p>
         <a href="mailto:team@datapilots.tech?subject=Early Access" class="btn btn-teal" style="font-size:14px;padding:12px 24px;display:inline-flex;width:auto;">
           Apply for early access
@@ -3414,7 +3576,7 @@
 
       <!-- Free -->
       <div class="plan reveal reveal-delay-1">
-        <div class="plan-tier">Quick Trust Check</div>
+        <div class="plan-tier">Trust Snapshot</div>
         <div class="plan-price-row">
           <div class="plan-price">$0</div>
           <div class="plan-period"> always</div>
@@ -3431,7 +3593,7 @@
           <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Team delegation — buyer, exec &amp; expert views</li>
         </ul>
         <a href="#hero-scan" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
-          Run Quick Trust Check — Free
+          Take your Trust Snapshot — Free
         </a>
         <p class="plan-foot">Takes about 5 minutes. No account needed.</p>
       </div>
@@ -3446,8 +3608,8 @@
         </div>
         <p class="plan-tagline">From knowing your gaps to fixing them — and proving it to enterprise clients.</p>
         <ul class="plan-feats">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Quick Trust Check</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Deep Trust Check — deeper scan + every finding with fix guides</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Trust Snapshot</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust Deep Check — deeper scan + every finding with fix guides</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF — designed to go into proposals &amp; RFPs</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Delegate findings across buyer, exec &amp; expert views</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan — track your progress over time</li>
@@ -3475,9 +3637,9 @@
 
   <div class="footer-cta">
     <h2 class="footer-cta-h">Ready for <span>takeoff?</span></h2>
-    <p class="footer-cta-sub">Your Quick Trust Check takes about 5 minutes. Your next deal might depend on it.</p>
+    <p class="footer-cta-sub">Your Trust Snapshot takes about 5 minutes. Your next deal might depend on it.</p>
     <div class="footer-cta-actions">
-      <a href="#hero-scan" class="btn btn-green" style="padding:16px 34px;font-size:15px;">Run Quick Trust Check</a>
+      <a href="#hero-scan" class="btn btn-green" style="padding:16px 34px;font-size:15px;">Take your Trust Snapshot</a>
       <a href="https://calendly.com/toni-datapilots/trust-check-in" class="btn btn-white" style="padding:14px 24px;font-size:14px;">
         <svg class="icon" width="14" height="14"><use href="#i-clock"/></svg>
         Book a 20-min call
@@ -3699,6 +3861,7 @@
 
   // ── Multi-step wizard ───────────────────────
   let _scanPromise = null; // holds scan result or promise
+  let _scanAnswers  = {};  // F1–F11 collected as user progresses
 
   function wizNext(fromStep) {
     if (fromStep === 1) {
@@ -3712,15 +3875,33 @@
         return;
       }
       showStep(2);
+      return;
+    }
+    if (fromStep === 2) {
+      _scanAnswers.F1 = _getRadio('f1');
+      _scanAnswers.F2 = _getChecks('f2');
+      showStep(3); return;
+    }
+    if (fromStep === 3) {
+      _scanAnswers.F3 = _getRadio('f3');
+      _scanAnswers.F5 = _getRadio('f5');
+      showStep(4); return;
+    }
+    if (fromStep === 4) {
+      _scanAnswers.F6 = _getRadio('f6') ? parseInt(_getRadio('f6')) : null;
+      _scanAnswers.F7 = _getRadio('f7');
+      _scanAnswers.F8 = _getRadio('f8');
+      showStep(5); return;
     }
   }
 
   function wizBack(fromStep) {
-    if (fromStep === 2) showStep(1);
+    const prev = fromStep - 1;
+    if (prev >= 1) showStep(prev);
   }
 
   function showStep(n) {
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 5; i++) {
       const el = document.getElementById('wiz-step-' + i);
       if (el) el.classList.toggle('hidden', i !== n);
     }
@@ -3734,7 +3915,33 @@
       const line = document.getElementById('wpLine' + i);
       if (line) line.classList.toggle('done', i < n);
     }
+    // Scroll scan card into view on mobile
+    const card = document.querySelector('.scan-card');
+    if (card && n > 1) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+
+  // ── Answer helpers ───────────────────────────
+  function _getRadio(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : null;
+  }
+  function _getChecks(name) {
+    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+  }
+
+  // F9 "None of these" exclusivity
+  document.addEventListener('change', function(e) {
+    if (e.target.name === 'f9') {
+      if (e.target.value === 'none' && e.target.checked) {
+        document.querySelectorAll('input[name="f9"]').forEach(cb => {
+          if (cb.value !== 'none') cb.checked = false;
+        });
+      } else if (e.target.value !== 'none' && e.target.checked) {
+        const noneEl = document.querySelector('input[name="f9"][value="none"]');
+        if (noneEl) noneEl.checked = false;
+      }
+    }
+  });
 
   // Auto-advance to step 2 when URL is typed
   document.getElementById('scanUrl').addEventListener('keydown', function(e) {
@@ -3862,6 +4069,11 @@
     const url = document.getElementById('scanUrl').value.trim();
     if (!url) return;
 
+    // Collect final screen answers (F9, F10, F11) before launching
+    _scanAnswers.F9  = _getChecks('f9');
+    _scanAnswers.F10 = _getRadio('f10');
+    _scanAnswers.F11 = _getRadio('f11');
+
     // Reset button state
     const btn = document.getElementById('modalBtn');
     btn.disabled = true;
@@ -3891,15 +4103,14 @@
     // Show modal
     document.getElementById('scan-modal').style.display = 'flex';
 
-    // Update wizard progress dots
+    // Update wizard progress dots — all steps done, modal is step 6
     for (let i = 1; i <= 5; i++) {
       const dot = document.getElementById('wpDot' + i);
       if (!dot) continue;
       dot.classList.remove('active','done');
-      if (i < 3) dot.classList.add('done');
-      else if (i === 3) dot.classList.add('active');
+      dot.classList.add('done');
       const line = document.getElementById('wpLine' + i);
-      if (line) line.classList.toggle('done', i < 3);
+      if (line) line.classList.add('done');
     }
 
     // Kick off scan + guided UX in parallel
@@ -3971,6 +4182,7 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         url,
+        answers: _scanAnswers,           // F1–F11 questionnaire answers
         papaya_options: {
           cookie_action: 'reject_all',   // simulate visitor clicking "reject all"
           user_location: 'California',   // CCPA context — most protective standard
@@ -4018,6 +4230,11 @@
         },
       ],
       total_issues: 7,
+      trust_gap: {
+        type: 'gap',
+        message: `You rated your buyer-ready confidence at 4/5, but ${domain} currently scores 58/100. This gap is almost always where deals get lost silently — a buyer's procurement team sees what you don't. The top findings above are where to start.`
+      },
+      compliance_context: 'With clients across multiple regions, the strictest frame applies: EU GDPR sets the baseline, plus US state privacy laws (CCPA, VCDPA, CPA) depending on data volume and revenue. Your privacy page should work for both EU and US audiences.',
       note: isPreview
         ? `This is an illustrative preview using typical findings for an L&D website. Run the check locally with the Data Pilots API for your actual ${domain} results.`
         : 'Free check covers your public-facing website. Upgrade to Co-Pilot to scan your learning portal/platform and unlock full fix guides.'
@@ -4245,6 +4462,36 @@
       </div>`;
     }).join('');
 
+    // ── Trust Gap insight ──────────────────────────────────────────────────
+    const tgEl = document.getElementById('ro-trust-gap');
+    if (tgEl) {
+      const gap = data.trust_gap;
+      if (gap && gap.type) {
+        tgEl.style.display = '';
+        const isOver = gap.type === 'gap';
+        tgEl.style.background = isOver ? 'rgba(251,191,36,.07)' : 'rgba(16,185,129,.07)';
+        tgEl.style.borderColor = isOver ? 'rgba(251,191,36,.22)' : 'rgba(16,185,129,.22)';
+        tgEl.innerHTML = `
+          <span style="font-size:18px;flex-shrink:0;">${isOver ? '⚠️' : '✅'}</span>
+          <span style="font-size:13px;line-height:1.55;color:rgba(255,255,255,.75)">${gap.message}</span>`;
+      } else {
+        tgEl.style.display = 'none';
+      }
+    }
+
+    // ── Compliance context ─────────────────────────────────────────────────
+    const ccEl = document.getElementById('ro-compliance-context');
+    if (ccEl) {
+      if (data.compliance_context) {
+        ccEl.style.display = '';
+        ccEl.innerHTML = `
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:8px;">Compliance context</div>
+          <p style="font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.55);margin:0">${data.compliance_context}</p>`;
+      } else {
+        ccEl.style.display = 'none';
+      }
+    }
+
     // Papaya strip (if live walkthrough still running)
     document.getElementById('ro-papaya-area').innerHTML = data.papaya_session_id ? `
       <div id="papaya-strip" style="display:flex;align-items:center;gap:10px;
@@ -4332,7 +4579,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Quick Trust Check — ${domain}</title>
+  <title>Trust Snapshot — ${domain}</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:#111827; background:#fff; padding:40px; max-width:700px; margin:0 auto; }
@@ -4345,7 +4592,7 @@
   <!-- Header -->
   <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:3px solid #00C8A8;margin-bottom:28px">
     <div>
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#00C8A8;margin-bottom:5px">Data Pilots · Quick Trust Check</div>
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#00C8A8;margin-bottom:5px">Data Pilots · Trust Snapshot</div>
       <div style="font-size:11px;color:#6B7280">Your website: <strong style="color:#111827">${domain}</strong></div>
       <div style="font-size:11px;color:#9CA3AF;margin-top:2px">${date}</div>
     </div>
@@ -4367,10 +4614,22 @@
   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#00C8A8;margin-bottom:12px">Scan Highlights${data.total_issues ? ` · ${data.total_issues} issues found` : ''}</div>
   ${findingsHTML}
 
+  ${data.trust_gap && data.trust_gap.type ? `
+  <div style="margin-top:18px;padding:14px 16px;background:${data.trust_gap.type==='gap'?'#FFFBEB':'#F0FDF4'};border:1px solid ${data.trust_gap.type==='gap'?'#FDE68A':'#A7F3D0'};border-radius:8px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:16px;flex-shrink:0">${data.trust_gap.type==='gap'?'⚠️':'✅'}</span>
+    <p style="font-size:12px;color:#374151;line-height:1.55;margin:0">${data.trust_gap.message}</p>
+  </div>` : ''}
+
+  ${data.compliance_context ? `
+  <div style="margin-top:18px;padding:14px 16px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748B;margin-bottom:7px">Compliance context</div>
+    <p style="font-size:11.5px;color:#475569;line-height:1.6;margin:0">${data.compliance_context}</p>
+  </div>` : ''}
+
   <!-- Next step -->
   <div style="margin-top:24px;padding:16px 18px;background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px">
     <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px">Next step: Co-Pilot — Treat &amp; Strengthen</div>
-    <div style="font-size:12px;color:#047857;line-height:1.55">Every finding with exact fix instructions for your owner, developer, and compliance team. Plus a trust proof PDF for proposals and monthly re-scans to track progress.</div>
+    <div style="font-size:12px;color:#047857;line-height:1.55">Every finding with exact fix instructions for your owner, developer, and compliance team. Plus a Trust Proof PDF for proposals and monthly re-scans to track progress.</div>
   </div>
 
   <!-- Footer -->
@@ -4627,7 +4886,7 @@
 <!-- Real scan results always appear here — never on the main page -->
 <div id="results-overlay">
   <div class="ro-header">
-    <span class="ro-badge">Quick Trust Check</span>
+    <span class="ro-badge">Trust Snapshot</span>
     <span class="ro-domain" id="ro-domain">your site</span>
     <div class="ro-header-actions">
       <button class="ro-download" id="ro-downloadBtn" onclick="downloadResultsPDF()">↓ Save Results</button>
@@ -4658,10 +4917,22 @@
 
     <div class="ro-pillars" id="ro-pillars"><!-- populated by JS --></div>
 
+    <!-- Trust Gap insight — hidden by default, shown by JS when fired -->
+    <div id="ro-trust-gap" style="display:none;
+      display:none;flex-direction:row;align-items:flex-start;gap:12px;
+      border:1px solid;border-radius:10px;padding:14px 16px;margin-bottom:22px;">
+    </div>
+
     <div class="ro-findings-section">
       <div class="ro-findings-title" id="ro-findings-title">Scan Highlights</div>
       <div id="ro-findings-list"><!-- populated by JS --></div>
       <div id="ro-papaya-area"></div>
+    </div>
+
+    <!-- Compliance context — hidden by default, shown by JS when answers available -->
+    <div id="ro-compliance-context" style="display:none;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:10px;padding:14px 16px;margin-bottom:22px;">
     </div>
 
     <!-- Method strip: Check → Treat → Strengthen -->

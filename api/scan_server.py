@@ -493,33 +493,307 @@ def check_sitemap(base: str) -> dict:
 # ─────────────────────────────────────────────
 # Scoring
 # ─────────────────────────────────────────────
-PILLAR_WEIGHTS = {"ux": 25, "transparency": 30, "safety": 30, "ai_trust": 15}
-STATUS_SCORE   = {"pass": 1.0, "warn": 0.5, "fail": 0.0, "info": 0.8}
+STATUS_SCORE = {"pass": 1.0, "warn": 0.5, "fail": 0.0, "info": 0.8}
 
-def compute_scores(findings: list) -> dict:
-    pillar_totals = {p: [] for p in PILLAR_WEIGHTS}
+# Buyer-profile weights per segment (F2) — from Scoring Logic tab
+# Each entry: {ux, transparency, safety, ai_trust}
+SEGMENT_WEIGHTS = {
+    "consumer":       {"ux": 0.25, "transparency": 0.40, "safety": 0.20, "ai_trust": 0.15},
+    "b2b_enterprise": {"ux": 0.15, "transparency": 0.25, "safety": 0.30, "ai_trust": 0.30},
+    "government":     {"ux": 0.15, "transparency": 0.30, "safety": 0.30, "ai_trust": 0.25},
+    "b2b_sme":        {"ux": 0.25, "transparency": 0.20, "safety": 0.30, "ai_trust": 0.25},
+    "other":          {"ux": 0.25, "transparency": 0.20, "safety": 0.30, "ai_trust": 0.25},
+}
+DEFAULT_WEIGHTS = SEGMENT_WEIGHTS["b2b_sme"]
+
+
+def compute_buyer_weights(f2: list) -> dict:
+    """
+    Multi-select F2: per area take MAX weight across selected segments, then renormalise to sum=1.
+    """
+    if not f2:
+        return DEFAULT_WEIGHTS
+
+    areas = ["ux", "transparency", "safety", "ai_trust"]
+    maxed = {}
+    for area in areas:
+        maxed[area] = max(
+            SEGMENT_WEIGHTS.get(seg, DEFAULT_WEIGHTS).get(area, 0)
+            for seg in f2
+        )
+    total = sum(maxed.values()) or 1.0
+    return {a: maxed[a] / total for a in areas}
+
+
+def score_questionnaire(answers: dict) -> dict:
+    """
+    Score the four answered questions (F3, F4, F5, F6).
+    Returns per-area scores 0-100 from the questionnaire alone.
+    """
+    # F3 — AI Trust (0-5 pts)
+    F3_SCORES = {
+        "no": 5, "own_drafts": 3, "client_facing": 1,
+        "processes_data": 0, "unsure": 0,
+    }
+    f3_pts = F3_SCORES.get(answers.get("F3", ""), 3)  # default 3 (neutral)
+
+    # F4 — Transparency (0-5 pts, but optional)
+    F4_SCORES = {"email": 2, "crm": 3, "multiple": 2, "unsure": 0}
+    f4_pts = F4_SCORES.get(answers.get("F4", ""), 2)
+
+    # F5 — Transparency (0-5 pts)
+    F5_SCORES = {
+        "legal_current": 5, "self_recent": 3, "old_unsure": 1, "none": 0,
+    }
+    f5_pts = F5_SCORES.get(answers.get("F5", ""), 2)
+
+    # F6 — self-assessment (1-5, insight only — NOT used in overall score per spec)
+    f6_val = int(answers.get("F6") or 3)
+
+    transparency_score = round((f4_pts + f5_pts) / 10 * 100)  # max 10 pts
+    ai_trust_score     = round(f3_pts / 5 * 100)
+
+    return {
+        "transparency": transparency_score,
+        "ai_trust":     ai_trust_score,
+        "f6":           f6_val,
+    }
+
+
+def compute_scores(findings: list, answers: dict = None) -> dict:
+    """
+    Blend scanner area scores (0.4 weight) with questionnaire area scores (0.6 weight).
+    Apply buyer-profile weights from F2 to compute the overall score.
+    """
+    answers = answers or {}
+    areas   = ["ux", "transparency", "safety", "ai_trust"]
+
+    # 1. Scanner scores per area
+    scanner_area_totals = {p: [] for p in areas}
     for f in findings:
         p = f.get("pillar")
-        if p in pillar_totals and f["status"] in STATUS_SCORE:
-            pillar_totals[p].append(STATUS_SCORE[f["status"]])
+        if p in scanner_area_totals and f["status"] in STATUS_SCORE:
+            scanner_area_totals[p].append(STATUS_SCORE[f["status"]])
+    scanner_scores = {
+        p: round(sum(v) / len(v) * 100) if v else 50
+        for p, v in scanner_area_totals.items()
+    }
 
-    pillar_scores = {}
-    for p, vals in pillar_totals.items():
-        pillar_scores[p] = round(sum(vals) / len(vals) * 100) if vals else 50
+    # 2. Questionnaire scores
+    q_scores = score_questionnaire(answers)
 
-    weighted = sum(pillar_scores[p] * PILLAR_WEIGHTS[p] / 100 for p in PILLAR_WEIGHTS)
-    overall  = round(weighted)
+    # 3. Blend: 0.4 scanner + 0.6 questionnaire (fallback to scanner if no answers)
+    blended = {}
+    for area in areas:
+        s = scanner_scores.get(area, 50)
+        q = q_scores.get(area)
+        if q is not None:
+            blended[area] = round(0.4 * s + 0.6 * q)
+        else:
+            blended[area] = s
+
+    # 4. Buyer-profile weights from F2
+    f2 = answers.get("F2") or []
+    weights = compute_buyer_weights(f2)
+
+    overall = round(sum(blended[a] * weights[a] for a in areas))
+    overall = max(0, min(100, overall))
 
     if overall >= 80:
-        label = "Mission Ready"
+        label = "Buyer-Ready"
     elif overall >= 60:
-        label = "Pilot Ready"
+        label = "Solid"
     elif overall >= 40:
-        label = "Pre-Flight"
+        label = "Patchy"
     else:
-        label = "Ground Check Needed"
+        label = "Needs Attention"
 
-    return {"overall": overall, "label": label, "pillars": pillar_scores}
+    return {
+        "overall":   overall,
+        "label":     label,
+        "pillars":   blended,
+        "f6":        q_scores.get("f6", 3),
+        "weights":   weights,
+    }
+
+
+# ─────────────────────────────────────────────
+# Findings engine  (questionnaire × scanner pairings)
+# ─────────────────────────────────────────────
+def derive_findings(answers: dict, scanner_findings: list) -> list:
+    """
+    Apply the Scanner × Questionnaire pairing rules from the master workbook.
+    Returns a list of finding dicts, priority-sorted.
+    """
+    results  = []
+    answer   = answers or {}
+    f3       = answer.get("F3", "")
+    f5       = answer.get("F5", "")
+    f6       = int(answer.get("F6") or 0)
+    f2       = answer.get("F2") or []
+    f9       = answer.get("F9") or []
+    f10      = answer.get("F10", "unsure")
+
+    # Build a quick lookup of what the scanner found
+    scanner_ids = {f.get("id") for f in scanner_findings}
+
+    # ── AI-01: Uses AI but no disclosure on site ─────────────────────────
+    uses_ai = f3 in ("own_drafts", "client_facing", "processes_data")
+    ai_disclosed = "ai_disclose" in scanner_ids and any(
+        f.get("id") == "ai_disclose" and f.get("status") == "pass"
+        for f in scanner_findings
+    )
+    if uses_ai and not ai_disclosed:
+        results.append({
+            "id": "q_ai_disclosure", "pillar": "ai_trust", "status": "fail",
+            "priority": "HIGH",
+            "title": "You use AI, but a buyer scanning your site cannot tell",
+            "detail": (
+                f"You told us you use AI tools{' in client-facing work' if f3 == 'client_facing' else ''}. "
+                "We could not find any mention of AI on your site. Enterprise buyers increasingly ask about "
+                "AI before signing — one or two clear sentences on your services or privacy page would "
+                "answer the question before it is even asked."
+            ),
+            "tag": "FIX THIS WEEK",
+        })
+
+    # ── AI-02: Client data going into AI tools ───────────────────────────
+    if f3 == "processes_data":
+        results.append({
+            "id": "q_ai_data", "pillar": "ai_trust", "status": "fail",
+            "priority": "HIGH",
+            "title": "Client data may be entering AI tools without a clear policy",
+            "detail": (
+                "You indicated that AI processes client or learner data. Without a stated policy — "
+                "and ideally enterprise-tier tools with data-protection settings on — this is the "
+                "single most common AI risk procurement teams flag."
+            ),
+            "tag": "FIX THIS WEEK",
+        })
+
+    # ── T-05: Privacy page exists but may be stale ───────────────────────
+    privacy_exists = any(
+        f.get("id") == "privacy" and f.get("status") == "pass"
+        for f in scanner_findings
+    )
+    if privacy_exists and f5 in ("old_unsure",):
+        results.append({
+            "id": "q_policy_stale", "pillar": "transparency", "status": "warn",
+            "priority": "MEDIUM",
+            "title": "Your privacy page exists but may be stale",
+            "detail": (
+                "We found a privacy page, but you indicated it may be old or you're not sure it's current. "
+                "Buyers who check care more about substance than origin — a 20-minute review is usually enough. "
+                "Check specifically: named tools, retention periods, international transfers, cookies, and "
+                "a contact route for data requests."
+            ),
+            "tag": "QUICK WIN",
+        })
+
+    # ── T: No privacy page AND self-reports having none ──────────────────
+    if not privacy_exists and f5 == "none":
+        results.append({
+            "id": "q_no_policy", "pillar": "transparency", "status": "fail",
+            "priority": "HIGH",
+            "title": "No privacy policy — confirmed by both scan and your answer",
+            "detail": (
+                "We couldn't find a privacy page and you confirmed you don't have one. "
+                "Over 70% of B2B buyers check for a privacy policy before signing. "
+                "This is the most common trust-killer — and one of the easiest to fix."
+            ),
+            "tag": "FIX THIS WEEK",
+        })
+
+    # ── G-01: Trust Gap — confident but site scores low ──────────────────
+    # (returned separately, not in top-3 findings)
+
+    # ── Escalate severity for Consumer segment + sensitive data ──────────
+    has_consumer  = "consumer"  in f2
+    has_sensitive = any(v in f9 for v in ["children", "health"])
+    for r in results:
+        if r.get("pillar") == "transparency":
+            if has_sensitive or has_consumer:
+                r["tag"] = "FIX THIS WEEK"
+                r["priority"] = "HIGH"
+
+    # Sort: HIGH before MEDIUM before LOW
+    priority_order = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
+    results.sort(key=lambda x: priority_order.get(x.get("priority", "LOW"), 2))
+
+    return results
+
+
+def build_trust_gap(f6: int, overall: int) -> dict | None:
+    """
+    Return the Trust Gap insight dict, or None if neither condition fires.
+    """
+    if f6 >= 4 and overall < 60:
+        return {
+            "type": "gap",
+            "message": (
+                f"You rated your buyer-ready confidence at {f6}/5, but your site currently scores "
+                f"{overall}/100. This gap is almost always where deals get lost silently — "
+                "a buyer's procurement team sees what you don't. The top findings above are where to start."
+            ),
+        }
+    if f6 <= 2 and overall >= 70:
+        return {
+            "type": "rebuild",
+            "message": (
+                f"You rated your confidence low ({f6}/5), but your site actually scores {overall}/100. "
+                "The remaining gaps are specific and quick to close — you're further along than you think."
+            ),
+        }
+    return None
+
+
+def build_compliance_context(answers: dict) -> str:
+    """
+    One paragraph of compliance context tailored to F10 (jurisdiction) and F9 (sensitive data).
+    """
+    f10 = (answers.get("F10") or "unsure").lower()
+    f9  = answers.get("F9") or []
+    has_children = "children" in f9
+    has_health   = "health"   in f9
+
+    base = {
+        "europe": (
+            "Your clients are primarily in the UK and EU. The key compliance frame is UK GDPR / EU GDPR "
+            "(Articles 12–14 for transparency, Article 32 for security) and PECR for cookies. "
+            "Your privacy page must name your lawful basis for processing and list third-party tools."
+        ),
+        "us": (
+            "Your clients are primarily in the US. Depending on revenue and data volume, CCPA/CPRA "
+            "(California) may apply, along with the Texas TDPSA and other state privacy laws. "
+            "Your privacy page should address the right to know, right to delete, and opt-out of data sales."
+        ),
+        "global": (
+            "With clients across multiple regions, the strictest frame applies: EU GDPR sets the baseline, "
+            "plus US state privacy laws (CCPA, VCDPA, CPA) depending on data volume and revenue. "
+            "Your privacy page should work for both EU and US audiences."
+        ),
+        "unsure": (
+            "Because your client base spans uncertain regions, we've applied the strictest compliance frame: "
+            "EU GDPR as the baseline. If your clients turn out to be primarily in one region, a Trust Deep Check "
+            "will narrow this to the exact laws that apply."
+        ),
+    }.get(f10, "")
+
+    addendum = ""
+    if has_children:
+        addendum += (
+            " You indicated your work involves children or under-18s. This triggers special-category "
+            "obligations under GDPR Article 8 and COPPA (US) — parental consent workflows and data "
+            "minimisation are particularly important."
+        )
+    if has_health:
+        addendum += (
+            " Health or mental health information is special-category data under GDPR Article 9, "
+            "and may trigger HIPAA in the US. Processing this data requires an explicit lawful basis "
+            "and heightened security controls."
+        )
+
+    return (base + addendum).strip()
 
 
 # ─────────────────────────────────────────────
@@ -532,7 +806,8 @@ def normalise_url(raw: str) -> str:
     return raw.rstrip("/")
 
 
-def run_scan(raw_url: str, tier: str = "free") -> dict:
+def run_scan(raw_url: str, tier: str = "free", answers: dict = None) -> dict:
+    answers = answers or {}
     base = normalise_url(raw_url)
 
     # Fetch home page: standard read for content checks, larger read for footer
@@ -568,30 +843,44 @@ def run_scan(raw_url: str, tier: str = "free") -> dict:
 
     findings.extend(check_security_headers(headers))
 
-    scores = compute_scores(findings)
+    # Blend scanner + questionnaire scores
+    scores = compute_scores(findings, answers)
 
-    actionable = [f for f in findings if f["status"] in ("fail", "warn") and f.get("tag")]
-    actionable.sort(key=lambda f: {"FIX THIS WEEK": 0, "QUICK WIN": 1, "REVIEW": 2}.get(f.get("tag", ""), 3))
+    # Questionnaire-derived findings, de-duplicated against scanner findings
+    TAG_ORDER = {"FIX THIS WEEK": 0, "QUICK WIN": 1, "REVIEW": 2}
+    scanner_actionable = [f for f in findings if f["status"] in ("fail", "warn") and f.get("tag")]
+    scanner_actionable.sort(key=lambda f: TAG_ORDER.get(f.get("tag", ""), 3))
+
+    q_findings = derive_findings(answers, findings)
+    q_ids      = {qf["id"] for qf in q_findings}
+    merged     = q_findings + [f for f in scanner_actionable if f.get("id") not in q_ids]
+    top_findings = merged[:3]
+
+    # Insight layers
+    trust_gap          = build_trust_gap(scores.get("f6", 3), scores["overall"])
+    compliance_context = build_compliance_context(answers)
 
     # Start Papaya run — returns the full Papaya run object (includes session_id, links, debug_url)
     papaya_run = papaya_start_run(base)
     papaya_session_id = papaya_run.get("session_id")
 
     return {
-        "url":               base,
-        "scanned_at":        datetime.utcnow().isoformat() + "Z",
-        "score":             scores["overall"],
-        "score_label":       scores["label"],
-        "tier":              tier,
+        "url":                base,
+        "scanned_at":         datetime.utcnow().isoformat() + "Z",
+        "score":              scores["overall"],
+        "score_label":        scores["label"],
+        "tier":               tier,
         "pillars": {
             "ux":           {"score": scores["pillars"]["ux"],           "label": "User Experience"},
             "transparency": {"score": scores["pillars"]["transparency"], "label": "Transparency"},
             "safety":       {"score": scores["pillars"]["safety"],       "label": "Safety"},
             "ai_trust":     {"score": scores["pillars"]["ai_trust"],     "label": "AI Trust"},
         },
-        "free_findings":     actionable[:3],
-        "total_issues":      len([f for f in findings if f["status"] in ("fail", "warn")]),
-        "papaya_session_id": papaya_session_id,
+        "free_findings":      top_findings,
+        "total_issues":       len([f for f in findings if f["status"] in ("fail", "warn")]),
+        "trust_gap":          trust_gap,
+        "compliance_context": compliance_context,
+        "papaya_session_id":  papaya_session_id,
         "note": (
             "Free check covers your public-facing website. "
             "Upgrade to Co-Pilot to scan your learning portal or platform "
@@ -702,9 +991,13 @@ class ScanHandler(BaseHTTPRequestHandler):
         if tier not in ("free", "paid"):
             tier = "free"
 
-        print(f"  Scanning: {raw_url}  tier={tier}", flush=True)
+        answers = payload.get("answers", {})
+        if not isinstance(answers, dict):
+            answers = {}
+
+        print(f"  Scanning: {raw_url}  tier={tier}  answers={list(answers.keys())}", flush=True)
         try:
-            result = run_scan(raw_url, tier=tier)
+            result = run_scan(raw_url, tier=tier, answers=answers)
             self._send_json(result)
         except Exception as e:
             self._send_json({"error": f"Scan failed: {str(e)}"}, 500)
