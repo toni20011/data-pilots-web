@@ -884,6 +884,12 @@
   .byline-name { font-size: 13px; font-weight: 700; color: var(--slate-800); }
   .byline-role { font-size: 11.5px; color: var(--slate-400); }
 
+  /* early access two-tier grid */
+  .early-access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 680px) {
+    .early-access-grid { grid-template-columns: 1fr; }
+  }
+
   /* trust marks */
   .trust-marks { display: flex; flex-wrap: wrap; gap: 12px; }
   .trust-mark {
@@ -2786,10 +2792,10 @@
       <div class="results-kicker">Audit &nbsp;·&nbsp; Assess &nbsp;·&nbsp; Act</div>
       <h2 class="results-h2">
         Trust Snapshot gives you the <span>big picture.</span><br>
-        Trust Deep Check gives you the full picture and how to fix it.
+        Trust Check gives you the full picture and how to fix it.
       </h2>
       <p class="results-sub">
-        Your Trust Snapshot scans your <strong>public-facing website</strong> and shows where you stand across four trust areas — no jargon, no 40-page PDFs. Upgrade to Co-Pilot for the Trust Deep Check: every finding, step-by-step fix guides, and a trust proof PDF for proposals.
+        Your Trust Snapshot scans your <strong>public-facing website</strong> and shows where you stand across four trust areas — no jargon, no 40-page PDFs. Upgrade to Trust Navigator for the Trust Check: every finding, step-by-step fix guides, and a trust proof PDF for proposals.
       </p>
     </div>
 
@@ -2875,7 +2881,7 @@
 
           <div class="free-note">
             <svg class="icon" width="15" height="15"><use href="#i-info"/></svg>
-            <span>You now know your gaps. <strong>Co-Pilot</strong> gives you the complete picture — every finding with step-by-step fix instructions you can hand straight to your developer or legal adviser — plus a trust proof PDF ready for proposals.</span>
+            <span>You now know your gaps. <strong>Trust Navigator</strong> gives you the complete picture — every finding with step-by-step fix instructions you can hand straight to your developer or legal adviser — plus a trust proof PDF ready for proposals.</span>
           </div>
         </div>
       </div>
@@ -2884,10 +2890,10 @@
       <div class="report-panel reveal reveal-delay-2">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Trust Deep Check</div>
-            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Co-Pilot</div>
+            <div class="panel-title">Trust Check</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Trust Navigator</div>
           </div>
-          <div class="panel-status status-paid">Co-Pilot</div>
+          <div class="panel-status status-paid">Trust Navigator</div>
         </div>
         <div class="panel-body">
 
@@ -2927,7 +2933,7 @@
           </div>
 
           <div class="paid-extras">
-            <p>Co-Pilot also includes: <strong>exportable trust proof PDF</strong> for proposals, monthly re-scans, and task-ready instructions your developer or legal adviser can pick up directly.</p>
+            <p>Trust Navigator also includes: <strong>exportable trust proof PDF</strong> for proposals, monthly re-scans, and task-ready instructions your developer or legal adviser can pick up directly.</p>
             <a href="#pricing" class="btn btn-teal" style="padding:9px 16px;font-size:12.5px;flex-shrink:0;">See Pricing</a>
           </div>
 
@@ -3421,10 +3427,10 @@
       </details>
 
       <details class="faq-item">
-        <summary class="faq-q">What's the difference between the free check and the paid Co-Pilot?</summary>
+        <summary class="faq-q">What's the difference between the free Trust Snapshot and Trust Navigator?</summary>
         <div class="faq-a">
-          <p>The free Trust Check scans your <em>public website</em> — the face you show to buyers before they even speak to you. It covers the basics that get flagged in procurement: security, privacy docs, consent behaviour, transparency signals.</p>
-          <p>The paid Co-Pilot goes deeper: your learning portal, your platform integrations, your contracts and DPAs. It also includes human-led guidance, ongoing monitoring, and a Trust Check-In call where we walk through findings with your team and give you a clear action roadmap. It's the difference between a self-test and having an expert on your side.</p>
+          <p>The free <strong>Trust Snapshot</strong> is a high-level audit of your public-facing website — the face you show to buyers before they even speak to you. It covers the signals that get flagged in procurement (security, privacy docs, consent behaviour, transparency) and gives you a score across four trust pillars, plus your top three priority fixes. No account needed, takes about five minutes.</p>
+          <p><strong>Trust Navigator</strong> is the full platform. It includes a complete Trust Check — a deeper audit and assessment that goes beyond your public site — plus step-by-step fix guides written for every person who needs to act (owner, developer, legal), a trust proof PDF you can put straight into proposals and RFPs, a dashboard to track your score over time, and monthly re-scans so you always know where you stand.</p>
         </div>
       </details>
 
@@ -3460,7 +3466,7 @@
       <details class="faq-item">
         <summary class="faq-q">Can I share my trust report with prospects?</summary>
         <div class="faq-a">
-          <p>Yes — that's one of the most popular uses. Co-Pilot includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
+          <p>Yes — that's one of the most popular uses. Trust Navigator includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
         </div>
       </details>
 
@@ -3475,7 +3481,7 @@
     <div class="pricing-header reveal">
       <div class="pricing-kicker">Pricing</div>
       <h2 class="pricing-h2">Start free.<br>Scale when it matters.</h2>
-      <p class="pricing-sub">The free scan tells you where you're losing deals. Co-Pilot tells you exactly how to fix it — with the right language for every person who needs to act, and a trust proof document you can put in front of enterprise clients today.</p>
+      <p class="pricing-sub">The free Trust Snapshot shows you where you're losing deals. Trust Navigator gives you the full picture — a complete Trust Check, step-by-step fix guides, a trust proof PDF for proposals, and a dashboard to track your progress. Launching at $99/month — early adopters lock in $29 for life.</p>
     </div>
 
     <div class="plans-grid">
@@ -3506,26 +3512,28 @@
 
       <!-- Pro -->
       <div class="plan pro reveal reveal-delay-2">
-        <div class="plan-badge">Most Popular</div>
-        <div class="plan-tier">Co-Pilot</div>
+        <div class="plan-badge">Early Adopter Rate</div>
+        <div class="plan-tier">Trust Navigator</div>
         <div class="plan-price-row">
           <div class="plan-price">$29</div>
           <div class="plan-period"> /month</div>
         </div>
+        <p style="font-size:12px;color:rgba(255,255,255,.45);margin:-4px 0 14px;"><s style="color:rgba(255,255,255,.3);">$99/month</s> — early adopter rate, locked in for life</p>
         <p class="plan-tagline">From knowing your gaps to fixing them — and proving it to enterprise clients.</p>
         <ul class="plan-feats">
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Trust Snapshot</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust Deep Check — deeper scan + every finding with fix guides</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Full Trust Check — complete audit, assessment &amp; every finding</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Step-by-step fix guides for owner, developer &amp; legal</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF — designed to go into proposals &amp; RFPs</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Delegate findings across buyer, exec &amp; expert views</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan — track your progress over time</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust dashboard — track your score over time</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan to track progress</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> AI quick win suggestions powered by Papaya</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Priority support</li>
         </ul>
-        <a href="#hero-scan" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
-          Get My Full Roadmap
+        <a href="#proof" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
+          Join the waitlist — lock in $29
         </a>
-        <p class="plan-foot">Cancel any time. No tricks, no annual lock-in.</p>
+        <p class="plan-foot">Early adopter rate locked in for life. Cancel any time.</p>
       </div>
 
     </div>
@@ -3544,26 +3552,53 @@
 
     <div class="proof-top reveal">
       <div>
-        <div class="proof-kicker">Co-Pilot Early Access</div>
-        <h2 class="proof-h2">Get in before<br>public launch — <em>founder pricing</em></h2>
+        <div class="proof-kicker">Trust Navigator — Early Access</div>
+        <h2 class="proof-h2">Two ways to get in<br>before public launch</h2>
       </div>
       <p class="proof-right">
-        Co-Pilot is still in beta. We're inviting a small group of L&amp;D founders to try the full product first, help shape what it becomes, and lock in their rate before we open to everyone.
+        Trust Navigator launches publicly at $99/month. Right now, there are two ways to get in early — as a founder or on the waitlist. Both lock in a rate you'll never pay again.
       </p>
     </div>
 
-    <div class="testi-featured reveal">
-      <div class="testi-grid testi-early-access" style="background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.18);border-radius:16px;padding:32px 36px;text-align:center;">
-        <p style="font-size:18px;line-height:1.7;color:rgba(255,255,255,.88);max-width:600px;margin:0 auto 20px;font-family:var(--font-display);font-weight:400;">
-          Co-Pilot gives you the full fix roadmap, team-ready instructions, and a trust proof PDF you can put straight into proposals. Early access members lock in their rate — for as long as they stay.
+    <div class="testi-featured early-access-grid reveal">
+
+      <!-- Tier 1: Founder cohort -->
+      <div style="background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.22);border-radius:16px;padding:32px 30px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,200,168,.15);color:var(--teal);padding:4px 10px;border-radius:20px;">Founder cohort</span>
+          <span style="font-size:11px;color:rgba(255,255,255,.4);">Limited spots</span>
+        </div>
+        <div>
+          <div style="font-size:2rem;font-weight:900;color:var(--white);line-height:1;">Free</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;">for the founding cohort period</div>
+        </div>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
+          We're working hands-on with a small group of L&amp;D founders to shape Trust Navigator. You get full access at no cost — in exchange for honest feedback that helps us build the right product.
         </p>
-        <p style="font-size:14px;color:rgba(255,255,255,.55);margin-bottom:24px;">
-          First cohort is small. Take your free Trust Snapshot above to see your score, then apply to unlock the full Co-Pilot experience.
-        </p>
-        <a href="mailto:team@datapilots.tech?subject=Co-Pilot Early Access" class="btn btn-teal" style="font-size:14px;padding:12px 24px;display:inline-flex;width:auto;">
-          Apply for Co-Pilot early access
+        <a href="mailto:team@datapilots.tech?subject=Founder Cohort Application" class="btn btn-teal" style="font-size:14px;padding:12px 20px;justify-content:center;">
+          Apply for the founder cohort
         </a>
+        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">We'll review your application and be in touch within 48 hours.</p>
       </div>
+
+      <!-- Tier 2: Waitlist -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:32px 30px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:4px 10px;border-radius:20px;">Early adopter waitlist</span>
+        </div>
+        <div>
+          <div style="font-size:2rem;font-weight:900;color:var(--white);line-height:1;">$29<span style="font-size:1rem;font-weight:400;color:rgba(255,255,255,.4);">/mo</span></div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;"><s style="color:rgba(255,255,255,.25);">$99/month</s> — locked in for life when you join</div>
+        </div>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
+          Not ready to apply for the cohort? Join the waitlist with no obligation. When Trust Navigator opens, you'll get first access at the early adopter rate — $29/month, locked in for as long as you stay.
+        </p>
+        <a href="mailto:team@datapilots.tech?subject=Trust Navigator Waitlist" class="btn btn-ghost" style="font-size:14px;padding:12px 20px;justify-content:center;">
+          Join the waitlist — no obligation
+        </a>
+        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">No card needed. We'll notify you when spots open.</p>
+      </div>
+
     </div>
 
     <!-- Trust marks -->
@@ -4212,7 +4247,7 @@
       compliance_context: 'With clients across multiple regions, the strictest frame applies: EU GDPR sets the baseline, plus US state privacy laws (CCPA, VCDPA, CPA) depending on data volume and revenue. Your privacy page should work for both EU and US audiences.',
       note: isPreview
         ? `This is an illustrative preview using typical findings for an L&D website. Run the check locally with the Data Pilots API for your actual ${domain} results.`
-        : 'Free check covers your public-facing website. Upgrade to Co-Pilot to scan your learning portal/platform and unlock full fix guides.'
+        : 'Free check covers your public-facing website. Upgrade to Trust Navigator to scan your learning portal/platform and unlock full fix guides.'
     };
   }
 
@@ -4319,7 +4354,7 @@
             Want to save these results?
           </strong>
           Your free scan for <strong style="color:rgba(255,255,255,.85);">${scannedDomain}</strong>
-          is stored in your browser for ${expiresIn}. Create a Co-Pilot account to save it permanently,
+          is stored in your browser for ${expiresIn}. Create a Trust Navigator account to save it permanently,
           get full fix instructions, and track your progress over time.
           <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
             <a href="#pricing" onclick="document.getElementById('dp-save-prompt').dataset.intent='save'"
@@ -4603,7 +4638,7 @@
 
   <!-- Next step -->
   <div style="margin-top:24px;padding:16px 18px;background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px">
-    <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px">Next step: Co-Pilot — Treat &amp; Strengthen</div>
+    <div style="font-size:12px;font-weight:700;color:#065F46;margin-bottom:5px">Next step: Trust Navigator — Treat &amp; Strengthen</div>
     <div style="font-size:12px;color:#047857;line-height:1.55">Every finding with exact fix instructions for your owner, developer, and compliance team. Plus a Trust Proof PDF for proposals and monthly re-scans to track progress.</div>
   </div>
 
@@ -4943,9 +4978,9 @@
 
     <div class="ro-upgrade">
       <div class="ro-upgrade-title">Ready to treat and strengthen?</div>
-      <p class="ro-upgrade-sub">Co-Pilot gives you every finding with step-by-step fix guides, a trust proof PDF for proposals, and monthly re-scans to track progress.</p>
+      <p class="ro-upgrade-sub">Trust Navigator gives you every finding with step-by-step fix guides, a trust proof PDF for proposals, and monthly re-scans to track progress.</p>
       <div class="ro-upgrade-actions">
-        <a href="#pricing" class="btn btn-teal" onclick="closeResultsOverlay()" style="padding:12px 26px;">See Co-Pilot →</a>
+        <a href="#pricing" class="btn btn-teal" onclick="closeResultsOverlay()" style="padding:12px 26px;">See Trust Navigator →</a>
         <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:11px 20px;font-size:13px;">
           <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
           Book a 20-min call
