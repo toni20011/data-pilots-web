@@ -2714,39 +2714,6 @@
   </div>
 </section>
 
-<!-- ════════════ BEFORE / AFTER ════════════ -->
-<section id="difference">
-  <div class="container">
-
-    <div class="diff-header reveal">
-      <div class="diff-kicker">The difference</div>
-      <h2 class="diff-h2">What Changes When You Know Your Trust Score</h2>
-    </div>
-
-    <div class="diff-grid reveal">
-      <div class="diff-col diff-without">
-        <div class="diff-col-title">Without Data Pilots</div>
-        <ul class="diff-list">
-          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Prospects ghost after checking your site</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Procurement asks questions you can't answer</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> You guess what's wrong and hope for the best</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-x"/></svg> Trust issues stay invisible until it's too late</li>
-        </ul>
-      </div>
-      <div class="diff-col diff-with">
-        <div class="diff-col-title">With Data Pilots</div>
-        <ul class="diff-list">
-          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> Your site signals credibility before the first call</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> You hand procurement a trust report that says yes</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> You get a ranked fix list you can delegate in minutes</li>
-          <li><svg class="icon" width="16" height="16"><use href="#i-check"/></svg> Hidden gaps surface early so you fix them fast</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <!-- ════════════ STATS BAND ════════════ -->
 <section id="stats">
   <div class="stats-layout">
@@ -3216,121 +3183,6 @@
 
     </div>
 
-    <!-- Integration voting -->
-    <div class="int-section reveal">
-      <div class="int-header">
-        <div>
-          <div class="int-hed">Help us build to fit your day-to-day</div>
-          <p class="int-sub">We are building integrations that slot into the tools you already use. Vote for the ones that would genuinely help you, and we will build them first.</p>
-        </div>
-        <a href="#pricing" class="btn btn-teal" style="flex-shrink:0;padding:11px 20px;font-size:13.5px;">
-          Get early access
-        </a>
-      </div>
-
-      <div class="int-grid" id="intGrid">
-        <div class="int-item" data-tool="Zapier" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:16px;font-weight:800;color:#FF4A00;">Z</div>
-          <div class="int-name">Zapier</div>
-          <div class="int-vote-count" id="v-zapier">14 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-        <div class="int-item" data-tool="HubSpot" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:18px;font-weight:800;color:#FF7A59;">H</div>
-          <div class="int-name">HubSpot</div>
-          <div class="int-vote-count" id="v-hubspot">11 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-        <div class="int-item" data-tool="Slack" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:16px;font-weight:800;color:#4A154B;">S</div>
-          <div class="int-name">Slack</div>
-          <div class="int-vote-count" id="v-slack">9 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-        <div class="int-item" data-tool="Notion" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:18px;font-weight:800;color:#000;">N</div>
-          <div class="int-name">Notion</div>
-          <div class="int-vote-count" id="v-notion">7 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-        <div class="int-item" data-tool="Calendly" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:18px;font-weight:800;color:#006BFF;">C</div>
-          <div class="int-name">Calendly</div>
-          <div class="int-vote-count" id="v-calendly">8 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-        <div class="int-item" data-tool="Sheets" onclick="voteInt(this)">
-          <div class="int-logo" style="font-size:18px;font-weight:800;color:#34A853;">G</div>
-          <div class="int-name">Google Sheets</div>
-          <div class="int-vote-count" id="v-sheets">6 votes</div>
-          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
-        </div>
-      </div>
-
-      <div class="int-submit-row">
-        <div class="int-item int-other" style="flex:1;max-width:340px;">
-          <svg class="icon" width="14" height="14" style="color:var(--slate-400);flex-shrink:0;"><use href="#i-search"/></svg>
-          <input type="text" id="otherTool" placeholder="Suggest a tool we should add..."/>
-        </div>
-        <button class="btn btn-green" style="padding:11px 20px;font-size:13.5px;" onclick="submitOther()">
-          <svg class="icon" width="14" height="14"><use href="#i-thumb"/></svg>
-          Vote
-        </button>
-        <p class="int-submit-note" id="intMsg"></p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ════════════ FRAMEWORK TEASER ════════════ -->
-<section id="framework-teaser">
-  <div class="container">
-    <div class="fw-inner reveal">
-
-      <div>
-        <div class="fw-kicker">Built for Business</div>
-        <h2 class="fw-h2">For the business and the team behind it.</h2>
-        <p class="fw-sub">Most tools give you a scorecard or a checklist. Neither tells the whole story, and neither is written for the person running the business. We give you one clear picture of what your site actually signals to buyers and regulators — and everything your team needs to act on it, without you having to translate.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
-          <a href="framework.html" class="btn btn-teal" style="padding:13px 24px;font-size:14.5px;">
-            See how our checks work
-            <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="fw-layers">
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(0,200,168,.15);color:var(--teal);">
-            <svg class="icon" width="16" height="16"><use href="#i-users"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Buyer &amp; Client View</div>
-            <div class="fw-layer-sub">See exactly what your buyers and enterprise clients see — the trust signals that win or lose deals before you ever speak</div>
-          </div>
-        </div>
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(16,185,129,.12);color:var(--green);">
-            <svg class="icon" width="16" height="16"><use href="#i-layers"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Executive Visibility</div>
-            <div class="fw-layer-sub">Leadership gets a business-friendly risk picture — one score, clear priorities, no jargon — so decisions can be made fast</div>
-          </div>
-        </div>
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(139,92,246,.12);color:#A78BFA;">
-            <svg class="icon" width="16" height="16"><use href="#i-award"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Expert Translation</div>
-            <div class="fw-layer-sub">Findings are translated into what your legal, dev, and compliance teams need — so you can delegate without becoming the expert</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
   </div>
 </section>
 
@@ -3370,6 +3222,48 @@
         <div class="wdp-card-desc">You don't need SOC 2 today. You need to pass the check already in front of you — and build the foundation so when formal certifications become the next step, you're already most of the way there.</div>
       </div>
 
+    </div>
+
+    <!-- Three-layer view: what the results mean for each stakeholder -->
+    <div class="fw-inner reveal" style="margin-top:48px;">
+      <div>
+        <div class="fw-kicker">One report. Every perspective.</div>
+        <h3 class="fw-h2" style="font-size:clamp(20px,2.5vw,30px);">Built for the business<br>and the team behind it.</h3>
+        <p class="fw-sub">We give you one clear picture of what your site actually signals — and everything your team needs to act on it, without you having to translate.</p>
+        <a href="framework.html" class="btn btn-teal" style="padding:12px 22px;font-size:14px;margin-top:8px;">
+          See how our checks work
+          <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
+        </a>
+      </div>
+      <div class="fw-layers">
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(0,200,168,.15);color:var(--teal);">
+            <svg class="icon" width="16" height="16"><use href="#i-users"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Buyer &amp; Client View</div>
+            <div class="fw-layer-sub">See exactly what your buyers and enterprise clients see — the trust signals that win or lose deals before you ever speak</div>
+          </div>
+        </div>
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(16,185,129,.12);color:var(--green);">
+            <svg class="icon" width="16" height="16"><use href="#i-layers"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Executive Visibility</div>
+            <div class="fw-layer-sub">Leadership gets a business-friendly risk picture — one score, clear priorities, no jargon — so decisions can be made fast</div>
+          </div>
+        </div>
+        <div class="fw-layer">
+          <div class="fw-layer-badge" style="background:rgba(139,92,246,.12);color:#A78BFA;">
+            <svg class="icon" width="16" height="16"><use href="#i-award"/></svg>
+          </div>
+          <div>
+            <div class="fw-layer-title">Expert Translation</div>
+            <div class="fw-layer-sub">Findings are translated into what your legal, dev, and compliance teams need — so you can delegate without becoming the expert</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="wdp-statement reveal">
@@ -3633,6 +3527,74 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- ════════════ INTEGRATIONS ════════════ -->
+<section id="integrations" style="padding:72px 0;background:var(--slate-50);">
+  <div class="container">
+    <div class="int-section reveal">
+      <div class="int-header">
+        <div>
+          <div class="int-hed">Help us build to fit your day-to-day</div>
+          <p class="int-sub">We are building integrations that slot into the tools you already use. Vote for the ones that would genuinely help you, and we will build them first.</p>
+        </div>
+        <a href="#proof" class="btn btn-teal" style="flex-shrink:0;padding:11px 20px;font-size:13.5px;">
+          Join the waitlist
+        </a>
+      </div>
+
+      <div class="int-grid" id="intGrid">
+        <div class="int-item" data-tool="Zapier" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:16px;font-weight:800;color:#FF4A00;">Z</div>
+          <div class="int-name">Zapier</div>
+          <div class="int-vote-count" id="v-zapier">14 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="HubSpot" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#FF7A59;">H</div>
+          <div class="int-name">HubSpot</div>
+          <div class="int-vote-count" id="v-hubspot">11 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Slack" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:16px;font-weight:800;color:#4A154B;">S</div>
+          <div class="int-name">Slack</div>
+          <div class="int-vote-count" id="v-slack">9 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Notion" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#000;">N</div>
+          <div class="int-name">Notion</div>
+          <div class="int-vote-count" id="v-notion">7 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Calendly" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#006BFF;">C</div>
+          <div class="int-name">Calendly</div>
+          <div class="int-vote-count" id="v-calendly">8 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+        <div class="int-item" data-tool="Sheets" onclick="voteInt(this)">
+          <div class="int-logo" style="font-size:18px;font-weight:800;color:#34A853;">G</div>
+          <div class="int-name">Google Sheets</div>
+          <div class="int-vote-count" id="v-sheets">6 votes</div>
+          <div class="int-vote"><svg class="icon" width="10" height="10"><use href="#i-check"/></svg></div>
+        </div>
+      </div>
+
+      <div class="int-submit-row">
+        <div class="int-item int-other" style="flex:1;max-width:340px;">
+          <svg class="icon" width="14" height="14" style="color:var(--slate-400);flex-shrink:0;"><use href="#i-search"/></svg>
+          <input type="text" id="otherTool" placeholder="Suggest a tool we should add..."/>
+        </div>
+        <button class="btn btn-green" style="padding:11px 20px;font-size:13.5px;" onclick="submitOther()">
+          <svg class="icon" width="14" height="14"><use href="#i-thumb"/></svg>
+          Vote
+        </button>
+        <p class="int-submit-note" id="intMsg"></p>
+      </div>
+    </div>
   </div>
 </section>
 
