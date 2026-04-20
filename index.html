@@ -1357,6 +1357,29 @@
   }
   .pain-card h3 { font-size: 15px; font-weight: 700; color: var(--slate-800); margin-bottom: 8px; }
   .pain-card p { font-size: 13.5px; color: var(--slate-500); line-height: 1.65; }
+  .pain-outcome {
+    margin-top: 16px; padding: 10px 12px;
+    border-radius: 8px; border-left: 3px solid;
+    font-size: 12px; line-height: 1.55;
+  }
+  .pain-outcome-label { font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: 10px; margin-bottom: 3px; }
+  /* Peace of mind resolution panel */
+  .peace-panel {
+    margin-top: 40px; padding: 32px 36px;
+    background: var(--white); border: 1.5px solid var(--slate-200);
+    border-radius: 16px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  .peace-half { padding: 0 28px 0 0; }
+  .peace-half + .peace-half { padding: 0 0 0 28px; border-left: 1.5px solid var(--slate-200); }
+  .peace-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+  .peace-h { font-size: 15px; font-weight: 800; color: var(--slate-800); margin-bottom: 6px; }
+  .peace-p { font-size: 13px; color: var(--slate-500); line-height: 1.65; }
+  @media (max-width: 680px) {
+    .peace-panel { grid-template-columns: 1fr; }
+    .peace-half { padding: 0 0 20px 0; }
+    .peace-half + .peace-half { padding: 20px 0 0 0; border-left: none; border-top: 1.5px solid var(--slate-200); }
+  }
 
   /* ───────────────────────────────────────────
      BEFORE / AFTER
@@ -2675,26 +2698,65 @@
     </div>
 
     <div class="pain-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-      <div class="pain-card reveal reveal-delay-1">
-        <div class="pain-icon" style="color:#EF4444;">
+
+      <!-- Card 1: Red — Stop risk -->
+      <div class="pain-card reveal reveal-delay-1" style="border-color:rgba(239,68,68,.2);">
+        <div class="pain-icon" style="color:#EF4444;background:rgba(239,68,68,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-shield"/></svg>
         </div>
         <h3>Making you an easy target for a complaint or claim</h3>
         <p>Missing policies, unclear data handling, cookie consent that doesn't comply — these are exactly what enforcement bodies and claimants look for first. You probably haven't had a complaint. That's not the same as being in the clear.</p>
+        <div class="pain-outcome" style="background:rgba(239,68,68,.05);border-color:#EF4444;">
+          <div class="pain-outcome-label" style="color:#EF4444;">🔴 Without action</div>
+          A complaint, enforcement notice, or legal claim that could disrupt or shut down your business entirely.
+        </div>
       </div>
-      <div class="pain-card reveal reveal-delay-2">
-        <div class="pain-icon" style="color:#F59E0B;">
+
+      <!-- Card 2: Orange — Block risk -->
+      <div class="pain-card reveal reveal-delay-2" style="border-color:rgba(249,115,22,.2);">
+        <div class="pain-icon" style="color:#F97316;background:rgba(249,115,22,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-users"/></svg>
         </div>
         <h3>Making you look like a liability to corporate clients</h3>
         <p>Corporate clients don't just buy your content — they vet your business. A procurement team checking your site for vendor risk will find the same gaps a regulator would. Once you're flagged, the door closes — often without explanation.</p>
+        <div class="pain-outcome" style="background:rgba(249,115,22,.05);border-color:#F97316;">
+          <div class="pain-outcome-label" style="color:#F97316;">🟠 Without action</div>
+          Due diligence fails, the contract goes elsewhere, and the opportunity is gone before you know it was at risk.
+        </div>
       </div>
-      <div class="pain-card reveal reveal-delay-1">
-        <div class="pain-icon" style="color:var(--teal);">
+
+      <!-- Card 3: Yellow — Slow risk -->
+      <div class="pain-card reveal reveal-delay-1" style="border-color:rgba(234,179,8,.25);">
+        <div class="pain-icon" style="color:#CA8A04;background:rgba(234,179,8,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-eye"/></svg>
         </div>
         <h3>Turning potential clients away — silently</h3>
         <p>Before anyone runs a formal check, buyers make a gut call from what they see. An unclear privacy page, cookie consent that feels off, no security signals — something gives them pause. They move on quietly. You never find out why.</p>
+        <div class="pain-outcome" style="background:rgba(234,179,8,.06);border-color:#EAB308;">
+          <div class="pain-outcome-label" style="color:#CA8A04;">🟡 Without action</div>
+          A steady, invisible drain on leads and growth — friction and doubt that slow your pipeline without ever showing up clearly.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Peace of mind resolution -->
+    <div class="peace-panel reveal">
+      <div class="peace-half">
+        <div class="peace-label" style="color:var(--teal);">Immediate peace of mind</div>
+        <div class="peace-h">Know exactly where you stand — right now</div>
+        <p class="peace-p">The free Trust Snapshot gives you instant visibility. In five minutes you'll know whether any of these risks apply to you. Most things are either fine, or fixable. Either way, you're no longer guessing.</p>
+        <a href="#hero-scan" class="btn btn-green" style="margin-top:14px;padding:11px 20px;font-size:13.5px;">
+          Take your Trust Snapshot — Free
+        </a>
+      </div>
+      <div class="peace-half">
+        <div class="peace-label" style="color:rgba(30,41,59,.4);">Lasting peace of mind</div>
+        <div class="peace-h">Take action — and keep your team aligned</div>
+        <p class="peace-p">Trust Navigator gives you the fix plan, team-ready instructions, and a dashboard to track progress. Not just awareness — action. So the issues stay resolved, your team knows what to do, and you're building a business that enterprise clients trust long-term.</p>
+        <a href="#proof" class="btn btn-ghost" style="margin-top:14px;padding:10px 20px;font-size:13.5px;color:var(--slate-600);border-color:var(--slate-300);">
+          Learn about Trust Navigator
+        </a>
       </div>
     </div>
 
