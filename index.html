@@ -5079,6 +5079,15 @@
   `;
   document.head.appendChild(style);
 
+  // ── Join Community from results overlay ──────────
+  function joinCommunityFromResults() {
+    closeResultsOverlay();
+    setTimeout(function() {
+      const target = document.getElementById('community-signup');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 350);
+  }
+
   // ── Community signup form ─────────────────────────
   const communityForm = document.getElementById('communityForm');
   if (communityForm) {
@@ -5211,31 +5220,50 @@
           <div class="ro-method-label">
             <span class="ro-method-num">2</span>
             <span class="ro-method-name">Treat</span>
-            <span class="ro-method-tier paid">CO-PILOT</span>
+            <span class="ro-method-tier paid">TRUST NAVIGATOR HUB</span>
           </div>
-          <p>Every finding comes with exact fix instructions — plain language for your business owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap, every person has their part.</p>
+          <p>Every finding comes with exact fix instructions — plain language for you as the owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap, every person has their part.</p>
         </div>
         <div class="ro-method-step">
           <div class="ro-method-label">
             <span class="ro-method-num">3</span>
             <span class="ro-method-name">Strengthen</span>
-            <span class="ro-method-tier paid">CO-PILOT</span>
+            <span class="ro-method-tier paid">TRUST NAVIGATOR HUB</span>
           </div>
-          <p>Export a trust proof PDF for proposals and procurement. Re-scan monthly to track your progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</p>
+          <p>Export a trust proof PDF for proposals and procurement. Re-scan monthly to track progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</p>
         </div>
       </div>
     </div>
 
+    <!-- Next steps: Community first, Hub second -->
     <div class="ro-upgrade">
-      <div class="ro-upgrade-title">Ready to treat and strengthen?</div>
-      <p class="ro-upgrade-sub">Trust Navigator gives you deeper insights across your public site, learner portal, platform, and client-facing tools — so sales, procurement, and onboarding with corporate clients moves faster. Every finding with fix guides and a trust proof PDF.</p>
-      <div class="ro-upgrade-actions">
-        <a href="#pricing" class="btn btn-teal" onclick="closeResultsOverlay()" style="padding:12px 26px;">See Trust Navigator →</a>
-        <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:11px 20px;font-size:13px;">
-          <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
-          Book a 20-min call
-        </a>
+
+      <!-- Step 1: Join Community -->
+      <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:24px;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px;">Your next step</div>
+        <div class="ro-upgrade-title" style="margin-bottom:8px;">Save your results — join Community free</div>
+        <p class="ro-upgrade-sub" style="margin-bottom:18px;">Your results are only visible to you right now. Join Community to save them, access guides, and stay connected as Trust Navigator Hub develops. Free, no card, takes 30 seconds.</p>
+        <button onclick="joinCommunityFromResults()" class="btn btn-teal" style="padding:13px 28px;font-size:15px;font-weight:700;">
+          Join Community free — save my results
+        </button>
       </div>
+
+      <!-- Step 2: Trust Navigator Hub -->
+      <div style="text-align:center;">
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.35);margin-bottom:10px;">When you're ready to go deeper</div>
+        <div style="font-size:16px;font-weight:800;color:var(--white);margin-bottom:8px;">Trust Navigator Hub</div>
+        <p class="ro-upgrade-sub" style="margin-bottom:16px;">Full audit across your public site, learner portal, platform, and client-facing tools. Fix guides for your whole team. Dashboard to track progress and stay green.</p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+          <button onclick="joinCommunityFromResults()" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">
+            Express interest via Community
+          </button>
+          <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:10px 20px;font-size:13px;">
+            <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
+            Book a 20-min call
+          </a>
+        </div>
+      </div>
+
     </div>
 
   </div>
