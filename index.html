@@ -2709,40 +2709,56 @@
 
     <div class="pain-grid" style="grid-template-columns: 1fr 1fr 1fr;">
 
-      <!-- Card 1: Red — Stop risk -->
-      <div class="pain-card reveal reveal-delay-1" style="border-color:rgba(239,68,68,.2);">
-        <div class="pain-icon" style="color:#EF4444;background:rgba(239,68,68,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <svg class="icon" width="20" height="20"><use href="#i-shield"/></svg>
+      <!-- Card 1: Red — Stop risk (target icon) -->
+      <div class="pain-card reveal reveal-delay-1" style="border:2px solid rgba(239,68,68,.45);box-shadow:0 2px 16px rgba(239,68,68,.07);">
+        <div class="pain-icon" style="color:#EF4444;background:rgba(239,68,68,.1);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <!-- Target / bullseye — you're in the crosshairs -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="6"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
+          </svg>
         </div>
-        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Making you an easy target for a complaint or claim</h3>
+        <h3><span class="trust-breaking" style="font-size:.78em;display:block;margin-bottom:4px;">Trust gaps are…</span>Making you an easy target for a complaint or claim</h3>
         <p>Missing policies, unclear data handling, cookie consent that doesn't comply — these are exactly what enforcement bodies and claimants look for first. You probably haven't had a complaint. That's not the same as being in the clear.</p>
-        <div class="pain-outcome" style="background:rgba(239,68,68,.05);border-color:#EF4444;">
+        <div class="pain-outcome" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.6);">
           <div class="pain-outcome-label" style="color:#EF4444;">🔴 Without action</div>
           A complaint, enforcement notice, or legal claim that could disrupt or shut down your business entirely.
         </div>
       </div>
 
-      <!-- Card 2: Orange — Block risk -->
-      <div class="pain-card reveal reveal-delay-2" style="border-color:rgba(249,115,22,.2);">
-        <div class="pain-icon" style="color:#F97316;background:rgba(249,115,22,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <svg class="icon" width="20" height="20"><use href="#i-users"/></svg>
+      <!-- Card 2: Orange — Block risk (warning triangle icon) -->
+      <div class="pain-card reveal reveal-delay-2" style="border:2px solid rgba(249,115,22,.45);box-shadow:0 2px 16px rgba(249,115,22,.07);">
+        <div class="pain-icon" style="color:#F97316;background:rgba(249,115,22,.1);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <!-- Warning / caution triangle -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
         </div>
-        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Making you look like a liability to corporate clients</h3>
+        <h3><span class="trust-breaking" style="font-size:.78em;display:block;margin-bottom:4px;">Trust gaps are…</span>Making you look like a liability to corporate clients</h3>
         <p>Corporate clients don't just buy your content — they vet your business. A procurement team checking your site for vendor risk will find the same gaps a regulator would. Once you're flagged, the door closes — often without explanation.</p>
-        <div class="pain-outcome" style="background:rgba(249,115,22,.05);border-color:#F97316;">
+        <div class="pain-outcome" style="background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.6);">
           <div class="pain-outcome-label" style="color:#F97316;">🟠 Without action</div>
           Due diligence fails, the contract goes elsewhere, and the opportunity is gone before you know it was at risk.
         </div>
       </div>
 
-      <!-- Card 3: Yellow — Slow risk -->
-      <div class="pain-card reveal reveal-delay-1" style="border-color:rgba(234,179,8,.25);">
-        <div class="pain-icon" style="color:#CA8A04;background:rgba(234,179,8,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
-          <svg class="icon" width="20" height="20"><use href="#i-eye"/></svg>
+      <!-- Card 3: Yellow — Slow risk (traffic light icon) -->
+      <div class="pain-card reveal reveal-delay-1" style="border:2px solid rgba(234,179,8,.5);box-shadow:0 2px 16px rgba(234,179,8,.07);">
+        <div class="pain-icon" style="color:#CA8A04;background:rgba(234,179,8,.1);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <!-- Traffic light — slowing you down -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="2" width="12" height="20" rx="6"/>
+            <circle cx="12" cy="7" r="1.8" fill="currentColor" stroke="none" opacity=".35"/>
+            <circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"/>
+            <circle cx="12" cy="17" r="1.8" fill="currentColor" stroke="none" opacity=".35"/>
+          </svg>
         </div>
-        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Turning potential clients away — silently</h3>
+        <h3><span class="trust-breaking" style="font-size:.78em;display:block;margin-bottom:4px;">Trust gaps are…</span>Turning potential clients away — silently</h3>
         <p>Before anyone runs a formal check, buyers make a gut call from what they see. An unclear privacy page, cookie consent that feels off, no security signals — something gives them pause. They move on quietly. You never find out why.</p>
-        <div class="pain-outcome" style="background:rgba(234,179,8,.06);border-color:#EAB308;">
+        <div class="pain-outcome" style="background:rgba(234,179,8,.07);border-color:rgba(234,179,8,.6);">
           <div class="pain-outcome-label" style="color:#CA8A04;">🟡 Without action</div>
           A steady, invisible drain on leads and growth — friction and doubt that slow your pipeline without ever showing up clearly.
         </div>
