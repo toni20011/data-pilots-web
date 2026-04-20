@@ -208,7 +208,6 @@
     font-size: 15px; font-weight: 800; letter-spacing: .1em;
     text-transform: uppercase; color: var(--white);
   }
-  .logo-wordmark span { color: var(--teal); }
   nav ul { display: flex; align-items: center; gap: 28px; list-style: none; }
   nav ul a {
     font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.5);
@@ -2158,7 +2157,6 @@
     <div class="nav-inner">
 
       <a href="/" class="logo">
-        <!-- Logo mark SVG — matching original: white face, circular eyes, open friendly -->
         <svg width="38" height="38" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
           <defs>
             <linearGradient id="nav-lg" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse">
@@ -2167,7 +2165,7 @@
               <stop offset="100%" stop-color="#00AAFF"/>
             </linearGradient>
           </defs>
-          <!-- Headset band arc (over the top) -->
+          <!-- Headset band arc -->
           <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#nav-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
           <!-- Left ear cup -->
           <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
@@ -2175,20 +2173,20 @@
           <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
           <!-- Gradient ring -->
           <circle cx="100" cy="112" r="76" stroke="url(#nav-lg)" stroke-width="12" fill="none"/>
-          <!-- White face plate -->
-          <circle cx="100" cy="112" r="69" fill="white"/>
+          <!-- Face plate — dark fill so background shows, no white blob -->
+          <circle cx="100" cy="112" r="63" fill="#0B1929"/>
           <!-- Left eye -->
-          <circle cx="76" cy="90" r="14" fill="url(#nav-lg)"/>
+          <circle cx="78" cy="96" r="12" fill="url(#nav-lg)"/>
           <!-- Right eye -->
-          <circle cx="124" cy="90" r="14" fill="url(#nav-lg)"/>
+          <circle cx="122" cy="96" r="12" fill="url(#nav-lg)"/>
           <!-- Mouth bar -->
-          <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#nav-lg)"/>
+          <rect x="65" y="124" width="70" height="11" rx="5" fill="url(#nav-lg)"/>
           <!-- Mic arm -->
           <path d="M 170 135 Q 163 158 148 166" stroke="url(#nav-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
           <!-- Mic capsule -->
-          <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#nav-lg)"/>
+          <rect x="128" y="162" width="26" height="14" rx="7" fill="url(#nav-lg)"/>
         </svg>
-        <div class="logo-wordmark">DATA <span>PILOTS</span></div>
+        <div class="logo-wordmark">DATA PILOTS</div>
       </a>
 
       <ul>
@@ -3631,15 +3629,14 @@
               <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
               <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
               <circle cx="100" cy="112" r="76" stroke="url(#ft-lg)" stroke-width="12" fill="none"/>
-              <!-- White face plate -->
-              <circle cx="100" cy="112" r="69" fill="white"/>
-              <circle cx="76" cy="90" r="14" fill="url(#ft-lg)"/>
-              <circle cx="124" cy="90" r="14" fill="url(#ft-lg)"/>
-              <rect x="62" y="122" width="76" height="13" rx="6" fill="url(#ft-lg)"/>
+              <circle cx="100" cy="112" r="63" fill="#0B1929"/>
+              <circle cx="78" cy="96" r="12" fill="url(#ft-lg)"/>
+              <circle cx="122" cy="96" r="12" fill="url(#ft-lg)"/>
+              <rect x="65" y="124" width="70" height="11" rx="5" fill="url(#ft-lg)"/>
               <path d="M 170 135 Q 163 158 148 166" stroke="url(#ft-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <rect x="128" y="162" width="28" height="15" rx="7" fill="url(#ft-lg)"/>
+              <rect x="128" y="162" width="26" height="14" rx="7" fill="url(#ft-lg)"/>
             </svg>
-            <div class="logo-wordmark" style="font-size:14px;">DATA <span>PILOTS</span></div>
+            <div class="logo-wordmark" style="font-size:14px;">DATA PILOTS</div>
           </a>
           <p class="footer-blurb">Helping L&D businesses show up as trustworthy, so the best work wins the deal.</p>
           <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);">
