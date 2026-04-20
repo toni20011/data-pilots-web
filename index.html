@@ -260,6 +260,16 @@
   }
   .hero-h1 .teal { color: var(--teal); }
   .hero-h1 .light { color: rgba(255,255,255,.42); font-weight: 400; font-style: italic; }
+  /* Building vs breaking trust visual treatment */
+  .trust-building {
+    color: #4ADE80;
+    font-style: italic;
+  }
+  .trust-breaking {
+    color: #F87171;
+    font-style: italic;
+  }
+  .pain-kicker .trust-breaking { font-style: normal; font-weight: 800; }
   .hero-h1-sub {
     font-size: clamp(17px, 2vw, 22px);
     font-weight: 500; color: rgba(255,255,255,.6);
@@ -2245,7 +2255,7 @@
         </div>
 
         <h1 class="hero-h1">
-          Is your website building trust — or breaking it?
+          Is your website <span class="trust-building">building trust</span> — or <span class="trust-breaking">breaking it?</span>
         </h1>
 
         <p class="hero-h1-sub">Your website is either working for you or quietly working against you. A trust gap can expose you to a complaint, cost you a corporate contract, or turn away clients before they ever reach out.</p>
@@ -2692,7 +2702,7 @@
   <div class="container">
 
     <div class="pain-header reveal">
-      <div class="pain-kicker">Is your website breaking trust?</div>
+      <div class="pain-kicker">Is your website <span class="trust-breaking">breaking trust?</span></div>
       <h2 class="pain-h2">A trust gap shows up in three ways — and they're all costing you.</h2>
       <p class="pain-sub">Most business owners find out about trust gaps the hard way. Here's how they tend to surface — starting with the most serious.</p>
     </div>
@@ -2704,7 +2714,7 @@
         <div class="pain-icon" style="color:#EF4444;background:rgba(239,68,68,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-shield"/></svg>
         </div>
-        <h3>Making you an easy target for a complaint or claim</h3>
+        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Making you an easy target for a complaint or claim</h3>
         <p>Missing policies, unclear data handling, cookie consent that doesn't comply — these are exactly what enforcement bodies and claimants look for first. You probably haven't had a complaint. That's not the same as being in the clear.</p>
         <div class="pain-outcome" style="background:rgba(239,68,68,.05);border-color:#EF4444;">
           <div class="pain-outcome-label" style="color:#EF4444;">🔴 Without action</div>
@@ -2717,7 +2727,7 @@
         <div class="pain-icon" style="color:#F97316;background:rgba(249,115,22,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-users"/></svg>
         </div>
-        <h3>Making you look like a liability to corporate clients</h3>
+        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Making you look like a liability to corporate clients</h3>
         <p>Corporate clients don't just buy your content — they vet your business. A procurement team checking your site for vendor risk will find the same gaps a regulator would. Once you're flagged, the door closes — often without explanation.</p>
         <div class="pain-outcome" style="background:rgba(249,115,22,.05);border-color:#F97316;">
           <div class="pain-outcome-label" style="color:#F97316;">🟠 Without action</div>
@@ -2730,7 +2740,7 @@
         <div class="pain-icon" style="color:#CA8A04;background:rgba(234,179,8,.08);border-radius:10px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">
           <svg class="icon" width="20" height="20"><use href="#i-eye"/></svg>
         </div>
-        <h3>Turning potential clients away — silently</h3>
+        <h3><span class="trust-breaking" style="font-size:.8em;display:block;margin-bottom:3px;">Breaking trust is</span>Turning potential clients away — silently</h3>
         <p>Before anyone runs a formal check, buyers make a gut call from what they see. An unclear privacy page, cookie consent that feels off, no security signals — something gives them pause. They move on quietly. You never find out why.</p>
         <div class="pain-outcome" style="background:rgba(234,179,8,.06);border-color:#EAB308;">
           <div class="pain-outcome-label" style="color:#CA8A04;">🟡 Without action</div>
@@ -2753,7 +2763,7 @@
       <div class="peace-half">
         <div class="peace-label" style="color:rgba(30,41,59,.4);">Lasting peace of mind</div>
         <div class="peace-h">Take action — and keep your team aligned</div>
-        <p class="peace-p">Trust Navigator gives you the fix plan, team-ready instructions, and a dashboard to track progress. Not just awareness — action. So the issues stay resolved, your team knows what to do, and you're building a business that enterprise clients trust long-term.</p>
+        <p class="peace-p">Trust Navigator gives you the fix plan, team-ready instructions, and a dashboard to track progress. Not just awareness — action. So the issues stay resolved, your team knows what to do, and you're <span class="trust-building" style="font-style:normal;">building</span> a business that enterprise clients trust long-term.</p>
         <a href="#proof" class="btn btn-ghost" style="margin-top:14px;padding:10px 20px;font-size:13.5px;color:var(--slate-600);border-color:var(--slate-300);">
           Learn about Trust Navigator
         </a>
