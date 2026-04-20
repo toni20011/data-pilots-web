@@ -84,7 +84,77 @@
     transition: opacity .18s var(--ease);
     z-index: 900;
   }
-  .term:hover::after { opacity: 1; }
+  .term:hover::after,
+  .term:focus::after { opacity: 1; }
+
+  /* ───────────────────────────────────────────
+     SKIP LINK (screen readers + keyboard)
+  ─────────────────────────────────────────── */
+  .skip-link {
+    position: absolute;
+    top: -100%; left: 0;
+    background: var(--navy);
+    color: var(--white);
+    padding: 12px 20px;
+    z-index: 9999;
+    border-radius: 0 0 8px 0;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: top .15s;
+  }
+  .skip-link:focus { top: 0; outline: 2px solid var(--teal); outline-offset: 0; }
+
+  /* ───────────────────────────────────────────
+     FOCUS VISIBLE — keyboard navigation
+  ─────────────────────────────────────────── */
+  :focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; border-radius: 4px; }
+
+  /* ───────────────────────────────────────────
+     PAIN CARD — expandable real example
+  ─────────────────────────────────────────── */
+  .pain-example { margin-top: 16px; }
+  .pain-example summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    user-select: none;
+    padding: 10px 0 0;
+  }
+  .pain-example summary::-webkit-details-marker { display: none; }
+  .pain-example .ex-chevron { transition: transform .2s; flex-shrink: 0; }
+  .pain-example[open] .ex-chevron { transform: rotate(180deg); }
+  .pain-example-body {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--slate-600);
+    line-height: 1.75;
+    padding: 14px;
+    background: rgba(0,0,0,.03);
+    border-radius: 8px;
+  }
+  .pain-example-body p { margin-bottom: 10px; }
+  .pain-example-body p:last-child { margin-bottom: 0; }
+  .pain-example-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .pain-example-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
 
   /* ───────────────────────────────────────────
      LOGO MARK ANIMATIONS
@@ -2104,6 +2174,8 @@
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- SVG icon symbols (hidden, referenced via <use>) -->
 <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
   <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2261,12 +2333,12 @@
 </nav>
 
 <!-- ════════════ HERO ════════════ -->
-<section id="hero">
+<section id="hero" aria-label="Hero">
   <div class="container">
     <div class="hero-inner">
 
       <!-- Copy -->
-      <div class="hero-copy">
+      <div class="hero-copy" id="main-content" tabindex="-1">
         <div class="hero-live">
           <div class="live-dot"></div>
           <span>Trust Snapshot · Free</span>
@@ -2284,7 +2356,7 @@
 
         <div class="hero-actions">
           <a href="#hero-scan" class="btn btn-teal" style="font-size:16px; padding:16px 32px;">
-            <svg class="icon" width="16" height="16"><use href="#i-search"/></svg>
+            <svg class="icon" width="16" height="16" aria-hidden="true"><use href="#i-search"/></svg>
             Take your Trust Snapshot
           </a>
           <a href="#results" class="btn btn-outline">
@@ -2335,7 +2407,7 @@
             <div class="scan-step">Step 1 — Your website</div>
             <div class="scan-title">Enter your website URL to get started</div>
             <div class="url-row">
-              <input type="url" id="scanUrl" placeholder="https://yourcoachingbusiness.com" autocomplete="off"/>
+              <input type="url" id="scanUrl" placeholder="https://yourcoachingbusiness.com" autocomplete="off" aria-label="Your website URL" aria-required="true"/>
               <button class="url-scan-btn" onclick="wizNext(1)">Next →</button>
             </div>
             <p class="scan-fine">Free · No account needed · We don't store data unless you save your results</p>
@@ -2348,7 +2420,7 @@
             <div class="scan-title">What best describes you?</div>
 
             <div class="q-group">
-              <label class="q-label">F1 — Your role</label>
+              <label class="q-label">What best describes your role?</label>
               <div class="q-radio-grid">
                 <label class="q-radio-opt"><input type="radio" name="f1" value="coach"/> Independent coach or consultant</label>
                 <label class="q-radio-opt"><input type="radio" name="f1" value="small_team"/> Small L&D team or training provider</label>
@@ -2358,7 +2430,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F2 — Who do you sell to? <span class="q-hint">tick all that apply</span></label>
+              <label class="q-label">Who do you sell to? <span class="q-hint">tick all that apply</span></label>
               <div class="q-check-grid">
                 <label class="q-check-opt"><input type="checkbox" name="f2" value="consumer"/> Consumers — individuals buying for themselves</label>
                 <label class="q-check-opt"><input type="checkbox" name="f2" value="b2b_sme"/> B2B — SMEs and mid-sized companies</label>
@@ -2381,7 +2453,7 @@
             <div class="scan-title">A few things we can't see from your site</div>
 
             <div class="q-group">
-              <label class="q-label">F3 — Do you use AI tools in your work?</label>
+              <label class="q-label">Do you use AI tools in your work?</label>
               <div class="q-radio-stack">
                 <label class="q-radio-opt"><input type="radio" name="f3" value="no"/> No, not at all</label>
                 <label class="q-radio-opt"><input type="radio" name="f3" value="own_drafts"/> Yes, but only for my own drafts and productivity</label>
@@ -2392,7 +2464,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F5 — What's the state of your privacy policy?</label>
+              <label class="q-label">What's your privacy policy situation?</label>
               <div class="q-radio-stack">
                 <label class="q-radio-opt"><input type="radio" name="f5" value="legal_current"/> Written or reviewed by a legal professional and kept current</label>
                 <label class="q-radio-opt"><input type="radio" name="f5" value="self_recent"/> I wrote it myself or used a template, reviewed in the last 12 months</label>
@@ -2413,7 +2485,7 @@
             <div class="scan-title">How are you feeling about this?</div>
 
             <div class="q-group">
-              <label class="q-label">F6 — How confident are you that your website would pass a quick buyer trust review right now?</label>
+              <label class="q-label">How confident are you that your website would pass a quick buyer trust check right now?</label>
               <div class="q-scale-row">
                 <span class="q-scale-label">Not at all</span>
                 <div class="q-scale-opts">
@@ -2428,7 +2500,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F7 — In the last 12 months, has a buyer asked unexpected questions about privacy, security, or AI?</label>
+              <label class="q-label">In the last 12 months, has a buyer asked you unexpected questions about privacy, data, security, or AI?</label>
               <div class="q-radio-stack">
                 <label class="q-radio-opt"><input type="radio" name="f7" value="yes_multiple"/> Yes, multiple times</label>
                 <label class="q-radio-opt"><input type="radio" name="f7" value="yes_once"/> Yes, once</label>
@@ -2438,7 +2510,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F8 — If you could fix one thing before your next proposal, which would it be?</label>
+              <label class="q-label">If you could fix one thing before your next proposal or sales call, what would it be?</label>
               <div class="q-radio-stack">
                 <label class="q-radio-opt"><input type="radio" name="f8" value="ux"/> How professional the site looks and feels (User Experience)</label>
                 <label class="q-radio-opt"><input type="radio" name="f8" value="transparency"/> Being clearer about my data practices (Transparency)</label>
@@ -2459,7 +2531,7 @@
             <div class="scan-title">Almost there — a little context</div>
 
             <div class="q-group">
-              <label class="q-label">F9 — Does your work involve any of these? <span class="q-hint">tick all that apply</span></label>
+              <label class="q-label">Does your work involve any of these? <span class="q-hint">tick all that apply</span></label>
               <div class="q-check-grid">
                 <label class="q-check-opt"><input type="checkbox" name="f9" value="children"/> Children or under-18s</label>
                 <label class="q-check-opt"><input type="checkbox" name="f9" value="health"/> Health, mental health, or clinical information</label>
@@ -2470,7 +2542,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F10 — Where are most of your clients based?</label>
+              <label class="q-label">Where are most of your clients based?</label>
               <div class="q-radio-grid">
                 <label class="q-radio-opt"><input type="radio" name="f10" value="us"/> Primarily United States</label>
                 <label class="q-radio-opt"><input type="radio" name="f10" value="europe"/> Primarily Europe (UK and EU)</label>
@@ -2480,7 +2552,7 @@
             </div>
 
             <div class="q-group" style="margin-top:18px;">
-              <label class="q-label">F11 — Annual business revenue (USD equivalent)</label>
+              <label class="q-label">Roughly what's your annual business revenue? (USD)</label>
               <div class="q-radio-grid">
                 <label class="q-radio-opt"><input type="radio" name="f11" value="lt1m"/> Under $1M</label>
                 <label class="q-radio-opt"><input type="radio" name="f11" value="1m_25m"/> $1M – $25M</label>
@@ -2653,9 +2725,9 @@
                 <div class="scenario-body">
                   <p class="scenario-situation">The decision-maker is ready. But legal needs to sign off and they can't find your data handling documentation. Every week of delay costs momentum.</p>
                   <div class="scenario-culprits">
-                    <span class="culprit-tag">No DPA language</span>
+                    <span class="culprit-tag term" tabindex="0" data-tip="A Data Processing Agreement — a legal document that says how you'll handle a client's employees' data. Corporate legal teams often require one before signing.">No DPA on file</span>
                     <span class="culprit-tag">Terms page missing</span>
-                    <span class="culprit-tag">GDPR not addressed</span>
+                    <span class="culprit-tag term" tabindex="0" data-tip="Europe's data privacy law. It applies to any business that works with EU clients or collects data from EU residents — even if your business is in the US.">GDPR not addressed</span>
                   </div>
                 </div>
               </div>
@@ -2668,9 +2740,9 @@
                 <div class="scenario-body">
                   <p class="scenario-situation">IT ran a quick check as part of vendor due diligence and came back with a list. Missing security headers, HSTS not set. Things that look minor but signal bigger risk to a technical reviewer.</p>
                   <div class="scenario-culprits">
-                    <span class="culprit-tag">No CSP header</span>
-                    <span class="culprit-tag">No HSTS</span>
-                    <span class="culprit-tag">Reject-all broken</span>
+                    <span class="culprit-tag term" tabindex="0" data-tip="Content Security Policy — an invisible browser setting that limits what code can run on your site. Missing it is a red flag in any IT security review.">No CSP header</span>
+                    <span class="culprit-tag term" tabindex="0" data-tip="HTTP Strict Transport Security — forces secure (HTTPS) connections. Without it, IT teams see a basic security gap.">No HSTS</span>
+                    <span class="culprit-tag term" tabindex="0" data-tip="When a visitor clicks 'Reject All' on your cookie banner, tracking should stop. If it doesn't, that's a compliance violation IT will flag.">Reject-all broken</span>
                   </div>
                 </div>
               </div>
@@ -2740,11 +2812,26 @@
           </svg>
         </div>
         <h3><span class="trust-breaking" style="font-size:.78em;display:block;margin-bottom:4px;">Trust gaps are…</span>Making you an easy target for a complaint or claim</h3>
-        <p>Missing policies, unclear data handling, cookie consent that doesn't hold up. That's exactly what enforcement bodies and claimants look for. You probably haven't had a complaint yet. That's not the same as being safe.</p>
+        <p>Missing policies, unclear data handling, <span class="term" tabindex="0" data-tip="The cookie pop-up on your website asking visitors for permission before tracking them">cookie consent</span> that doesn't hold up. That's exactly what <span class="term" tabindex="0" data-tip="Regulators like your state Attorney General, the FTC, or EU/UK data protection authorities who can issue fines and enforcement notices">enforcement bodies</span> and claimants look for. You probably haven't had a complaint yet. That's not the same as being safe.</p>
         <div class="pain-outcome" style="background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.6);">
           <div class="pain-outcome-label" style="color:#EF4444;">🔴 Without action</div>
           A complaint, enforcement notice, or legal claim that could disrupt or shut down your business entirely.
         </div>
+        <details class="pain-example">
+          <summary style="color:#EF4444;">
+            <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            See a real example
+          </summary>
+          <div class="pain-example-body">
+            <p>A training company in California received a formal notice from the state Attorney General's office. A California resident had used the AG's online complaint tool to flag that the website had no privacy policy — something California law requires for any business that collects visitor data, including email signups. The company had 30 days to respond. Legal advice, policy writing, and the stress of the process cost far more than the fix would have.</p>
+            <p><strong>What triggered it:</strong> No privacy policy visible on the site. California's CCPA gives residents the right to report this directly to the state AG.</p>
+            <div class="pain-example-tags">
+              <span class="pain-example-tag" style="color:#EF4444;background:rgba(239,68,68,.08);">No privacy policy</span>
+              <span class="pain-example-tag" style="color:#EF4444;background:rgba(239,68,68,.08);">California AG complaint</span>
+              <span class="pain-example-tag" style="color:#EF4444;background:rgba(239,68,68,.08);">CCPA</span>
+            </div>
+          </div>
+        </details>
         </div><!-- /inner padding -->
       </div><!-- /card 1 -->
 
@@ -2761,11 +2848,26 @@
           </svg>
         </div>
         <h3><span class="trust-breaking" style="font-size:.78em;display:block;margin-bottom:4px;">Trust gaps are…</span>Making you look like a liability to corporate clients</h3>
-        <p>Corporate clients don't just buy your content. They vet your business first. A procurement team running a vendor check will find the same gaps a regulator would. Once you're flagged, the door closes. Usually without explanation.</p>
+        <p>Corporate clients don't just buy your content. They vet your business first. A <span class="term" tabindex="0" data-tip="The team at a company that reviews and approves new vendors before any contract is signed — often involves legal, IT, and finance">procurement team</span> running a <span class="term" tabindex="0" data-tip="A review a company runs on a potential supplier to check legal compliance, data security, and financial stability before they're allowed to work together">vendor check</span> will find the same gaps a regulator would. Once you're flagged, the door closes. Usually without explanation.</p>
         <div class="pain-outcome" style="background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.6);">
           <div class="pain-outcome-label" style="color:#F97316;">🟠 Without action</div>
           Due diligence fails, the contract goes elsewhere. Gone before you knew it was at risk.
         </div>
+        <details class="pain-example">
+          <summary style="color:#F97316;">
+            <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            See a real example
+          </summary>
+          <div class="pain-example-body">
+            <p>An executive coaching firm spent three months getting approval to run a paid pilot program with a mid-size US company. The HR director was ready. Budget was approved. Then the corporate IT and legal team ran their standard vendor review — they needed to inspect the platform where coaching notes and assessments would be stored. No data processing agreement on the website, no mention of how learner data was handled, third-party tools embedded with no disclosure. The pilot was "paused pending compliance review." It never restarted.</p>
+            <p><strong>What triggered it:</strong> No DPA (Data Processing Agreement) available, learner portal not reviewed, data handling undocumented. Common blockers in corporate vendor approval processes.</p>
+            <div class="pain-example-tags">
+              <span class="pain-example-tag" style="color:#F97316;background:rgba(249,115,22,.08);">No DPA available</span>
+              <span class="pain-example-tag" style="color:#F97316;background:rgba(249,115,22,.08);">Vendor review blocked</span>
+              <span class="pain-example-tag" style="color:#F97316;background:rgba(249,115,22,.08);">Platform not reviewed</span>
+            </div>
+          </div>
+        </details>
         </div><!-- /inner padding -->
       </div><!-- /card 2 -->
 
@@ -2788,6 +2890,21 @@
           <div class="pain-outcome-label" style="color:#854D0E;">🟡 Without action</div>
           A slow, invisible leak. Leads and pipeline draining away with no clear reason why.
         </div>
+        <details class="pain-example">
+          <summary style="color:#854D0E;">
+            <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            See a real example
+          </summary>
+          <div class="pain-example-body">
+            <p>A leadership development consultant built an automated lead funnel: LinkedIn ads targeting HR directors, a free guide download, and an email sequence that drove warm leads directly to her website to book a discovery call. The ads performed well. Leads were clicking through. But bookings were flat — less than 2% of visitors converted. She assumed it was the offer or the copy. Three months later, she asked two prospects directly. Both said the same thing: they landed on her site, couldn't find a privacy policy, and quietly moved on. The funnel was fine. The website was losing them.</p>
+            <p><strong>What triggered it:</strong> No privacy policy visible on the landing page, no trust signals, cookie tracking firing before consent. All quick fixes — but invisible until you know to look.</p>
+            <div class="pain-example-tags">
+              <span class="pain-example-tag" style="color:#854D0E;background:rgba(234,179,8,.1);">No visible privacy policy</span>
+              <span class="pain-example-tag" style="color:#854D0E;background:rgba(234,179,8,.1);">No trust signals</span>
+              <span class="pain-example-tag" style="color:#854D0E;background:rgba(234,179,8,.1);">Tracking before consent</span>
+            </div>
+          </div>
+        </details>
         </div><!-- /inner padding -->
       </div><!-- /card 3 -->
 
@@ -3458,7 +3575,7 @@
       <details class="faq-item">
         <summary class="faq-q">Why do I need something built for businesses like mine? Trust is trust, isn't it?</summary>
         <div class="faq-a">
-          <p>Not quite. Corporate procurement has its own patterns: HR and learning buyers care about data handling for learner records; legal teams ask about DPAs and GDPR compliance; IT security checks headers and cookie consent. A generic trust tool won't know that "no AI disclosure" is a bigger issue for a training provider than for a florist.</p>
+          <p>Not quite. Corporate <span class="term" tabindex="0" data-tip="The process a company uses to review and approve new suppliers before a contract can be signed — usually involves legal, IT, and finance">procurement</span> has its own patterns: HR and learning buyers care about data handling for learner records; legal teams ask about <span class="term" tabindex="0" data-tip="A Data Processing Agreement — a contract that spells out how you'll handle a client's employee or learner data. Required by law in many situations.">DPAs</span> and <span class="term" tabindex="0" data-tip="Europe's data privacy law. Applies to any business working with EU clients — even US-based businesses.">GDPR</span> compliance; IT security checks <span class="term" tabindex="0" data-tip="Invisible settings your web server sends to browsers, telling them how to handle security. Missing ones are a common red flag in vendor reviews.">security headers</span> and <span class="term" tabindex="0" data-tip="The cookie pop-up on your website asking visitors for permission before tracking them">cookie consent</span>. A generic trust tool won't know that "no AI disclosure" is a bigger issue for a training provider than for a florist.</p>
           <p>We've built the scoring and action guidance around what actually blocks or accelerates deals for businesses selling online services to corporate clients, so your results are relevant, not just technically accurate.</p>
         </div>
       </details>
