@@ -1312,7 +1312,8 @@
     .step { margin-bottom: 36px; }
     .mv-grid { grid-template-columns: 1fr; }
     .fw-inner { grid-template-columns: 1fr; gap: 36px; }
-    .plans-grid { grid-template-columns: 1fr; }
+    .plans-grid { grid-template-columns: 1fr !important; }
+    .hub-tiers { grid-template-columns: 1fr !important; }
     .plan.pro { margin-top: 0; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .int-grid { grid-template-columns: repeat(3, 1fr); }
@@ -3524,125 +3525,168 @@
   <div class="container">
 
     <div class="pricing-header reveal">
-      <div class="pricing-kicker">Pricing</div>
-      <h2 class="pricing-h2">Start free.<br>Scale when it matters.</h2>
-      <p class="pricing-sub">The free Trust Snapshot audits your public-facing website. Trust Navigator gives you deeper operational insights — across your public site, learner portal, platform, and client-facing tools — so you can move faster through sales, procurement, and onboarding with corporate clients.</p>
+      <div class="pricing-kicker">Access</div>
+      <h2 class="pricing-h2">Start with Community.<br>Add the Hub when ready.</h2>
+      <p class="pricing-sub">Community is free and always stays with you — whether or not you ever upgrade. Trust Navigator Hub sits on top, adding deeper audits, fix guides, team coordination, and a dashboard to track progress and stay green.</p>
     </div>
 
-    <div class="plans-grid">
+    <div class="plans-grid" style="grid-template-columns: 1fr 1.6fr;">
 
-      <!-- Free -->
+      <!-- Community (free, always) -->
       <div class="plan reveal reveal-delay-1">
-        <div class="plan-tier">Trust Snapshot</div>
-        <div class="plan-price-row">
-          <div class="plan-price">$0</div>
-          <div class="plan-period"> always</div>
-        </div>
-        <p class="plan-tagline">Most of what you're worried about is either fine, or fixable. The Snapshot tells you which — five minutes, no account needed.</p>
+        <div class="plan-tier">Community</div>
+        <div style="font-size:30px;font-weight:900;color:var(--slate-800);line-height:1;margin-bottom:2px;">Free</div>
+        <div style="font-size:11.5px;color:var(--slate-400);margin-bottom:16px;">always included. never taken away.</div>
+        <p class="plan-tagline">Run your Trust Snapshot, save your results, access guides and resources, and stay connected as we build. Yours whether or not you ever upgrade to the Hub.</p>
         <ul class="plan-feats">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Live audit across UX, Transparency, Safety &amp; AI Trust</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Your overall trust score out of 100</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Top 3 issues costing you deals — in plain English</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Covers both UX trust signals and compliance risks</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No account, no card — your data stays yours</li>
-          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Every finding with step-by-step fix instructions</li>
-          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Trust proof PDF for proposals &amp; procurement</li>
-          <li class="locked"><svg class="icon chk" width="15" height="15" style="color:var(--slate-300);"><use href="#i-check"/></svg> Team delegation — buyer, exec &amp; expert views</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Free Trust Snapshot — see your top trust risks</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Save and revisit your results</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Resource hub — practical guides for L&amp;D and professional development businesses</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Community updates, events, and newsletter</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Help shape what we build</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No card, no commitment</li>
         </ul>
-        <a href="#hero-scan" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
-          Take your Trust Snapshot — Free
+        <a href="#proof" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
+          Join Community free
         </a>
-        <p class="plan-foot">Takes about 5 minutes. No account needed.</p>
+        <p class="plan-foot">Run a Trust Snapshot first. No account needed to try it.</p>
       </div>
 
-      <!-- Pro -->
+      <!-- Trust Navigator Hub -->
       <div class="plan pro reveal reveal-delay-2">
-        <div class="plan-badge">Early Adopter Rate</div>
-        <div class="plan-tier">Trust Navigator</div>
-        <div class="plan-price-row">
-          <div class="plan-price">$29</div>
-          <div class="plan-period"> /month</div>
+        <div class="plan-badge">Pricing confirmed at launch — join Community to access early rates</div>
+        <div class="plan-tier">Trust Navigator Hub</div>
+        <p class="plan-tagline" style="margin-top:6px;margin-bottom:20px;">The full picture across your public site, learner portal, platform, and client-facing tools. Step-by-step fix guides for your whole team. A dashboard to track progress and stay green. Contractors, advisors, and third parties included at no extra cost.</p>
+
+        <!-- Tier preview -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
+            <div style="font-size:13px;font-weight:800;color:var(--white);margin-bottom:8px;">Solo</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:10px;">Independent coaches, consultants, and course creators. You carry it yourself.</div>
+            <div style="font-size:10px;font-style:italic;color:rgba(255,255,255,.28);">Pricing at launch</div>
+          </div>
+
+          <div style="background:rgba(0,200,168,.1);border:1px solid rgba(0,200,168,.3);border-radius:10px;padding:14px 12px;">
+            <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);margin-bottom:4px;">Most popular</div>
+            <div style="font-size:13px;font-weight:800;color:var(--teal);margin-bottom:8px;">Team</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:10px;">Small e-learning and training businesses. You lead; your internal team acts on findings.</div>
+            <div style="font-size:10px;font-style:italic;color:rgba(255,255,255,.28);">Pricing at launch</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
+            <div style="font-size:13px;font-weight:800;color:var(--white);margin-bottom:8px;">Advanced</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin-bottom:10px;">Established L&amp;D platforms. You lead; actions flow across internal teams and external specialists.</div>
+            <div style="font-size:10px;font-style:italic;color:rgba(255,255,255,.28);">Pricing at launch</div>
+          </div>
+
         </div>
-        <p style="font-size:12px;color:rgba(255,255,255,.45);margin:-4px 0 14px;"><s style="color:rgba(255,255,255,.3);">$99/month</s> — early adopter rate</p>
-        <p class="plan-tagline">Address all three layers — compliance exposure, corporate due diligence, and client conversion — with deeper insights across your public site, learner portal, platform, and client-facing tools. Fix what matters now. Build the foundation for what comes next.</p>
-        <ul class="plan-feats">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Trust Snapshot</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Deeper public site audit — every finding, not just the top 3</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Learner portal &amp; platform review — what clients experience post-sale</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> CRM &amp; client-facing tools — no gaps in the full client journey</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Step-by-step fix guides for owner, developer &amp; legal</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF — designed to go into proposals &amp; RFPs</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust dashboard — track your score over time</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Monthly re-scan to track progress</li>
+
+        <ul class="plan-feats" style="margin-bottom:24px;">
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Community, plus:</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Full audit — every finding, not just the top 3</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Learner portal and platform review</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> CRM and client-facing tools — full client journey covered</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Step-by-step fix guides for owner, developer, and legal</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF for proposals and procurement</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust dashboard and monthly re-scan to track progress</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> AI quick win suggestions powered by Papaya</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Unlimited Guests — contractors and advisors included, no extra seats</li>
         </ul>
         <a href="#proof" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
-          Join the waitlist — lock in $29
+          Join Community to access early pricing
         </a>
-        <p class="plan-foot">Cancel any time. No tricks, no annual lock-in.</p>
+        <p class="plan-foot">Join Community free first. Early Adopter rate available to Community members before launch.</p>
       </div>
 
     </div>
 
     <p class="pricing-foot">
-      Need a team plan or a custom setup?
+      Questions about which tier fits your team?
       <a href="mailto:team@datapilots.tech">Get in touch</a>
     </p>
 
   </div>
 </section>
 
-<!-- ════════════ EARLY ACCESS ════════════ -->
+<!-- ════════════ GET INVOLVED ════════════ -->
 <section id="proof">
   <div class="container">
 
     <div class="proof-top reveal">
       <div>
-        <div class="proof-kicker">Trust Navigator — Early Access</div>
-        <h2 class="proof-h2">Two ways to get in<br>before public launch</h2>
+        <div class="proof-kicker">Get involved early</div>
+        <h2 class="proof-h2">Start in Community.<br>Get early access to the Hub.</h2>
       </div>
       <p class="proof-right">
-        Trust Navigator launches publicly at $99/month. Right now, there are two ways to get in early — as a founder or on the waitlist. Both lock in a rate you'll never pay again.
+        Join Community free — save your Snapshot results and stay connected as Trust Navigator Hub develops. From there, two paths to early Hub access: the Early Adopter rate for those ready to upgrade at launch, and Founding Pilots for those who want to help shape what we're building.
       </p>
+    </div>
+
+    <!-- Step 1: Join Community -->
+    <div class="reveal" style="background:rgba(0,200,168,.05);border:1px solid rgba(0,200,168,.18);border-radius:16px;padding:28px 32px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:rgba(0,200,168,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--teal);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:3px;">Step 1 — Free</div>
+          <div style="font-size:16px;font-weight:700;color:var(--white);">Join Community — no card, no commitment</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:2px;">Save your Snapshot results, access resources, and stay connected. Yours whether or not you upgrade.</div>
+        </div>
+      </div>
+      <a href="mailto:team@datapilots.tech?subject=Join Community" class="btn btn-teal" style="flex-shrink:0;padding:12px 24px;font-size:14px;">
+        Join Community free
+      </a>
+    </div>
+
+    <!-- Step 2 label -->
+    <div style="text-align:center;margin-bottom:16px;">
+      <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);">Step 2 — from Community, choose your path to early Hub access</span>
     </div>
 
     <div class="testi-featured early-access-grid reveal">
 
-      <!-- Tier 1: Founder cohort -->
+      <!-- Early Adopter Rate -->
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:32px 30px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:4px 10px;border-radius:20px;">Early Adopter Rate</span>
+          <span style="font-size:11px;color:rgba(255,255,255,.35);">Limited time</span>
+        </div>
+        <div>
+          <div style="font-size:1.4rem;font-weight:900;color:var(--white);line-height:1.2;">Discounted rate</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">confirmed before launch for Community members</div>
+        </div>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
+          For Community members ready to upgrade when Trust Navigator Hub launches. A limited-time discounted rate — available before public launch, and not available again once it closes.
+        </p>
+        <a href="mailto:team@datapilots.tech?subject=Early Adopter Interest" class="btn btn-ghost" style="font-size:14px;padding:12px 20px;justify-content:center;">
+          Express interest as a Community member
+        </a>
+        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">Join Community first. Rate confirmed and offered to Community members before launch.</p>
+      </div>
+
+      <!-- Founding Pilots -->
       <div style="background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.22);border-radius:16px;padding:32px 30px;display:flex;flex-direction:column;gap:16px;">
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,200,168,.15);color:var(--teal);padding:4px 10px;border-radius:20px;">Founder cohort</span>
+          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,200,168,.15);color:var(--teal);padding:4px 10px;border-radius:20px;">Founding Pilots</span>
           <span style="font-size:11px;color:rgba(255,255,255,.4);">Limited spots</span>
         </div>
         <div>
-          <div style="font-size:2rem;font-weight:900;color:var(--white);line-height:1;">Free</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;">for the founding cohort period</div>
+          <div style="font-size:1.4rem;font-weight:900;color:var(--white);line-height:1.2;">Free access</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;">during the program period</div>
         </div>
         <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
-          We're working hands-on with a small group of L&amp;D founders to shape Trust Navigator. You get full access at no cost — in exchange for honest feedback that helps us build the right product.
+          For those who want to help shape Trust Navigator alongside us — whether you're a potential customer or a specialist who works with businesses like ours. Full Hub access at no cost, in exchange for structured feedback and active participation. Founding Pilots are featured on the Data Pilots site.
         </p>
-        <a href="mailto:team@datapilots.tech?subject=Founder Cohort Application" class="btn btn-teal" style="font-size:14px;padding:12px 20px;justify-content:center;">
-          Apply for the founder cohort
+        <a href="mailto:team@datapilots.tech?subject=Founding Pilots Application" class="btn btn-teal" style="font-size:14px;padding:12px 20px;justify-content:center;">
+          Apply to be a Founding Pilot
         </a>
-        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">We'll review your application and be in touch within 48 hours.</p>
-      </div>
-
-      <!-- Tier 2: Waitlist -->
-      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:32px 30px;display:flex;flex-direction:column;gap:16px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5);padding:4px 10px;border-radius:20px;">Early adopter waitlist</span>
-        </div>
-        <div>
-          <div style="font-size:2rem;font-weight:900;color:var(--white);line-height:1;">$29<span style="font-size:1rem;font-weight:400;color:rgba(255,255,255,.4);">/mo</span></div>
-          <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;"><s style="color:rgba(255,255,255,.25);">$99/month</s> — early adopter rate</div>
-        </div>
-        <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
-          Not ready to apply for the cohort? Join the waitlist with no obligation. When Trust Navigator opens, you'll get first access at the early adopter rate of $29/month.
-        </p>
-        <a href="mailto:team@datapilots.tech?subject=Trust Navigator Waitlist" class="btn btn-ghost" style="font-size:14px;padding:12px 20px;justify-content:center;">
-          Join the waitlist — no obligation
-        </a>
-        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">No card needed. We'll notify you when spots open.</p>
+        <p style="font-size:11.5px;color:rgba(255,255,255,.35);margin:0;">We review every application and respond within 48 hours.</p>
       </div>
 
     </div>
