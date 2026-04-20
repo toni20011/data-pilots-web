@@ -2279,7 +2279,7 @@
         <p class="hero-h1-sub">From e-learning and professional development providers to executive coaches selling to corporate clients: your website is where you deliver your product and where corporate buyers decide if you're credible enough to work with. Trust gaps don't just cost you leads. They cost you work... or worse.</p>
 
         <p class="hero-p">
-          The free Trust Snapshot gives you a read on your biggest trust risks in five minutes. It scans your public site, factors in your business context, and shows you what to look at first. No account needed. Nothing stored by default.
+          If you're the founder, owner, or whoever carries responsibility for growth at your business — without a compliance expert or data specialist on call — the free Trust Snapshot gives you a clear read on your biggest trust risks in five minutes. It scans your public site, factors in your business context, and shows you what to look at first.
         </p>
 
         <div class="hero-actions">
@@ -2722,7 +2722,7 @@
     <div class="pain-header reveal">
       <div class="pain-kicker"><span style="color:var(--slate-800);font-style:normal;">Is your website</span> <span class="trust-breaking">breaking trust?</span></div>
       <h2 class="pain-h2">Trust gaps show up in three ways. All of them cost you.</h2>
-      <p class="pain-sub">Here's how they tend to show up for e-learning providers, training businesses, and coaches selling B2B — starting with the most serious.</p>
+      <p class="pain-sub">Here's how they tend to show up for e-learning providers, training businesses, and coaches selling B2B — and why they land on the founder or business owner to sort out, not the team.</p>
     </div>
 
     <div class="pain-grid" style="grid-template-columns: 1fr 1fr 1fr;">
@@ -3546,7 +3546,7 @@
           <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Help shape what we build</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No card, no commitment</li>
         </ul>
-        <a href="#proof" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
+        <a href="#community-signup" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
           Join Community free
         </a>
         <p class="plan-foot">Run a Trust Snapshot first. No account needed to try it.</p>
@@ -3639,7 +3639,7 @@
           <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:2px;">Save your Snapshot results, access resources, and stay connected. Yours whether or not you upgrade.</div>
         </div>
       </div>
-      <a href="mailto:team@datapilots.tech?subject=Join Community" class="btn btn-teal" style="flex-shrink:0;padding:12px 24px;font-size:14px;">
+      <a href="#community-signup" class="btn btn-teal" style="flex-shrink:0;padding:12px 24px;font-size:14px;">
         Join Community free
       </a>
     </div>
@@ -3721,6 +3721,62 @@
           <div class="sub"><a href="framework.html" style="color:var(--blue);text-decoration:none;font-weight:600;">See how our checks work</a></div>
         </div>
       </div>
+    </div>
+
+    <!-- Community signup form -->
+    <div id="community-signup" class="reveal" style="margin-top:56px;border-top:1px solid rgba(255,255,255,.08);padding-top:48px;">
+
+      <div style="text-align:center;max-width:520px;margin:0 auto 36px;">
+        <div class="proof-kicker" style="margin-bottom:10px;">Get started</div>
+        <h3 style="font-size:clamp(22px,2.8vw,32px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;">Join Community — free, 30 seconds</h3>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.5);line-height:1.7;">Start with a free Trust Snapshot. Join Community to save your results and stay connected. Tick below if you're also interested in early Hub access.</p>
+      </div>
+
+      <form id="communityForm" style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">
+
+        <input type="email" id="joinEmail" placeholder="Your business email" required
+          style="background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.14);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--white);font-family:inherit;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(255,255,255,.14)'"/>
+
+        <input type="text" id="joinBusiness" placeholder="Your business name" required
+          style="background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.14);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--white);font-family:inherit;outline:none;transition:border-color .15s;"
+          onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='rgba(255,255,255,.14)'"/>
+
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:2px;">I'm also interested in:</div>
+
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="joinEarlyAdopter" style="margin-top:2px;accent-color:var(--teal);width:15px;height:15px;flex-shrink:0;cursor:pointer;"/>
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:var(--white);">Early Adopter rate</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Discounted Hub access at launch — limited time, Community members only</div>
+            </div>
+          </label>
+
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+            <input type="checkbox" id="joinFoundingPilots" style="margin-top:2px;accent-color:var(--teal);width:15px;height:15px;flex-shrink:0;cursor:pointer;"/>
+            <div>
+              <div style="font-size:13.5px;font-weight:600;color:var(--white);">Founding Pilots program</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Help shape Trust Navigator — free Hub access in exchange for structured feedback. Application required.</div>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-teal" style="width:100%;justify-content:center;padding:14px;font-size:15px;font-weight:700;">
+          Join Community free
+        </button>
+        <p style="text-align:center;font-size:12px;color:rgba(255,255,255,.3);margin:0;">No card needed. We'll be in touch within 48 hours.</p>
+
+      </form>
+
+      <div id="communityFormSuccess" style="display:none;max-width:480px;margin:0 auto;text-align:center;padding:40px 32px;background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.2);border-radius:16px;">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(0,200,168,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--teal);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div style="font-size:20px;font-weight:900;color:var(--white);margin-bottom:8px;">You're in.</div>
+        <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;" id="communitySuccessMsg">We'll be in touch within 48 hours.</p>
+      </div>
+
     </div>
 
   </div>
@@ -5022,6 +5078,43 @@
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
   `;
   document.head.appendChild(style);
+
+  // ── Community signup form ─────────────────────────
+  const communityForm = document.getElementById('communityForm');
+  if (communityForm) {
+    communityForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email    = document.getElementById('joinEmail').value.trim();
+      const business = document.getElementById('joinBusiness').value.trim();
+      const earlyAdopter    = document.getElementById('joinEarlyAdopter').checked;
+      const foundingPilots  = document.getElementById('joinFoundingPilots').checked;
+
+      const interests = ['Community (free)'];
+      if (earlyAdopter)   interests.push('Early Adopter rate');
+      if (foundingPilots) interests.push('Founding Pilots program');
+
+      const subject = encodeURIComponent('Community Signup: ' + business);
+      const body    = encodeURIComponent(
+        'New Community signup\n\nBusiness: ' + business +
+        '\nEmail: ' + email +
+        '\nInterested in: ' + interests.join(', ')
+      );
+
+      // Show success state
+      communityForm.style.display = 'none';
+      const success = document.getElementById('communityFormSuccess');
+      const msg     = document.getElementById('communitySuccessMsg');
+      let detail = "We'll be in touch within 48 hours at " + email + ".";
+      if (foundingPilots) detail += " Your Founding Pilots application will be reviewed separately.";
+      msg.textContent = detail;
+      success.style.display = 'block';
+
+      // Open mailto as fallback
+      setTimeout(function() {
+        window.location.href = 'mailto:team@datapilots.tech?subject=' + subject + '&body=' + body;
+      }, 400);
+    });
+  }
 </script>
 
 <!-- ════════════ COOKIE TRANSPARENCY STRIP ════════════ -->
