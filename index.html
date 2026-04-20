@@ -1404,6 +1404,8 @@
   @media (max-width: 760px) {
     .green-panel-body { grid-template-columns: 1fr; }
     .green-panel-header { flex-direction: column; align-items: flex-start; }
+    .green-panel-foot { grid-template-columns: 1fr !important; }
+    .green-panel-foot > div:first-child { border-right: none !important; border-bottom: 1px solid rgba(16,185,129,.15); }
   }
 
   /* ───────────────────────────────────────────
@@ -2276,7 +2278,7 @@
         <p class="hero-h1-sub">Your website is either working for you or quietly working against you. A trust gap can expose you to a complaint, cost you a corporate contract, or turn away clients before they ever reach out.</p>
 
         <p class="hero-p">
-          Most business owners don't know which side they're on — until it costs them. The free Trust Snapshot shows you exactly where you stand in five minutes. Most things are either fine, or fixable. Either way, you'll know.
+          Most business owners don't know which side they're on — until it costs them. The free Trust Snapshot is your first step: in five minutes, you'll see your biggest trust risks and whether they're worth acting on. It won't give you every answer — but it'll tell you what to look at first. From there, Trust Navigator gives you the full picture and the roadmap to fix it.
         </p>
 
         <div class="hero-actions">
@@ -2802,7 +2804,7 @@
         </div>
         <div>
           <div class="green-panel-title">🟢 Green light — your website <span style="color:#6EE7B7;">building trust</span>, driving growth</div>
-          <div class="green-panel-sub">What it looks like when the gaps are closed — and your site is actively working for you</div>
+          <div class="green-panel-sub">What Trust Navigator gets you to — and keeps you at. This is the destination, not what a Snapshot delivers on its own.</div>
         </div>
       </div>
       <div class="green-panel-body">
@@ -2838,14 +2840,25 @@
           <div class="green-outcome-p">No hesitation, no gut-check moment that sends a buyer elsewhere. The gut call goes your way — and the sale, the contract, or the partnership moves from "maybe" to signed.</div>
         </div>
       </div>
-      <div class="green-panel-foot">
-        <a href="#hero-scan" class="btn btn-teal" style="padding:11px 22px;font-size:13.5px;">
-          Get your free Trust Snapshot
-        </a>
-        <a href="#early-access" class="btn btn-ghost" style="padding:10px 22px;font-size:13.5px;color:#065F46;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06);">
-          Join Trust Navigator waitlist
-        </a>
-        <span style="font-size:12px;color:var(--slate-400);margin-left:auto;">Most fixes take less than a week once you know what to address.</span>
+      <div class="green-panel-foot" style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;">
+        <!-- Step 1 -->
+        <div style="padding:22px 28px;border-right:1px solid rgba(16,185,129,.15);display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(16,185,129,.6);margin-bottom:2px;">Step 1 — Free</div>
+          <div style="font-size:14px;font-weight:700;color:var(--slate-800);">Take your Trust Snapshot</div>
+          <div style="font-size:12.5px;color:var(--slate-500);line-height:1.55;">Five minutes. See your biggest trust risks and whether any apply to you. Your starting point — not the full answer.</div>
+          <a href="#hero-scan" class="btn btn-teal" style="margin-top:10px;padding:10px 18px;font-size:13px;align-self:flex-start;">
+            Start here — it's free
+          </a>
+        </div>
+        <!-- Step 2 -->
+        <div style="padding:22px 28px;display:flex;flex-direction:column;gap:6px;background:rgba(16,185,129,.03);">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(16,185,129,.6);margin-bottom:2px;">Step 2 — Trust Navigator</div>
+          <div style="font-size:14px;font-weight:700;color:var(--slate-800);">Get to green — and stay there</div>
+          <div style="font-size:12.5px;color:var(--slate-500);line-height:1.55;">The full audit across your site, learner portal, and client tools. Step-by-step fix guides, a trust score dashboard, and monthly re-scans so you don't slip back.</div>
+          <a href="#early-access" class="btn btn-ghost" style="margin-top:10px;padding:9px 18px;font-size:13px;align-self:flex-start;color:#065F46;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06);">
+            Join the waitlist
+          </a>
+        </div>
       </div>
     </div>
 
