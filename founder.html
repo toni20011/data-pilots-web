@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toni's Story | Data Pilots</title>
+  <meta name="description" content="Why Toni Dumas built Data Pilots — a career on both sides of the trust problem, and what she kept seeing."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+  :root {
+    --navy: #0B1929; --navy-mid: #112238; --navy-soft: #1A3350;
+    --teal: #00C8A8; --teal-dim: rgba(0,200,168,.12); --teal-border: rgba(0,200,168,.22);
+    --cyan: #00AFCC; --green: #10B981; --purple: #8B5CF6; --blue: #2C5AA0;
+    --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+    --slate-400: #94A3B8; --slate-500: #64748B; --slate-600: #475569; --slate-800: #1E293B;
+    --white: #FFFFFF;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
+    --ease: cubic-bezier(.4,0,.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--slate-50); color: var(--slate-800); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+  .prose { max-width: 680px; }
+  .icon { display: inline-block; vertical-align: middle; flex-shrink: 0; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+
+  /* NAV */
+  nav { background: rgba(11,25,41,.97); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.06); padding: 13px 0; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-wordmark { font-size: 15px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--white); }
+  .btn { display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; text-decoration: none; white-space: nowrap; transition: all .17s var(--ease); border-radius: var(--r-sm); }
+  .btn-ghost { padding: 9px 18px; font-size: 13.5px; color: rgba(255,255,255,.55); background: transparent; border: 1px solid rgba(255,255,255,.12); }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+  .btn-teal { padding: 10px 22px; font-size: 13.5px; background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--navy); }
+  .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,200,168,.3); }
+  .btn-green { padding: 13px 28px; font-size: 15px; background: var(--green); color: var(--white); box-shadow: 0 4px 14px rgba(16,185,129,.3); }
+  .btn-green:hover { background: #0EA573; transform: translateY(-1px); }
+
+  /* HERO */
+  .founder-hero { background: linear-gradient(145deg, var(--navy) 0%, var(--navy-mid) 100%); padding: 80px 0 100px; position: relative; overflow: hidden; }
+  .founder-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(0,200,168,.12) 1px, transparent 1px); background-size: 30px 30px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%); pointer-events: none; }
+  .founder-hero-inner { position: relative; z-index: 1; max-width: 700px; }
+  .founder-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 16px; }
+  .founder-h1 { font-size: clamp(28px, 4vw, 52px); font-weight: 900; letter-spacing: -.03em; line-height: 1.08; color: var(--white); margin-bottom: 20px; }
+  .founder-h1-sub { font-size: 15px; color: rgba(255,255,255,.55); margin-bottom: 28px; }
+  .founder-role-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+  .founder-role-chip { padding: 6px 14px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 99px; font-size: 12.5px; color: rgba(255,255,255,.65); }
+
+  /* STORY BODY */
+  .story-section { padding: 80px 0; background: var(--white); }
+  .story-grid { display: grid; grid-template-columns: 1fr 320px; gap: 72px; align-items: start; }
+  .story-body h2 { font-size: clamp(20px, 2.5vw, 28px); font-weight: 900; letter-spacing: -.02em; color: var(--slate-800); margin-bottom: 20px; line-height: 1.2; }
+  .story-body p { font-size: 16px; color: var(--slate-600); line-height: 1.85; margin-bottom: 18px; }
+  .story-body p:last-child { margin-bottom: 0; }
+
+  /* Pull quote */
+  .pull-quote { border-left: 3px solid var(--teal); padding: 4px 0 4px 24px; margin: 32px 0; }
+  .pull-quote p { font-size: 18px; font-weight: 500; color: var(--slate-800); line-height: 1.6; letter-spacing: -.01em; font-style: italic; margin-bottom: 0; }
+
+  /* Section break */
+  .story-break { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin: 48px 0 20px; padding-top: 48px; border-top: 1px solid var(--slate-200); }
+
+  /* Sidebar */
+  .story-sidebar { position: sticky; top: 96px; }
+  .sidebar-card { background: var(--slate-50); border: 1px solid var(--slate-200); border-radius: var(--r-xl); padding: 28px; margin-bottom: 20px; }
+  .sidebar-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--slate-400); margin-bottom: 14px; }
+  .cred-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .cred-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--slate-600); line-height: 1.5; }
+  .cred-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 6px; }
+  .sidebar-cta { background: linear-gradient(145deg, var(--navy), var(--navy-mid)); border-radius: var(--r-xl); padding: 28px; text-align: center; }
+  .sidebar-cta p { font-size: 14px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 16px; }
+  .sidebar-cta-links { display: flex; flex-direction: column; gap: 10px; }
+
+  /* WHAT ELSE */
+  .what-else-section { padding: 72px 0; background: var(--slate-50); border-top: 1px solid var(--slate-200); }
+  .drg-card { background: var(--white); border: 1.5px solid var(--slate-200); border-radius: var(--r-xl); padding: 40px; max-width: 720px; }
+  .drg-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .drg-h3 { font-size: 22px; font-weight: 900; letter-spacing: -.015em; color: var(--slate-800); margin-bottom: 14px; }
+  .drg-body { font-size: 15px; color: var(--slate-600); line-height: 1.8; }
+  .drg-body p + p { margin-top: 12px; }
+
+  /* CTA */
+  .founder-cta { background: linear-gradient(145deg, var(--navy), var(--navy-mid)); padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
+  .founder-cta::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(0,200,168,.1) 1px, transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%); pointer-events: none; }
+  .founder-cta-inner { position: relative; z-index: 1; }
+  .founder-cta h2 { font-size: clamp(24px, 3vw, 40px); font-weight: 900; color: var(--white); letter-spacing: -.02em; margin-bottom: 14px; }
+  .founder-cta p { font-size: 16px; color: rgba(255,255,255,.62); line-height: 1.7; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer { background: var(--navy); padding: 40px 0 28px; border-top: 1px solid rgba(255,255,255,.06); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 12.5px; color: rgba(255,255,255,.28); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: rgba(255,255,255,.4); text-decoration: none; transition: color .14s; }
+  .footer-links a:hover { color: rgba(255,255,255,.75); }
+
+  @media (max-width: 860px) {
+    .story-grid { grid-template-columns: 1fr; }
+    .story-sidebar { position: static; }
+  }
+  </style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <svg width="34" height="34" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="nl" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00F59D"/><stop offset="50%" stop-color="#00D4C0"/><stop offset="100%" stop-color="#00AAFF"/></linearGradient></defs>
+          <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#nl)" stroke-width="16" stroke-linecap="round" fill="none"/>
+          <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#nl)"/>
+          <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#nl)"/>
+          <circle cx="100" cy="112" r="76" stroke="url(#nl)" stroke-width="12" fill="none"/>
+          <circle cx="100" cy="112" r="63" fill="#0B1929"/>
+          <circle cx="78" cy="96" r="12" fill="url(#nl)"/>
+          <circle cx="122" cy="96" r="12" fill="url(#nl)"/>
+          <rect x="65" y="124" width="70" height="11" rx="5" fill="url(#nl)"/>
+          <path d="M 170 135 Q 163 158 148 166" stroke="url(#nl)" stroke-width="9" stroke-linecap="round" fill="none"/>
+          <rect x="128" y="162" width="26" height="14" rx="7" fill="url(#nl)"/>
+        </svg>
+        <div class="logo-wordmark">DATA PILOTS</div>
+      </a>
+      <div style="display:flex;gap:12px;">
+        <a href="about.html" class="btn btn-ghost">About Us</a>
+        <a href="index.html#hero-scan" class="btn btn-teal">
+          <svg class="icon" width="13" height="13"><use href="#i-search"/></svg>
+          Free Check
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="founder-hero">
+  <div class="container">
+    <div class="founder-hero-inner reveal">
+      <div class="founder-kicker">Founder Spotlight</div>
+      <h1 class="founder-h1">Why I built Data Pilots — and why I won't stop.</h1>
+      <p class="founder-h1-sub">Antonia "Toni" Dumas · Co-Founder &amp; CEO</p>
+      <div class="founder-role-strip">
+        <span class="founder-role-chip">DC-Licensed Attorney</span>
+        <span class="founder-role-chip">CIPP/E</span>
+        <span class="founder-role-chip">Former Big 4 Advisor</span>
+        <span class="founder-role-chip">CLE Instructor</span>
+        <span class="founder-role-chip">Adjunct JD Professor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story-section">
+  <div class="container">
+    <div class="story-grid">
+
+      <!-- Main narrative -->
+      <div class="story-body reveal">
+
+        <p>I've spent my career on both sides of a problem most people treat as two separate problems.</p>
+
+        <p>I started in marketing and business — across the full arc of how brands actually get built. Developing concepts and brand identity, building websites and social presence, creating marketing copy and content, planning and working events, representing global brands. That work spanned technology, beverage, fashion and beauty, and sports — categories where brand, growth, and client trust are built in public and measured in real time.</p>
+
+        <p>From there, my path moved back and forth between marketing and the legal field, beginning in consumer protection, before I returned to law school and became a lawyer myself. I immediately focused on privacy and security — helping businesses with compliance across the business, including the core marketing activities and tools used to grow: websites, mobile apps, email and digital communications, and the tech stack underneath.</p>
+
+        <div class="story-break">The work</div>
+
+        <p>Across my legal and advisory career, I've been part of the full compliance lifecycle: conducting risk and impact assessments, building privacy and data strategy and programmes, implementing those programmes across teams and tools, and guiding businesses when things go wrong.</p>
+
+        <p>I've conducted website audits across privacy, consent, and accessibility — treating them as connected parts of the same user experience — and was among the first to speak and publish on mobile app compliance when Apple introduced Privacy Labels for the App Store. I've advised on digital marketing strategies and handled the foundational legal work behind it all: privacy policies, terms of service and use, EULAs, cookies and consent management, data processing agreements, cross-border data transfers, and subprocessor management.</p>
+
+        <p>I'm a DC-licensed attorney, CIPP/E-certified privacy professional, and former Big 4 advisor, and I've worked internationally with businesses from early-stage founders to global organisations.</p>
+
+        <p>Alongside client work, teaching has been a constant thread. I'm a federal and state bar CLE instructor and an adjunct professor in JD programmes, training other lawyers and privacy specialists. I also teach in the other direction — leading workshops, webinars, and panels for business owners and non-expert teams, translating complex compliance into things real businesses can understand and act on. That dual fluency — credible to specialists, accessible to everyone else — is a throughline in my work, and the foundation for how we're building Data Pilots.</p>
+
+        <div class="story-break">What I kept seeing</div>
+
+        <p>Across that full arc — and living it myself as a business owner — I kept seeing the same pattern. Marketing and growth on one side. Compliance and risk on the other. Operating as if they were in conflict. Growth teams moving fast, pulling in new tools, launching new funnels. Privacy and legal brought in late, usually to slow things down or clean something up. Neither side trusting the other. Clients paying the price.</p>
+
+        <div class="pull-quote">
+          <p>Marketing and privacy are not opposing forces — they are the same conversation about trust, told from different seats.</p>
+        </div>
+
+        <p>When they work together from the start, businesses grow faster and build stronger client relationships. When they don't, growth quietly costs trust — usually in places no one is watching, starting with the website.</p>
+
+        <div class="story-break">Why Data Pilots</div>
+
+        <p>Data Pilots exists to close that gap. We give business leaders deeper visibility into how their websites and tools handle client data, with clear next steps they can act on early — before a problem becomes a crisis, and before they're ready to bring in outside experts. It's built for leaders who want to grow and do right by their clients, and who have been waiting for something that treats those two goals as connected.</p>
+
+        <p>I co-founded Data Pilots with Kara Kelly because solving this problem well requires both sides of the build: the thesis and the execution. Kara brings the technical, product, and operational depth that turns the insight into something businesses can actually use. We're supported by a network of advisors and trusted partners who've been shaping this from day one.</p>
+
+      </div>
+
+      <!-- Sticky sidebar -->
+      <aside class="story-sidebar reveal reveal-delay-1">
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Background</div>
+          <ul class="cred-list">
+            <li><div class="cred-dot"></div>DC-Licensed Attorney</li>
+            <li><div class="cred-dot"></div>CIPP/E Certified Privacy Professional</li>
+            <li><div class="cred-dot"></div>Former Big 4 Advisor</li>
+            <li><div class="cred-dot"></div>Federal &amp; State Bar CLE Instructor</li>
+            <li><div class="cred-dot"></div>Adjunct JD Professor</li>
+            <li><div class="cred-dot"></div>International client experience, early-stage to global</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Areas of Practice</div>
+          <ul class="cred-list">
+            <li><div class="cred-dot"></div>Privacy &amp; data strategy</li>
+            <li><div class="cred-dot"></div>Website &amp; app compliance</li>
+            <li><div class="cred-dot"></div>Digital marketing compliance</li>
+            <li><div class="cred-dot"></div>Consent &amp; cookie management</li>
+            <li><div class="cred-dot"></div>Cross-border data transfers</li>
+            <li><div class="cred-dot"></div>Privacy by design</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-label">Community</div>
+          <ul class="cred-list">
+            <li><div class="cred-dot"></div>IAPP</li>
+            <li><div class="cred-dot"></div>ISACA</li>
+            <li><div class="cred-dot"></div>NAWBO</li>
+            <li><div class="cred-dot"></div>The Sheroe Mindshift</li>
+          </ul>
+        </div>
+
+        <div class="sidebar-cta">
+          <p>Want to follow along, ask a question, or connect?</p>
+          <div class="sidebar-cta-links">
+            <a href="index.html#community-signup" class="btn btn-teal" style="width:100%;justify-content:center;padding:12px;">Join Community free</a>
+            <a href="mailto:team@datapilots.tech" class="btn btn-ghost" style="width:100%;justify-content:center;padding:11px;">Get in touch</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- DATA RISK GROUP -->
+<section class="what-else-section">
+  <div class="container">
+    <div class="reveal">
+      <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:12px;">What else I'm building</div>
+      <div class="drg-card">
+        <div class="drg-tag">Separate Initiative</div>
+        <h3 class="drg-h3">Data Risk Group</h3>
+        <div class="drg-body">
+          <p>Alongside Data Pilots, I'm the founder of Data Risk Group, a boutique consultancy advising small B2B companies — particularly in learning and development — and other professional services firms on privacy, security, and compliance at a hands-on level.</p>
+          <p>Together, the two form a trust ecosystem. Data Risk Group for firms ready to work directly with an expert. Data Pilots for the many more who need to take action before they're there — or who want a clear picture of where they stand before making that call.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="founder-cta">
+  <div class="container">
+    <div class="founder-cta-inner reveal">
+      <h2>See what buyers see when they check your site.</h2>
+      <p>The Trust Snapshot takes five minutes and gives you a clear, prioritised picture — no account needed.</p>
+      <div class="cta-btns">
+        <a href="index.html#hero-scan" class="btn btn-teal" style="padding:14px 28px; font-size:15px;">
+          <svg class="icon" width="14" height="14"><use href="#i-search"/></svg>
+          Take your Trust Snapshot — free
+        </a>
+        <a href="about.html" class="btn btn-ghost" style="padding:13px 24px; font-size:15px;">Meet the full team</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <p>2025 Data Pilots · datapilots.tech</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="framework.html">Our Framework</a>
+        <a href="#">Privacy Policy</a>
+        <a href="mailto:team@datapilots.tech">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>

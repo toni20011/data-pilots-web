@@ -1260,9 +1260,56 @@
     font-style: italic;
     color: var(--teal);
   }
+  /* Thesis pull-quote */
+  .wdp-thesis { max-width: 780px; margin: 0 auto 52px; text-align: center; }
+  .wdp-thesis-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.3vw, 1.6rem);
+    font-weight: 400; color: rgba(255,255,255,.9);
+    line-height: 1.65; letter-spacing: -.005em;
+  }
+  /* Narrative 2-col */
+  .wdp-narrative-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 56px; align-items: start; margin-bottom: 52px;
+  }
+  .wdp-narrative-body p {
+    font-size: 15.5px; color: rgba(255,255,255,.72);
+    line-height: 1.82; margin-bottom: 16px;
+  }
+  .wdp-narrative-links {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 8px; font-size: 14px;
+  }
+  .wdp-narrative-links a {
+    color: var(--teal); text-decoration: none; font-weight: 600;
+    border-bottom: 1px solid rgba(0,200,168,.3); padding-bottom: 1px;
+    transition: border-color .14s;
+  }
+  .wdp-narrative-links a:hover { border-color: var(--teal); }
+  .wdp-narrative-links span { color: rgba(255,255,255,.2); }
+  .wdp-pattern-box {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: var(--r-xl); padding: 32px 28px;
+  }
+  .wdp-pattern-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: rgba(0,200,168,.7); margin-bottom: 16px;
+  }
+  .wdp-pattern-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .wdp-pattern-list li {
+    font-size: 14px; color: rgba(255,255,255,.62);
+    line-height: 1.65; padding-left: 16px; position: relative;
+  }
+  .wdp-pattern-list li::before {
+    content: ''; position: absolute; left: 0; top: 9px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: rgba(0,200,168,.5);
+  }
   @media (max-width: 860px) {
-    .wdp-grid { grid-template-columns: 1fr; gap: 16px; }
     .wdp-statement { padding: 28px 24px; }
+    .wdp-narrative-grid { grid-template-columns: 1fr; gap: 32px; }
   }
 
   /* ───────────────────────────────────────────
@@ -2372,7 +2419,7 @@
       <ul>
         <li><a href="#results">How It Works</a></li>
         <li><a href="#proof">Get Involved</a></li>
-        <li><a href="#trust-journey">About</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="framework.html">Our Framework</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
@@ -3643,85 +3690,38 @@
 <section class="wdp-section" id="why-dp">
   <div class="container">
 
-    <div class="wdp-header reveal">
+    <div class="wdp-header reveal" style="margin-bottom:36px;">
       <div class="wdp-kicker">Why Data Pilots</div>
-      <h2 class="wdp-h2">Built for the test<br><span>you didn't know you were taking</span></h2>
-      <p class="wdp-sub">Most compliance tools are designed for formal certifications and procurement questionnaires. Those matter, but they come later, and they're built for companies already past the starting line. We solve for the check happening right now.</p>
     </div>
 
-    <div class="wdp-grid reveal">
-
-      <div class="wdp-card">
-        <div class="wdp-icon">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><circle cx="12" cy="12" r="3.5"/><path d="M2 12s4-8 10-8 10 8 10 8-4 8-10 8-10-8-10-8z"/></svg>
-        </div>
-        <div class="wdp-card-title">The first check, not the last one</div>
-        <div class="wdp-card-desc">By the time a formal compliance questionnaire arrives, a prospect has already assessed you: your website, your privacy policy, your first impression. We show you what they find before they do, so you can fix it and own it.</div>
-      </div>
-
-      <div class="wdp-card">
-        <div class="wdp-icon">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="wdp-card-title">Translated for every person who needs to act</div>
-        <div class="wdp-card-desc">A score in a report nobody reads changes nothing. We translate every finding into plain language for the founder, the ops lead, the legal contact, and the day-to-day team. The right person knows exactly what to do.</div>
-      </div>
-
-      <div class="wdp-card">
-        <div class="wdp-icon">
-          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="var(--teal)" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="wdp-card-title">Ready now. Built for what comes next.</div>
-        <div class="wdp-card-desc">You don't need SOC 2 today. You need to pass the check already in front of you. Build the foundation now, and when formal certifications become the next step, you're already most of the way there.</div>
-      </div>
-
+    <div class="wdp-thesis reveal">
+      <p class="wdp-thesis-text">Marketing and privacy are not opposing forces — they are the same conversation about trust, told from different seats.</p>
     </div>
 
-    <!-- Three-layer view: what the results mean for each stakeholder -->
-    <div class="fw-inner reveal" style="margin-top:48px;">
-      <div>
-        <div class="fw-kicker">One report. Every perspective.</div>
-        <h3 class="fw-h2" style="font-size:clamp(20px,2.5vw,30px);">Built for the business<br>and the team behind it.</h3>
-        <p class="fw-sub">We give you one clear picture of what your site actually signals, and everything your team needs to act on it without you having to translate.</p>
-        <a href="framework.html" class="btn btn-teal" style="padding:12px 22px;font-size:14px;margin-top:8px;">
-          See how our checks work
-          <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
-        </a>
+    <div class="wdp-narrative-grid reveal">
+      <div class="wdp-narrative-body">
+        <p>We've spent our careers on both sides of this. Building brands, websites, campaigns — and advising businesses on the privacy and compliance work that sits underneath all of it. Across that arc, the same pattern kept appearing: growth teams moving fast, compliance brought in late, usually to slow things down. Neither side fully trusting the other. Clients paying the price somewhere nobody was watching.</p>
+        <p>Data Pilots exists to close that gap. We give business leaders early visibility into the trust signals their site is already sending — before a missed check becomes a missed deal. Clear steps, written for the right person, and progress you can see and share with everyone who needs to be on the same page.</p>
+        <div class="wdp-narrative-links">
+          <a href="about.html">Meet the team</a>
+          <span>·</span>
+          <a href="founder.html">Toni's story</a>
+        </div>
       </div>
-      <div class="fw-layers">
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(0,200,168,.15);color:var(--teal);">
-            <svg class="icon" width="16" height="16"><use href="#i-users"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Buyer &amp; Client View</div>
-            <div class="fw-layer-sub">See exactly what your buyers and enterprise clients see: the trust signals that win or lose deals before you ever speak</div>
-          </div>
-        </div>
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(16,185,129,.12);color:var(--green);">
-            <svg class="icon" width="16" height="16"><use href="#i-layers"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Executive Visibility</div>
-            <div class="fw-layer-sub">Leadership gets a business-friendly risk picture: one score, clear priorities, no jargon. Decisions can be made fast.</div>
-          </div>
-        </div>
-        <div class="fw-layer">
-          <div class="fw-layer-badge" style="background:rgba(139,92,246,.12);color:#A78BFA;">
-            <svg class="icon" width="16" height="16"><use href="#i-award"/></svg>
-          </div>
-          <div>
-            <div class="fw-layer-title">Expert Translation</div>
-            <div class="fw-layer-sub">Findings are translated into what your legal, dev, and compliance teams need, so you can delegate without becoming the expert</div>
-          </div>
-        </div>
+      <div class="wdp-pattern-box">
+        <div class="wdp-pattern-label">What we keep seeing</div>
+        <ul class="wdp-pattern-list">
+          <li>Growth and compliance operating as if in conflict — one moving fast, one brought in to slow things down</li>
+          <li>Buyers running website trust checks before a single conversation has happened</li>
+          <li>Fixable gaps — most taking a day or two — that nobody knew were there</li>
+          <li>Reports that sit unread because they aren't written for the person who actually needs to act</li>
+        </ul>
       </div>
     </div>
 
     <div class="wdp-statement reveal">
-      <div class="wdp-stmt-label">The difference</div>
-      <p class="wdp-stmt-text">Most compliance tools help you pass the big formal checks:<br>procurement questionnaires, security certifications, legal frameworks.<br><em>We help you pass the first one. And get you ready for what follows.</em></p>
+      <div class="wdp-stmt-label">Our role</div>
+      <p class="wdp-stmt-text">Most compliance tools help you pass the big formal checks:<br>certifications, questionnaires, legal frameworks.<br><em>We help you pass the first one — the one already happening — and build the foundation for everything that follows.</em></p>
     </div>
 
   </div>
@@ -3887,8 +3887,9 @@
               <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="faq-a">
-              <p>Data Pilots is being built by a team with background in data strategy, compliance, and the online learning industry. We kept seeing the same problem: good businesses losing deals not because of a bad product, but because their website didn't pass the informal trust checks buyers were running — often before a single conversation had happened.</p>
-              <p>We're building this in public, with early Community members helping shape what it becomes. If you want to follow along or help us get it right, <a href="#community-signup" style="color:var(--teal);font-weight:600;">join Community free</a>.</p>
+              <p>Data Pilots is co-founded by Toni Dumas and Kara Kelly. Toni is a DC-licensed attorney and CIPP/E-certified privacy professional whose career has spanned both marketing and law — building brands and websites on one side, advising businesses on privacy, security, and compliance on the other. Kara is a tech-driven leader and legally trained privacy expert with over a decade in privacy, cyber, and risk management across global organisations.</p>
+              <p>We're building alongside an advisory network and a growing partner ecosystem — including Papaya, MyQuest, and Data Risk Group — with community roots across IAPP, ISACA, NAWBO, and The Sheroe Mindshift.</p>
+              <p><a href="about.html" style="color:var(--teal);font-weight:600;">Meet the full team →</a> &nbsp;·&nbsp; <a href="founder.html" style="color:var(--teal);font-weight:600;">Toni's story →</a></p>
             </div>
           </details>
 
@@ -4332,7 +4333,7 @@
             <li><a href="#results">How It Works</a></li>
             <li><a href="framework.html">Our Framework</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#trust-journey">About</a></li>
+            <li><a href="about.html">About</a></li>
             <li><a href="/trust-ecosystem.html">Trust Ecosystem</a></li>
           </ul>
         </div>
