@@ -1046,6 +1046,20 @@
   .step-desc { font-size: 13.5px; color: var(--slate-600); line-height: 1.65; max-width: 220px; margin: 0 auto; }
   .step-arrow { display: flex; align-items: flex-start; padding-top: 32px; color: var(--slate-300); }
 
+  /* Step expandable detail */
+  .step-expand { margin-top: 14px; text-align: left; }
+  .step-expand summary { list-style: none; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; font-weight: 700; color: var(--teal); padding: 4px 0; }
+  .step-expand summary::-webkit-details-marker { display: none; }
+  .step-expand .ex-chevron { transition: transform .2s; flex-shrink: 0; }
+  .step-expand[open] .ex-chevron { transform: rotate(180deg); }
+  .step-expand-body { margin-top: 12px; padding: 14px 16px; background: var(--white); border: 1px solid var(--slate-100); border-radius: 10px; font-size: 12.5px; line-height: 1.7; color: var(--slate-600); box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+  .step-expand-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--slate-400); margin-bottom: 4px; }
+  .step-expand-label + ul { margin-top: 0; }
+  .step-expand-body ul { margin: 0 0 10px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .step-expand-body ul:last-child { margin-bottom: 0; }
+  .step-expand-body li { display: flex; gap: 7px; align-items: flex-start; }
+  .step-expand-body li::before { content: "→"; flex-shrink: 0; color: var(--teal); font-weight: 700; line-height: 1.7; }
+
   /* Mission/Vision */
   .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 52px; }
   .mv-card {
@@ -1666,6 +1680,9 @@
   }
   .faq-a p:first-child { margin-top: 12px; }
   .faq-a strong { color: var(--slate-800); }
+  .faq-a ul { margin: 12px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .faq-a li { display: flex; gap: 8px; align-items: flex-start; font-size: .92rem; color: var(--slate-600); line-height: 1.65; }
+  .faq-a li::before { content: "→"; flex-shrink: 0; color: var(--teal); font-weight: 700; }
 
 /* ───────────────────────────────────────────
    MODAL JOURNEY STRIP
@@ -3527,13 +3544,38 @@
 
     <div class="steps-row reveal">
 
+      <!-- Step 1: Check -->
       <div class="step">
         <div class="step-icon" style="background:rgba(0,200,168,.12);border:1.5px solid rgba(0,200,168,.2);">
           <svg class="icon" width="24" height="24" style="color:var(--teal);"><use href="#i-search"/></svg>
           <div class="step-num">1</div>
         </div>
         <div class="step-name">Check</div>
-        <div class="step-desc">Enter your URL and answer a few short questions. We combine a live site walkthrough with direct analysis and your business context to give you a plain-English trust score across four pillars. About 5 minutes, no account needed.</div>
+        <div class="step-desc">Enter your URL and answer a few short questions. We combine a live site walkthrough with your business context to give you a plain-English trust score across four pillars. About 5 minutes, no account needed.</div>
+        <details class="step-expand">
+          <summary>
+            <svg class="ex-chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            What happens in this step
+          </summary>
+          <div class="step-expand-body">
+            <div class="step-expand-label">What you do</div>
+            <ul>
+              <li>Enter your website URL — no account or sign-up needed</li>
+              <li>Answer 10 short questions about your role, your clients, and your current data setup (about 5 minutes)</li>
+            </ul>
+            <div class="step-expand-label">What we do</div>
+            <ul>
+              <li>Analyze your public site the same way a buyer's IT team or procurement portal would see it</li>
+              <li>Score you across four pillars: User Experience, Transparency, Safety &amp; Security, and AI Trust</li>
+              <li>Match findings to your business context — not every gap matters equally for every business</li>
+            </ul>
+            <div class="step-expand-label">What you get</div>
+            <ul>
+              <li>A trust score out of 100 with a plain-English readiness label</li>
+              <li>Your top trust gaps — what they are, why buyers notice them, and what's at risk if left open</li>
+            </ul>
+          </div>
+        </details>
       </div>
 
       <div class="step-arrow">
@@ -3545,6 +3587,7 @@
         </svg>
       </div>
 
+      <!-- Step 2: Treat -->
       <div class="step">
         <div class="step-icon" style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.2);">
           <svg class="icon" width="24" height="24" style="color:var(--green);"><use href="#i-zap"/></svg>
@@ -3552,6 +3595,27 @@
         </div>
         <div class="step-name">Treat</div>
         <div class="step-desc">Every finding comes with plain-language fix instructions for your business owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap. Every person has their part.</div>
+        <details class="step-expand">
+          <summary>
+            <svg class="ex-chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            What a finding looks like
+          </summary>
+          <div class="step-expand-body">
+            <div class="step-expand-label">For each gap we find, you get</div>
+            <ul>
+              <li>A plain-English description — what the issue is and why buyers notice it</li>
+              <li>Fix instructions written for your developer, with exact technical steps</li>
+              <li>Legal context written for your compliance contact or attorney</li>
+              <li>A priority rating so you know which gaps to close first</li>
+              <li>Region flags — whether it affects US (CCPA), EU (GDPR), or both</li>
+            </ul>
+            <div class="step-expand-label">For example</div>
+            <ul>
+              <li>"Your cookie banner doesn't block tracking when a visitor clicks Reject All — here's the exact fix your developer needs"</li>
+              <li>"Your privacy policy doesn't mention AI tools — here's the clause your legal contact should add"</li>
+            </ul>
+          </div>
+        </details>
       </div>
 
       <div class="step-arrow">
@@ -3563,6 +3627,7 @@
         </svg>
       </div>
 
+      <!-- Step 3: Strengthen -->
       <div class="step">
         <div class="step-icon" style="background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.2);">
           <svg class="icon" width="24" height="24" style="color:#8B5CF6;"><use href="#i-trend"/></svg>
@@ -3570,6 +3635,26 @@
         </div>
         <div class="step-name">Strengthen</div>
         <div class="step-desc">Export a trust proof PDF for proposals and procurement. Re-scan monthly to track your progress. As your score improves, your pipeline should too. Trust becomes a measurable, repeatable edge.</div>
+        <details class="step-expand">
+          <summary>
+            <svg class="ex-chevron" aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            What this looks like ongoing
+          </summary>
+          <div class="step-expand-body">
+            <div class="step-expand-label">What you get to use</div>
+            <ul>
+              <li>A trust proof PDF you can attach to proposals, include in your procurement pack, or share on request</li>
+              <li>A monthly re-scan that checks whether gaps are closing and whether anything new has appeared</li>
+              <li>A progress dashboard tracking your score across all four pillars over time</li>
+            </ul>
+            <div class="step-expand-label">What changes in your business</div>
+            <ul>
+              <li>You can confidently answer "yes, we've been audited" when buyers ask</li>
+              <li>You stop scrambling when procurement asks for credentials at the last minute</li>
+              <li>Trust becomes part of your sales story — something you lead with, not something you defend</li>
+            </ul>
+          </div>
+        </details>
       </div>
 
     </div>
@@ -3671,87 +3756,99 @@
 <section class="faq-section" id="faq">
   <div class="container">
     <div class="faq-header">
-      <div class="faq-kicker">Got questions?</div>
-      <h2 class="faq-h2">Why Data Pilots, and not just ChatGPT or a free scanner?</h2>
-      <p class="faq-sub">Fair question. Here's the honest answer.</p>
+      <div class="faq-kicker">Common questions</div>
+      <h2 class="faq-h2">Straight answers.</h2>
+      <p class="faq-sub">No jargon. If something's still unclear, <a href="mailto:team@datapilots.tech" style="color:var(--teal);text-decoration:none;font-weight:600;">just ask us</a>.</p>
     </div>
 
     <div class="faq-grid">
 
       <details class="faq-item" open>
-        <summary class="faq-q">Can't I just ask ChatGPT to check my website?</summary>
+        <summary class="faq-q">Can't I just use ChatGPT or a free scanner?</summary>
         <div class="faq-a">
-          <p>You can, and you'll get a generic checklist back. What you won't get is a real assessment that actually visits your site, fires cookies, clicks "Decline All," and checks whether tracking actually stops. ChatGPT doesn't visit URLs. It guesses based on training data.</p>
-          <p>Our Trust Snapshot works differently. It combines three things: a live site walkthrough that visits your website the way a real buyer or auditor would; direct analysis of your website's signals (policy language, security headers, AI disclosure, and more); and a few short questions about your business and clients, because context changes what findings actually mean.</p>
-          <p>Everything gets combined and translated into plain English, prioritised by what matters most for the clients you're trying to win, with clear guidance for every person in your business who needs to act on it.</p>
+          <p>Free tools are a reasonable starting point — but they have a key limitation: they don't visit your site. ChatGPT works from training data, not a live crawl. Cookie scanners check one thing. Neither knows anything about your business, your clients, or what buyers in your market actually look for.</p>
+          <p>Our Trust Snapshot does a live walkthrough of your website — the same way a buyer or IT team would — then combines it with your business context. You get a scored picture across four pillars and plain-English priority fixes, not a generic checklist.</p>
         </div>
       </details>
 
       <details class="faq-item">
-        <summary class="faq-q">There are free cookie scanners out there. Why pay?</summary>
+        <summary class="faq-q">Why do I need something built for businesses like mine?</summary>
         <div class="faq-a">
-          <p>Free scanners check one thing: cookies. We check your whole trust picture: security headers, privacy policy quality, GDPR language, AI disclosure, footer policy links, consent banner behaviour, and how all of it lands with the specific type of buyer you're trying to win.</p>
-          <p>More importantly: free tools give you a list. We give you a prioritised action plan in plain English, with the context of why each issue matters to the procurement teams you're selling to. That's the bit that turns findings into revenue.</p>
+          <p>Because what matters depends on who's buying. Corporate buyers in your market run specific checks: IT teams look for security headers; legal teams want to see data agreements; HR and learning buyers care about how you handle people's records. A general trust tool won't know that a missing AI disclosure is a bigger issue for a training provider than it is for a florist.</p>
+          <p>We built the scoring and guidance around what actually blocks or accelerates deals for businesses like yours — selling online services and expertise to corporate clients. Your results are relevant, not just technically accurate.</p>
         </div>
       </details>
 
       <details class="faq-item">
-        <summary class="faq-q">Why do I need something built for businesses like mine? Trust is trust, isn't it?</summary>
+        <summary class="faq-q">What do I actually get?</summary>
         <div class="faq-a">
-          <p>Not quite. Corporate <span class="term" tabindex="0" data-tip="The process a company uses to review and approve new suppliers before a contract can be signed — usually involves legal, IT, and finance">procurement</span> has its own patterns: HR and learning buyers care about data handling for learner records; legal teams ask about <span class="term" tabindex="0" data-tip="A Data Processing Agreement — a contract that spells out how you'll handle a client's employee or learner data. Required by law in many situations.">DPAs</span> and <span class="term" tabindex="0" data-tip="Europe's data privacy law. Applies to any business working with EU clients — even US-based businesses.">GDPR</span> compliance; IT security checks <span class="term" tabindex="0" data-tip="Invisible settings your web server sends to browsers, telling them how to handle security. Missing ones are a common red flag in vendor reviews.">security headers</span> and <span class="term" tabindex="0" data-tip="The cookie pop-up on your website asking visitors for permission before tracking them">cookie consent</span>. A generic trust tool won't know that "no AI disclosure" is a bigger issue for a training provider than for a florist.</p>
-          <p>We've built the scoring and action guidance around what actually blocks or accelerates deals for businesses selling online services to corporate clients, so your results are relevant, not just technically accurate.</p>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-q">What do I actually get that I couldn't piece together myself?</summary>
-        <div class="faq-a">
-          <p>Three things that are hard to replicate solo: <strong>(1) Both risk types in one place.</strong> Most tools focus on UX or compliance. We identify both trust risks (what breaks buyer confidence) and compliance risks (what triggers a procurement veto) in a single scan. <strong>(2) Three perspectives, not one.</strong> Findings are framed for your buyers and clients, for leadership (decisions without jargon), and for your legal or technical team (what they need to fix it). <strong>(3) Prioritised action plan.</strong> Not a list of 40 issues, but the 3 things to fix this week that have the biggest impact.</p>
-          <p>You could spend half a day pulling this together across different tools, then try to translate technical output into something your team can act on. Or you can have it in 5 minutes, in language you can actually use.</p>
+          <p>Your free Trust Snapshot gives you:</p>
+          <ul>
+            <li>A trust score out of 100 across four pillars — User Experience, Transparency, Safety &amp; Security, and AI Trust</li>
+            <li>Your top three priority fixes, written in plain English — no jargon</li>
+            <li>Context on why each issue matters to the buyers you're selling to</li>
+            <li>Role-split guidance: what you need to do, what your developer needs to do, what your legal contact should handle</li>
+          </ul>
+          <p>Trust Navigator Hub goes further — every finding (not just the top three), a review of your learner portal and client-facing tools, monthly re-scans, and a trust proof PDF for proposals.</p>
         </div>
       </details>
 
       <details class="faq-item">
         <summary class="faq-q">What's the difference between the free Trust Snapshot and Trust Navigator Hub?</summary>
         <div class="faq-a">
-          <p>The free <strong>Trust Snapshot</strong> audits your public-facing website: the face you show to buyers before they even speak to you. It covers the signals that get flagged in procurement (security, privacy docs, consent behaviour, transparency) and gives you a score across four trust pillars, plus your top three priority fixes. No account needed, takes about five minutes.</p>
-          <p><strong>Trust Navigator Hub</strong> is the full platform. It runs a deeper audit of your public-facing site (every finding, not just the top three), then extends the review to your <strong>learner portal or platform</strong> and your <strong>CRM and client-facing tools</strong>: the parts of your operation corporate clients and their procurement teams actually interact with. The goal is to surface anything that slows down sales, flags during procurement, or creates friction in client onboarding. You get step-by-step guides for every person who needs to act, a trust proof PDF for proposals and RFPs, a dashboard, and monthly re-scans.</p>
+          <p>The <strong>Trust Snapshot</strong> audits your public-facing website — the first thing buyers see. It covers the signals that get flagged in procurement and gives you a score plus your top three fixes. No account needed, about five minutes.</p>
+          <p><strong>Trust Navigator Hub</strong> runs a deeper public site audit (every finding, not just the top three), then extends the review to your learner portal, platform, and client-facing tools. You also get step-by-step fix guides for your whole team, a trust proof PDF for proposals, a progress dashboard, and monthly re-scans to stay green.</p>
         </div>
       </details>
 
       <details class="faq-item">
-        <summary class="faq-q">How is this different from hiring a lawyer or a data consultant?</summary>
+        <summary class="faq-q">How is this different from hiring a lawyer or compliance consultant?</summary>
         <div class="faq-a">
-          <p>Lawyers and data consultants are essential for complex compliance work. We're not replacing them. What we do is surface the practical, fixable issues that stop deals before they even get to a legal review. Most of our top findings take 1–2 days to fix without any specialist help.</p>
-          <p>Think of it as triage: we tell you what's broken and how to fix it in plain English. If something needs a lawyer, we'll say so. But most trust issues on websites like yours don't.</p>
+          <p>Lawyers and consultants are essential for complex compliance work — we're not replacing them. What we do is surface the practical, fixable issues that stop deals before they ever reach a legal review. Most of our top findings take 1–2 days to fix without specialist help.</p>
+          <p>Think of it as triage. We tell you what's broken and how to fix it in plain English. If something genuinely needs a lawyer, we'll say so clearly.</p>
         </div>
       </details>
 
       <details class="faq-item">
         <summary class="faq-q">I'm not technical — will I understand the results?</summary>
         <div class="faq-a">
-          <p>That's exactly who we built this for. Every finding is written in plain language with a real-world example. If it says "Missing privacy page," we tell you what that means to a buyer, why it matters, and how to fix it. No developer or lawyer needed.</p>
+          <p>Yes, and that's the point. Every finding is written in plain language with a real-world example of what it means and what to do about it. If it says "Missing privacy page," we explain what a buyer actually sees, why it matters, and how to fix it — without needing a developer or lawyer to translate.</p>
         </div>
       </details>
 
       <details class="faq-item">
         <summary class="faq-q">What happens to my data when I run a scan?</summary>
         <div class="faq-a">
-          <p>Nothing is stored unless you choose to save your results. We scan your public-facing website and return a score. No account needed for the free check. You are always in control of what gets saved.</p>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-q">Who is this built for?</summary>
-        <div class="faq-a">
-          <p>E-learning providers, professional development businesses, and executive coaches selling to corporate clients. If you're the founder or business owner responsible for growth, and your buyers check your website before agreeing to meet, this is for you. No technical background needed.</p>
+          <p>We scan your public-facing website and return a score. Nothing is stored unless you choose to save your results. No account needed for the free Trust Snapshot. You're always in control of what gets saved.</p>
         </div>
       </details>
 
       <details class="faq-item">
         <summary class="faq-q">Can I share my trust report with prospects?</summary>
         <div class="faq-a">
-          <p>Yes, that's one of the most popular uses. Trust Navigator Hub includes an exportable trust proof PDF designed to go into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously.</p>
+          <p>Yes — and that's one of the most common uses. Trust Navigator Hub includes a trust proof PDF designed to go straight into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously, before they've even asked the question.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">What does "Unlimited Guests" mean?</summary>
+        <div class="faq-a">
+          <p>Guests are people you bring into your Trust Navigator Hub dashboard without needing a paid seat — your developer, a legal advisor, a contractor, an accountant. They can view findings and act on fix guides relevant to their role. Unlimited means exactly that: no per-seat charges for the people you need to loop in.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Who is this built for?</summary>
+        <div class="faq-a">
+          <p>Coaches, consultants, e-learning providers, and training businesses selling to corporate clients. If you're the founder or owner responsible for growth — and your buyers check your website before agreeing to meet — this is for you. No technical background required.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-q">Who's behind Data Pilots?</summary>
+        <div class="faq-a">
+          <p>Data Pilots is being built by a team with background in data strategy, compliance, and the online learning industry. We kept seeing the same problem: good businesses losing deals not because of a bad product, but because their website didn't pass the informal trust checks buyers were running — often before a single conversation had happened.</p>
+          <p>We're building this in public, with early Community members helping shape what it becomes. If you want to follow along or help us get it right, <a href="#community-signup" style="color:var(--teal);font-weight:600;">join Community free</a>.</p>
         </div>
       </details>
 
