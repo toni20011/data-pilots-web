@@ -2834,9 +2834,19 @@
                 </div>
               </div>
             </div>
-            <p style="font-size:11.5px;color:rgba(255,255,255,.3);margin-top:14px;line-height:1.5;">
-              We're also running a live site walkthrough, simulating a buyer visiting from California and clicking "reject all" on your cookie banner.
-            </p>
+            <!-- Papaya partner callout -->
+            <div style="margin-top:16px;background:rgba(0,200,168,.05);border:1px solid rgba(0,200,168,.14);border-radius:9px;padding:11px 13px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;">
+                <img src="https://papaya-consent-check-be11a0846ed5.herokuapp.com/static/assets/consent_checker-removebg-preview.png"
+                  alt="Papaya" height="20" style="height:20px;width:auto;opacity:.85;filter:brightness(1.2);"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+                <span style="display:none;font-size:11.5px;font-weight:800;color:var(--teal);letter-spacing:.04em;">PAPAYA</span>
+                <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.3);">Partner tool — running now</span>
+              </div>
+              <div style="font-size:11px;color:rgba(255,255,255,.42);line-height:1.65;">
+                Papaya is a consent analysis tool built for privacy professionals. We use it to simulate exactly what a cautious buyer — and a compliance reviewer — sees when they visit your site and reject all cookies. What it finds, we translate into plain-English insights you can act on.
+              </div>
+            </div>
           </div>
 
           <!-- TAB 2: Why it matters (scenarios) -->
@@ -5266,12 +5276,22 @@
         // Walkthrough already completed — show screenshot instantly
         const imgUrl = shot.url || shot.public_url;
         papayaArea.innerHTML = `
-          <div style="margin-top:14px;border-radius:8px;overflow:hidden;border:1px solid rgba(0,200,168,.18);">
+          <div style="margin-top:16px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,200,168,.18);">
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 13px;
+              background:rgba(0,200,168,.07);border-bottom:1px solid rgba(0,200,168,.12);">
+              <img src="https://papaya-consent-check-be11a0846ed5.herokuapp.com/static/assets/consent_checker-removebg-preview.png"
+                alt="Papaya" height="16" style="height:16px;width:auto;opacity:.8;filter:brightness(1.2);"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+              <span style="display:none;font-size:10.5px;font-weight:800;color:var(--teal);letter-spacing:.04em;">PAPAYA</span>
+              <span style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.4;">
+                Consent analysis tool for privacy professionals — we translate what it finds into insights for you
+              </span>
+            </div>
             <img src="${imgUrl}" alt="${shot.label || 'Consent banner screenshot'}"
               style="width:100%;display:block;max-height:220px;object-fit:cover;object-position:top;"
               loading="lazy">
-            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;
-              background:rgba(16,185,129,.06);font-size:12px;color:rgba(255,255,255,.55);">
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 13px;
+              background:rgba(16,185,129,.06);font-size:12px;color:rgba(255,255,255,.5);">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981"
                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
                 <polyline points="20 6 9 17 4 12"/>
@@ -5284,12 +5304,20 @@
       } else {
         // Papaya timed out or screenshot unavailable — fall back to live polling
         papayaArea.innerHTML = `
-          <div id="papaya-strip" style="display:flex;align-items:center;gap:10px;
-            background:rgba(0,200,168,.07);border:1px solid rgba(0,200,168,.18);
-            border-radius:8px;padding:10px 14px;margin-top:14px;
-            font-size:12px;color:rgba(255,255,255,.55);">
-            <div class="modal-spinner" style="width:13px;height:13px;flex-shrink:0;"></div>
-            <span id="papaya-strip-msg">Site walkthrough running — simulating California visitor, reject-all cookies…</span>
+          <div style="margin-top:16px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,200,168,.18);">
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 13px;
+              background:rgba(0,200,168,.07);border-bottom:1px solid rgba(0,200,168,.12);">
+              <img src="https://papaya-consent-check-be11a0846ed5.herokuapp.com/static/assets/consent_checker-removebg-preview.png"
+                alt="Papaya" height="16" style="height:16px;width:auto;opacity:.8;filter:brightness(1.2);"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+              <span style="display:none;font-size:10.5px;font-weight:800;color:var(--teal);letter-spacing:.04em;">PAPAYA</span>
+              <span style="font-size:11px;color:rgba(255,255,255,.45);">Consent analysis tool for privacy professionals</span>
+            </div>
+            <div id="papaya-strip" style="display:flex;align-items:center;gap:10px;
+              padding:10px 14px;font-size:12px;color:rgba(255,255,255,.55);">
+              <div class="modal-spinner" style="width:13px;height:13px;flex-shrink:0;"></div>
+              <span id="papaya-strip-msg">Site walkthrough running — simulating California visitor, reject-all cookies…</span>
+            </div>
           </div>
           <div id="papaya-screenshot" style="display:none;margin-top:4px;"></div>`;
         pollPapayaFindings(sessionId);
