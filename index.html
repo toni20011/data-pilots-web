@@ -1003,6 +1003,44 @@
   .paid-extras p { font-size: 12.5px; color: rgba(255,255,255,.55); }
   .paid-extras strong { color: var(--teal); font-weight: 700; }
 
+  /* Snapshot findings preview (below pillars) */
+  .snap-findings { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--slate-100); }
+  .snap-findings-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--slate-400); margin-bottom: 10px; }
+  .snap-finding-row { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 8px; }
+  .snap-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .snap-finding-text { font-size: 12px; color: var(--slate-600); line-height: 1.4; flex: 1; }
+  .snap-tag { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 1px 7px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .snap-tag-red { background: rgba(239,68,68,.08); color: #DC2626; }
+  .snap-tag-amber { background: rgba(245,158,11,.08); color: #D97706; }
+  .snap-more { font-size: 11.5px; color: var(--teal); font-weight: 600; margin-top: 10px; display: block; text-decoration: none; }
+  .snap-more:hover { text-decoration: underline; }
+
+  /* 6-instrument hub view (Trust Panel mockup) */
+  .instrument-list { display: flex; flex-direction: column; }
+  .instrument-row {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 11px 0; border-bottom: 1px solid var(--slate-100);
+  }
+  .instrument-row:last-child { border-bottom: none; }
+  .inst-num {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    font-size: 10px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--teal-dim); color: var(--teal); margin-top: 1px;
+  }
+  .inst-content { flex: 1; min-width: 0; }
+  .inst-name { font-size: 12.5px; font-weight: 700; color: var(--slate-800); margin-bottom: 1px; }
+  .inst-desc { font-size: 11.5px; color: var(--slate-400); line-height: 1.4; }
+  .inst-pill {
+    font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    padding: 2px 8px; border-radius: 99px; flex-shrink: 0; white-space: nowrap; margin-top: 3px;
+  }
+  .inst-pill-teal { background: rgba(0,200,168,.1); color: var(--teal); }
+  .inst-pill-green { background: rgba(16,185,129,.1); color: #059669; }
+  .inst-pill-purple { background: rgba(139,92,246,.1); color: #7C3AED; }
+  .inst-pill-blue { background: rgba(59,130,246,.1); color: #2563EB; }
+  .inst-pill-amber { background: rgba(245,158,11,.1); color: #D97706; }
+
   /* CTA strip */
   .cta-strip {
     display: flex; align-items: center; justify-content: space-between;
@@ -3443,61 +3481,106 @@
 
           </div>
 
+          <div class="snap-findings">
+            <div class="snap-findings-label">Findings flagged in your Snapshot</div>
+            <div class="snap-finding-row">
+              <div class="snap-dot" style="background:#DC2626;"></div>
+              <div class="snap-finding-text">No AI disclosure visible on your site</div>
+              <div class="snap-tag snap-tag-red">Fix This Week</div>
+            </div>
+            <div class="snap-finding-row">
+              <div class="snap-dot" style="background:#D97706;"></div>
+              <div class="snap-finding-text">Security headers missing — flags IT vendor scans</div>
+              <div class="snap-tag snap-tag-amber">Review</div>
+            </div>
+            <div class="snap-finding-row">
+              <div class="snap-dot" style="background:#10B981;"></div>
+              <div class="snap-finding-text">Privacy policy buried — not where buyers look</div>
+              <div class="snap-tag" style="background:rgba(16,185,129,.08);color:#059669;">Quick Win</div>
+            </div>
+            <span class="snap-more" href="#pricing">Full findings + fix guides in Trust Panel →</span>
+          </div>
+
           <div class="free-note">
             <svg class="icon" width="15" height="15"><use href="#i-info"/></svg>
-            <span>This covers your public site — the first thing buyers check. <strong>Trust Panel</strong> goes further: your learner portal, platform, and client tools, with fix guides your developer and legal adviser can pick up and act on directly.</span>
+            <span>This covers your public website. <strong>Trust Panel</strong> extends the review to your learner portal, platform, and client tools — with fix guides your team can act on directly.</span>
           </div>
         </div>
       </div>
 
-      <!-- PAID panel -->
+      <!-- PAID panel — 6 instruments -->
       <div class="report-panel reveal reveal-delay-2">
         <div class="panel-header">
           <div>
             <div class="panel-title">Trust Panel</div>
-            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Trust Panel</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Your full instrument panel · 6 dimensions</div>
           </div>
           <div class="panel-status status-paid">Trust Panel</div>
         </div>
         <div class="panel-body">
 
-          <div class="finding-item">
-            <div class="finding-icon" style="background:#EDE9FE;">
-              <svg class="icon" width="15" height="15" style="color:#7C3AED;"><use href="#i-bot"/></svg>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--slate-400);margin-bottom:4px;">How Trust Panel navigates your trust picture</div>
+
+          <div class="instrument-list">
+
+            <div class="instrument-row">
+              <div class="inst-num">1</div>
+              <div class="inst-content">
+                <div class="inst-name">Visibility</div>
+                <div class="inst-desc">Full picture: website, platform, and client-facing tools</div>
+              </div>
+              <div class="inst-pill inst-pill-teal">Live</div>
             </div>
-            <div class="finding-body">
-              <strong>No AI disclosure on your training site</strong>
-              <span class="finding-tag tag-fix-now">Fix This Week</span>
-              <p>You use AI in your work but there's no mention of it on your site. Corporate L&amp;D procurement teams now ask about this before signing — and silence reads as evasion.</p>
+
+            <div class="instrument-row">
+              <div class="inst-num">2</div>
+              <div class="inst-content">
+                <div class="inst-name">Translation</div>
+                <div class="inst-desc">Plain English findings — written for owner, developer, legal</div>
+              </div>
+              <div class="inst-pill inst-pill-blue">3 roles</div>
             </div>
+
+            <div class="instrument-row">
+              <div class="inst-num">3</div>
+              <div class="inst-content">
+                <div class="inst-name">Decision Making</div>
+                <div class="inst-desc">Prioritised view: Fix This Week · Quick Win · Review</div>
+              </div>
+              <div class="inst-pill inst-pill-amber">Ranked</div>
+            </div>
+
+            <div class="instrument-row">
+              <div class="inst-num">4</div>
+              <div class="inst-content">
+                <div class="inst-name">Coordination</div>
+                <div class="inst-desc">Tasks assigned by role and tool — no ambiguity about who acts</div>
+              </div>
+              <div class="inst-pill inst-pill-purple">Assigned</div>
+            </div>
+
+            <div class="instrument-row">
+              <div class="inst-num">5</div>
+              <div class="inst-content">
+                <div class="inst-name">Action</div>
+                <div class="inst-desc">Step-by-step fix guides your team picks up directly</div>
+              </div>
+              <div class="inst-pill inst-pill-green">Ready</div>
+            </div>
+
+            <div class="instrument-row">
+              <div class="inst-num">6</div>
+              <div class="inst-content">
+                <div class="inst-name">Progress</div>
+                <div class="inst-desc">Monthly re-scans · trust score trend · proof PDF for proposals</div>
+              </div>
+              <div class="inst-pill inst-pill-teal">Tracked</div>
+            </div>
+
           </div>
 
-          <div class="finding-item">
-            <div class="finding-icon" style="background:#D1FAE5;">
-              <svg class="icon" width="15" height="15" style="color:#059669;"><use href="#i-eye"/></svg>
-            </div>
-            <div class="finding-body">
-              <strong>Learner data handling not visible to buyers</strong>
-              <span class="finding-tag tag-quick-win">Quick Win</span>
-              <div class="fw-tags"><span class="fw-tag">US (CCPA)</span><span class="fw-tag">Global (GDPR)</span></div>
-              <p>Your privacy page doesn't mention how learner records are stored. One paragraph fixes it — and stops procurement teams asking the question before the deal's even moving.</p>
-            </div>
-          </div>
-
-          <div class="finding-item">
-            <div class="finding-icon" style="background:#FEF3C7;">
-              <svg class="icon" width="15" height="15" style="color:#D97706;"><use href="#i-shield"/></svg>
-            </div>
-            <div class="finding-body">
-              <strong>Security headers missing — flags IT vendor scans</strong>
-              <span class="finding-tag tag-review">Review</span>
-              <div class="fw-tags"><span class="fw-tag">Certifications (ISO 27001)</span><span class="fw-tag">Audit (SOC 2)</span></div>
-              <p>Corporate IT teams run automated checks on every supplier. Two missing headers are flagging your site. A developer can fix both in under an hour with our step-by-step guide.</p>
-            </div>
-          </div>
-
-          <div class="paid-extras">
-            <p>Trust Panel also includes: <strong>exportable trust proof PDF</strong> for proposals, monthly re-scans, and task-ready instructions your developer or legal adviser can pick up directly.</p>
+          <div class="paid-extras" style="margin-top:14px;">
+            <p>One panel. Your developer, legal adviser, and tools all working from the same picture.</p>
             <a href="#pricing" class="btn btn-teal" style="padding:9px 16px;font-size:12.5px;flex-shrink:0;">See Pricing</a>
           </div>
 
