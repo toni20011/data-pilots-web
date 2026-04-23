@@ -2453,6 +2453,7 @@
         <li><a href="#proof">Get Involved</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="framework.html">Our Framework</a></li>
+        <li><a href="hub.html">Trust Navigator Hub</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -5240,54 +5241,6 @@
       }
     }
 
-    // Hub teaser — contextual locked deeper-insight cards
-    const hubEl = document.getElementById('ro-hub-teaser');
-    if (hubEl) {
-      const A = data.answers || {};
-      const f2 = Array.isArray(A.F2) ? A.F2 : [];
-      const lockedItems = [
-        { cat: 'Consent & cookies', title: 'Full cookie audit — names, purposes, and consent timing for every tracker' },
-        { cat: 'Data flow', title: 'Third-party tracker inventory with jurisdiction risk flags' },
-        { cat: 'Data transfer', title: 'Cross-border data transfer mapping and SCCs gap check' },
-      ];
-      if (f2.includes('b2b_enterprise') || f2.includes('government')) {
-        lockedItems.push({ cat: 'Procurement', title: 'Vendor security questionnaire gap analysis — common blockers before you get asked' });
-      }
-      if (A.F3 && A.F3 !== 'no') {
-        lockedItems.push({ cat: 'AI governance', title: 'AI tool data handling audit — what each tool can access and what your policy must say' });
-      }
-      if (A.F5 === 'none' || A.F5 === 'old_unsure') {
-        lockedItems.push({ cat: 'Legal gap', title: 'Privacy policy completeness review against your actual tool stack and client base' });
-      }
-      if (A.F4 === 'crm' || A.F4 === 'multiple') {
-        lockedItems.push({ cat: 'Tool stack', title: 'CRM and platform data flow audit — subprocessors, retention, and DPA requirements' });
-      }
-      const lockSVG = `<svg class="ro-hub-lock-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
-      hubEl.innerHTML = `
-        <div class="ro-hub-head">
-          <div class="ro-hub-kicker">Trust Navigator Hub</div>
-          <div class="ro-hub-title">What a full audit would find here</div>
-          <div class="ro-hub-sub">Your free snapshot covers the trust signals visible on your public site. The full audit goes deeper — across your site, tools, and client-facing systems.</div>
-        </div>
-        <div class="ro-hub-locked-list">
-          ${lockedItems.slice(0, 5).map(item => `
-          <div class="ro-hub-locked">
-            ${lockSVG}
-            <div class="ro-hub-locked-body">
-              <div class="ro-hub-locked-cat">${item.cat}</div>
-              <div class="ro-hub-locked-title">${item.title}</div>
-            </div>
-            <div class="ro-hub-locked-bar"></div>
-          </div>`).join('')}
-        </div>
-        <div class="ro-hub-cta">
-          <div class="ro-hub-cta-text">Full fix guides written for you, your developer, and your legal adviser — one shared roadmap.</div>
-          <button onclick="joinCommunityFromResults()" class="btn btn-ghost" style="padding:8px 16px;font-size:12.5px;white-space:nowrap;">
-            Get early access →
-          </button>
-        </div>`;
-    }
-
     // Papaya area — show immediately if screenshot is pre-loaded, else fall back to live poll
     const papayaArea = document.getElementById('ro-papaya-area');
     if (data.papaya_session_id) {
@@ -5808,20 +5761,42 @@
       border-radius:10px;padding:14px 16px;margin-bottom:22px;">
     </div>
 
-    <!-- Hub teaser — populated by JS -->
-    <div id="ro-hub-teaser" class="ro-hub-teaser"></div>
+    <!-- What just happened — empowerment bridge -->
+    <div id="ro-what-happened" style="
+      background:rgba(0,200,168,.06);border:1px solid rgba(0,200,168,.14);
+      border-radius:12px;padding:16px 18px;margin-bottom:24px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:12px;">What we just did for you</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Scored your site across the four areas corporate buyers check before responding to your pitch</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Ran a live walkthrough of your site as a California visitor — simulating exactly what a cautious buyer sees</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Mapped your findings to your specific buyer context and compliance frame — not a generic checklist</span>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.5;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Gave you specific steps you can act on today — with and without us</span>
+        </div>
+      </div>
+    </div>
 
-    <!-- Method strip: Check → Treat → Strengthen -->
+    <!-- Method strip: what's next -->
     <div class="ro-method">
-      <div class="ro-method-title">How your score was built — and what comes next</div>
+      <div class="ro-method-title">Your path from here</div>
       <div class="ro-method-steps">
         <div class="ro-method-step active">
           <div class="ro-method-label">
             <span class="ro-method-num">1</span>
             <span class="ro-method-name">Check</span>
-            <span class="ro-method-tier free">FREE — done</span>
+            <span class="ro-method-tier free">DONE</span>
           </div>
-          <p>Enter your URL and answer a few short questions. We combine a live site walkthrough, direct website analysis, and your business context to give you a plain-English trust score across UX, Transparency, Safety, and AI Trust. About 5 minutes, no account needed.</p>
+          <p>You've seen where you stand. You have your score, your findings, and specific steps to start fixing. That's real — most businesses never get this far.</p>
         </div>
         <div class="ro-method-step">
           <div class="ro-method-label">
@@ -5829,7 +5804,7 @@
             <span class="ro-method-name">Treat</span>
             <span class="ro-method-tier paid">TRUST NAVIGATOR HUB</span>
           </div>
-          <p>Every finding comes with exact fix instructions — plain language for you as the owner, technical steps for your developer, and legal context for your compliance team. One shared roadmap, every person has their part.</p>
+          <p>Every finding gets exact fix instructions — written for you as the owner, your developer, and your legal adviser. One shared roadmap, no translation needed.</p>
         </div>
         <div class="ro-method-step">
           <div class="ro-method-label">
@@ -5837,33 +5812,34 @@
             <span class="ro-method-name">Strengthen</span>
             <span class="ro-method-tier paid">TRUST NAVIGATOR HUB</span>
           </div>
-          <p>Export a trust proof PDF for proposals and procurement. Re-scan monthly to track progress. As your score improves, your pipeline should too — trust becomes a measurable, repeatable edge.</p>
+          <p>Monthly re-scans, progress tracking, and a trust proof PDF you can attach to proposals. Trust becomes something you can show — not just something you claim.</p>
         </div>
       </div>
     </div>
 
-    <!-- Next steps: Community first, Hub second -->
+    <!-- CTA block -->
     <div class="ro-upgrade">
 
-      <!-- Step 1: Join Community -->
+      <!-- Primary: save results + join Community -->
       <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:24px;">
-        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px;">Your next step</div>
-        <div class="ro-upgrade-title" style="margin-bottom:8px;">Save your results — join Community free</div>
-        <p class="ro-upgrade-sub" style="margin-bottom:18px;">Your results are only visible to you right now. Join Community to save them, access guides, and stay connected as Trust Navigator Hub develops. Free, no card, takes 30 seconds.</p>
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px;">Keep the momentum</div>
+        <div class="ro-upgrade-title" style="margin-bottom:8px;">Save your results and start fixing</div>
+        <p class="ro-upgrade-sub" style="margin-bottom:18px;">Your results disappear when you close this window. Join Community free to save them, access early resources, and stay connected as Trust Navigator Hub launches. Free, no card, 30 seconds.</p>
         <button onclick="joinCommunityFromResults()" class="btn btn-teal" style="padding:13px 28px;font-size:15px;font-weight:700;">
-          Join Community free — save my results
+          Save my results — join Community free
         </button>
       </div>
 
-      <!-- Step 2: Trust Navigator Hub -->
+      <!-- Secondary: Hub teaser link -->
       <div style="text-align:center;">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.35);margin-bottom:10px;">When you're ready to go deeper</div>
-        <div style="font-size:16px;font-weight:800;color:var(--white);margin-bottom:8px;">Trust Navigator Hub</div>
-        <p class="ro-upgrade-sub" style="margin-bottom:16px;">Full audit across your public site, learner portal, platform, and client-facing tools. Fix guides for your whole team. Dashboard to track progress and stay green.</p>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:10px;">Ready to go further?</div>
+        <p style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:16px;max-width:380px;margin-left:auto;margin-right:auto;">
+          Trust Navigator Hub turns these findings into a full fix roadmap — with deeper audits, team-ready instructions, and monthly progress tracking.
+        </p>
         <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
-          <button onclick="joinCommunityFromResults()" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">
-            Express interest via Community
-          </button>
+          <a href="hub.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">
+            See what's coming in Trust Navigator Hub →
+          </a>
           <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:10px 20px;font-size:13px;">
             <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
             Book a 20-min call

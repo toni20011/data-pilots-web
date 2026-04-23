@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trust Navigator Hub | Data Pilots</title>
+  <meta name="description" content="Trust Navigator Hub turns your free snapshot into a full fix roadmap — deeper audits, team-ready instructions, and monthly progress tracking. Early access available."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+  :root {
+    --navy: #0B1929; --navy-mid: #112238; --navy-soft: #1A3350;
+    --teal: #00C8A8; --teal-dim: rgba(0,200,168,.12); --teal-border: rgba(0,200,168,.22);
+    --cyan: #00AFCC; --green: #10B981; --purple: #8B5CF6; --blue: #2C5AA0;
+    --slate-50: #F8FAFC; --slate-100: #F1F5F9; --slate-200: #E2E8F0;
+    --slate-400: #94A3B8; --slate-500: #64748B; --slate-600: #475569; --slate-800: #1E293B;
+    --white: #FFFFFF;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
+    --ease: cubic-bezier(.4,0,.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--navy); color: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 28px; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* NAV */
+  nav { background: rgba(11,25,41,.97); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.06); padding: 13px 0; position: sticky; top: 0; z-index: 100; }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-mark { width: 28px; height: 28px; background: linear-gradient(135deg, var(--teal), var(--cyan)); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+  .logo-wordmark { font-size: 15px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--white); }
+  .nav-links { display: flex; align-items: center; gap: 6px; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; font-family: inherit; font-weight: 600; cursor: pointer; border: none; text-decoration: none; white-space: nowrap; transition: all .17s var(--ease); border-radius: var(--r-sm); }
+  .btn-ghost { padding: 9px 18px; font-size: 13.5px; color: rgba(255,255,255,.55); background: transparent; border: 1px solid rgba(255,255,255,.12); }
+  .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,.3); }
+  .btn-teal { padding: 10px 22px; font-size: 13.5px; background: linear-gradient(135deg, var(--teal), var(--cyan)); color: var(--navy); }
+  .btn-teal:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,200,168,.3); }
+
+  /* HERO */
+  .hub-hero {
+    padding: 88px 0 80px;
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    position: relative; overflow: hidden;
+  }
+  .hub-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(139,92,246,.1) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hub-hero-inner { position: relative; z-index: 1; max-width: 680px; }
+  .hub-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.25);
+    border-radius: 99px; padding: 5px 14px; margin-bottom: 24px;
+    font-size: 11.5px; font-weight: 700; color: rgba(139,92,246,.9);
+    letter-spacing: .05em; text-transform: uppercase;
+  }
+  .hub-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple); animation: pulse-dot 2s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .hub-h1 {
+    font-size: clamp(34px, 5vw, 60px); font-weight: 900; letter-spacing: -.03em;
+    line-height: 1.06; color: var(--white); margin-bottom: 20px;
+  }
+  .hub-h1 span { background: linear-gradient(135deg, var(--purple), #C084FC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hub-sub { font-size: 17px; color: rgba(255,255,255,.6); line-height: 1.75; max-width: 520px; margin-bottom: 32px; }
+  .hub-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* BRIDGE — snapshot to hub */
+  .bridge-section { padding: 72px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .bridge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+  @media (max-width: 700px) { .bridge-grid { grid-template-columns: 1fr; } }
+  .bridge-col-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+  .bridge-col-label.free { color: var(--teal); }
+  .bridge-col-label.hub  { color: var(--purple); }
+  .bridge-card {
+    border-radius: var(--r-lg); padding: 22px 24px;
+  }
+  .bridge-card.free { background: rgba(0,200,168,.06); border: 1px solid rgba(0,200,168,.15); }
+  .bridge-card.hub  { background: rgba(139,92,246,.07); border: 1px solid rgba(139,92,246,.2); }
+  .bridge-card-title { font-size: 14.5px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 14px; }
+  .bridge-items { display: flex; flex-direction: column; gap: 9px; }
+  .bridge-item { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.5; }
+  .bridge-item svg { flex-shrink: 0; margin-top: 2px; }
+  .bridge-arrow { display: flex; align-items: center; justify-content: center; font-size: 24px; color: rgba(255,255,255,.2); padding: 12px 0; }
+  @media (max-width: 700px) { .bridge-arrow { display: none; } }
+
+  /* WHAT'S IN THE HUB */
+  .features-section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .section-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--purple); margin-bottom: 12px; }
+  .section-h2 { font-size: clamp(26px, 3.5vw, 40px); font-weight: 900; letter-spacing: -.025em; line-height: 1.15; color: var(--white); margin-bottom: 14px; }
+  .section-sub { font-size: 15.5px; color: rgba(255,255,255,.55); line-height: 1.75; max-width: 560px; margin-bottom: 48px; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .feature-card {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--r-md); padding: 20px 22px;
+    transition: border-color .2s var(--ease);
+  }
+  .feature-card:hover { border-color: rgba(139,92,246,.3); }
+  .feature-icon-wrap { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; margin-bottom: 13px; }
+  .feature-title { font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,.88); margin-bottom: 6px; }
+  .feature-detail { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+  /* WHO IT'S FOR */
+  .icp-section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.015); }
+  .icp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 44px; }
+  @media (max-width: 680px) { .icp-grid { grid-template-columns: 1fr; } }
+  .icp-card { border-radius: var(--r-md); padding: 20px 22px; }
+  .icp-card.built-for { background: rgba(139,92,246,.07); border: 1px solid rgba(139,92,246,.18); }
+  .icp-card.not-for   { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); }
+  .icp-card-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
+  .icp-card.built-for .icp-card-label { color: rgba(139,92,246,.8); }
+  .icp-card.not-for   .icp-card-label { color: rgba(255,255,255,.3); }
+  .icp-items { display: flex; flex-direction: column; gap: 9px; }
+  .icp-item { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.5; }
+  .icp-item svg { flex-shrink: 0; margin-top: 2px; }
+
+  /* EARLY ACCESS */
+  .early-section { padding: 88px 0; }
+  .early-inner { max-width: 680px; }
+  .early-steps { margin-top: 40px; display: flex; flex-direction: column; gap: 0; }
+  .early-step { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 28px; position: relative; }
+  .early-step:not(:last-child)::before { content: ''; position: absolute; left: 15px; top: 34px; bottom: 0; width: 1px; background: rgba(139,92,246,.2); }
+  .early-step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .early-step-num.done { background: rgba(0,200,168,.15); color: var(--teal); border: 1px solid rgba(0,200,168,.3); }
+  .early-step-num.next { background: rgba(139,92,246,.15); color: var(--purple); border: 1px solid rgba(139,92,246,.3); }
+  .early-step-num.later { background: rgba(255,255,255,.05); color: rgba(255,255,255,.3); border: 1px solid rgba(255,255,255,.1); }
+  .early-step-body { padding-top: 5px; }
+  .early-step-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.85); margin-bottom: 4px; }
+  .early-step-desc { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.6; }
+  .early-cta-block { margin-top: 44px; background: rgba(139,92,246,.07); border: 1px solid rgba(139,92,246,.2); border-radius: var(--r-lg); padding: 32px; }
+  .early-cta-title { font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
+  .early-cta-sub { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.7; margin-bottom: 24px; max-width: 480px; }
+  .early-cta-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-purple { padding: 13px 28px; font-size: 15px; font-weight: 700; background: linear-gradient(135deg, var(--purple), #A78BFA); color: var(--white); border-radius: var(--r-sm); border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all .17s var(--ease); }
+  .btn-purple:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139,92,246,.35); }
+  .btn-white { padding: 12px 22px; font-size: 13.5px; font-weight: 600; background: rgba(255,255,255,.1); color: var(--white); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-sm); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: all .17s var(--ease); }
+  .btn-white:hover { background: rgba(255,255,255,.16); }
+
+  /* FOOTER */
+  footer { border-top: 1px solid rgba(255,255,255,.06); padding: 32px 0; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,.3); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { font-size: 12px; color: rgba(255,255,255,.35); text-decoration: none; }
+  .footer-links a:hover { color: rgba(255,255,255,.65); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <span class="logo-wordmark">Data Pilots</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="btn btn-ghost" style="font-size:13px;">← Back to home</a>
+        <a href="index.html#hero-scan" class="btn btn-teal" style="font-size:13px;">Get free snapshot</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hub-hero">
+  <div class="container">
+    <div class="hub-hero-inner">
+      <div class="hub-badge">
+        <span class="hub-badge-dot"></span>
+        Coming soon — early access open
+      </div>
+      <h1 class="hub-h1">Trust Navigator <span>Hub</span></h1>
+      <p class="hub-sub">Your free snapshot shows you where the gaps are. Trust Navigator Hub is what you do about them — a full audit, a fix roadmap your whole team can act on, and a way to track progress over time.</p>
+      <div class="hub-hero-ctas">
+        <a href="index.html#community-signup" class="btn-purple">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Join Community for early access
+        </a>
+        <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" rel="noopener" class="btn-white">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Book a 20-min call
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRIDGE: snapshot → hub -->
+<section class="bridge-section">
+  <div class="container">
+    <div class="bridge-grid">
+
+      <div>
+        <div class="bridge-col-label free">Free Trust Snapshot — what you have now</div>
+        <div class="bridge-card free">
+          <div class="bridge-card-title">You know where the gaps are</div>
+          <div class="bridge-items">
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Trust score across UX, Transparency, Safety, and AI Trust</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Live consent walkthrough of your public site</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Key findings mapped to your buyer context</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>DIY starting points for each finding</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="bridge-col-label hub">Trust Navigator Hub — what comes next</div>
+        <div class="bridge-card hub">
+          <div class="bridge-card-title">Now you can actually fix it — and prove it</div>
+          <div class="bridge-items">
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Full audit across your site, tools, and client-facing systems</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Fix guides written for you, your developer, and your legal adviser</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Trust proof PDF you can attach to proposals and procurement responses</span>
+            </div>
+            <div class="bridge-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Monthly re-scans and a dashboard to track progress over time</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S IN THE HUB -->
+<section class="features-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-kicker">What's included</div>
+      <h2 class="section-h2">A full audit. A real roadmap.<br>Proof you can share.</h2>
+      <p class="section-sub">Trust Navigator Hub goes where the free snapshot can't — inside your tools, across your whole client journey, and into the legal and technical details that procurement teams actually check.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap" style="background:rgba(0,200,168,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#00C8A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feature-title">Full cookie and consent audit</div>
+        <div class="feature-detail">Every cookie named, categorised, and mapped against your consent setup — including what fires before consent, and what your banner actually does versus what it says.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon-wrap" style="background:rgba(139,92,246,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        </div>
+        <div class="feature-title">Third-party tracker inventory</div>
+        <div class="feature-detail">A full list of every tracker loading on your site, which jurisdiction laws apply to each one, and what your disclosure needs to say to stay clean.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon-wrap" style="background:rgba(245,158,11,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="feature-title">Privacy policy completeness review</div>
+        <div class="feature-detail">We map your actual tool stack against your policy — checking that what you use is what you've disclosed, in the language that matters for your specific client jurisdictions.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap" style="background:rgba(44,90,160,.15);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4A7FD4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="feature-title">Data transfer mapping</div>
+        <div class="feature-detail">Where your data goes, which countries it crosses, and whether your current contracts and SCCs cover the transfers your tools are actually making.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon-wrap" style="background:rgba(16,185,129,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="feature-title">AI governance audit</div>
+        <div class="feature-detail">Which AI tools you use, what data they can access, what your enterprise-tier settings actually do, and what your site needs to say to satisfy procurement questions before you're asked.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon-wrap" style="background:rgba(239,68,68,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="feature-title">Fix guides for three audiences</div>
+        <div class="feature-detail">Every finding comes with plain-language instructions for you as the owner, technical steps for your developer, and legal context for your compliance adviser. One roadmap, no translation needed.</div>
+      </div>
+
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap" style="background:rgba(0,175,204,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#00AFCC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="feature-title">Trust proof PDF</div>
+        <div class="feature-detail">An exportable document showing your current trust score, what was checked, and your progress over time. Built to attach to proposals, RFPs, and procurement questionnaires.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon-wrap" style="background:rgba(139,92,246,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="feature-title">Monthly re-scans and dashboard</div>
+        <div class="feature-detail">Your score updates every month. You see what improved, what slipped, and what needs attention next — so trust stays green between client conversations, not just when you remember to check.</div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon-wrap" style="background:rgba(245,158,11,.1);">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="feature-title">Procurement readiness check</div>
+        <div class="feature-detail">For those working with enterprise and government clients: a gap analysis against the questions vendor security questionnaires actually ask, before procurement finds the gaps themselves.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="icp-section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-kicker">Right fit</div>
+      <h2 class="section-h2">Built for a specific moment</h2>
+      <p class="section-sub">Trust Navigator Hub isn't for every business. It's built for the ones that are doing real work, reaching for bigger clients, and running into trust and compliance questions they don't yet have good answers to.</p>
+    </div>
+    <div class="icp-grid">
+      <div class="icp-card built-for reveal">
+        <div class="icp-card-label">This is built for you if…</div>
+        <div class="icp-items">
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>You're selling to corporate, enterprise, or government clients — or you want to be</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>You've hit procurement delays, vendor approval questions, or legal sign-off hold-ups</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Your team is small, but you need to move like a business that takes compliance seriously</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>You use a mix of tools — CRM, e-learning platform, email, AI — and aren't sure what your obligations are across all of them</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>You want something to show — not just something to claim</span>
+          </div>
+        </div>
+      </div>
+      <div class="icp-card not-for reveal reveal-delay-1">
+        <div class="icp-card-label">This probably isn't for you if…</div>
+        <div class="icp-items">
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span style="color:rgba(255,255,255,.4);">You only sell to consumers and have no enterprise clients in your pipeline</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span style="color:rgba(255,255,255,.4);">You already have an in-house legal and compliance team running regular audits</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span style="color:rgba(255,255,255,.4);">You're looking for a one-time legal consultation rather than an ongoing system</span>
+          </div>
+          <div class="icp-item">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span style="color:rgba(255,255,255,.4);">You haven't done the free snapshot yet — start there first</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EARLY ACCESS -->
+<section class="early-section">
+  <div class="container">
+    <div class="early-inner reveal">
+      <div class="section-kicker">Where we are</div>
+      <h2 class="section-h2">Early access is open now</h2>
+      <p class="section-sub">Trust Navigator Hub is in development. Community members who join now will get early access, founding pricing, and the chance to shape what gets built first.</p>
+
+      <div class="early-steps">
+        <div class="early-step">
+          <div class="early-step-num done">1</div>
+          <div class="early-step-body">
+            <div class="early-step-title">Free Trust Snapshot — available now</div>
+            <div class="early-step-desc">Run your snapshot, get your score, and see exactly what corporate buyers see when they look you up. No account needed.</div>
+          </div>
+        </div>
+        <div class="early-step">
+          <div class="early-step-num next">2</div>
+          <div class="early-step-body">
+            <div class="early-step-title">Join Community — secure your early access</div>
+            <div class="early-step-desc">Free to join. Community members get first access to Trust Navigator Hub at the Early Adopter rate — a one-time discounted pricing that won't be available at public launch.</div>
+          </div>
+        </div>
+        <div class="early-step">
+          <div class="early-step-num later">3</div>
+          <div class="early-step-body">
+            <div class="early-step-title">Trust Navigator Hub — launching to Community first</div>
+            <div class="early-step-desc">Full Hub access: deeper audits, fix roadmap, trust proof PDF, monthly re-scans, and dashboard. Community members get in first.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="early-cta-block">
+        <div class="early-cta-title">Join Community — it's free</div>
+        <div class="early-cta-sub">Save your snapshot results, get updates as Hub develops, and lock in early access and founding pricing before the public launch.</div>
+        <div class="early-cta-btns">
+          <a href="index.html#community-signup" class="btn-purple">
+            Join Community free →
+          </a>
+          <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" rel="noopener" class="btn-white">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Book a 20-min call instead
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2025 Data Pilots. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="framework.html">How it works</a>
+        <a href="about.html">About</a>
+        <a href="https://www.datapilots.tech/privacy-notice" target="_blank" rel="noopener">Privacy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
