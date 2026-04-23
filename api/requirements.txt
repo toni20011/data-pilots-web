@@ -1,2 +1,0 @@
-# No external packages — scan server uses Python standard library only
-# Python 3.9+ required
