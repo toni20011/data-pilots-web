@@ -17,7 +17,7 @@ export async function onRequestOptions() {
 // Body: { url: string }
 export async function onRequestPost(context) {
   const { request, env } = context;
-  const PAPAYA_API_KEY = env.PAPAYA_API_KEY || 'cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX';
+  const PAPAYA_API_KEY = env.PAPAYA_API_KEY || 'cck_live_788628eb_z_-kCKw8wT0iniMT_79nZmZHDGGrCXZm';
 
   let body;
   try { body = await request.json(); } catch {
@@ -47,7 +47,7 @@ export async function onRequestPost(context) {
 // GET /api/papaya?session_id=xxx&report=1      — fetch markdown report
 export async function onRequestGet(context) {
   const { request, env } = context;
-  const PAPAYA_API_KEY = env.PAPAYA_API_KEY || 'cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX';
+  const PAPAYA_API_KEY = env.PAPAYA_API_KEY || 'cck_live_788628eb_z_-kCKw8wT0iniMT_79nZmZHDGGrCXZm';
 
   const params    = new URL(request.url).searchParams;
   const sessionId = params.get('session_id');
