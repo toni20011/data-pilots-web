@@ -314,6 +314,50 @@
   nav ul a:hover { color: var(--white); }
   .nav-actions { display: flex; align-items: center; gap: 10px; }
 
+  /* ── Nav dropdown ── */
+  .nav-dropdown { position: relative; }
+  .nav-dd-btn {
+    background: none; border: none; padding: 0; cursor: pointer;
+    font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.5);
+    display: flex; align-items: center; gap: 5px;
+    transition: color .15s; font-family: inherit; line-height: 1;
+  }
+  .nav-dd-btn:hover,
+  .nav-dd-btn[aria-expanded="true"] { color: var(--white); }
+  .nav-dd-chevron { transition: transform .2s; flex-shrink: 0; }
+  .nav-dd-btn[aria-expanded="true"] .nav-dd-chevron { transform: rotate(180deg); }
+  .nav-dd-menu {
+    display: block !important;
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    background: var(--navy-mid); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 12px; padding: 6px;
+    min-width: 210px; list-style: none; gap: 0;
+    box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .15s, visibility .15s, transform .15s;
+  }
+  .nav-dd-menu.open {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .nav-dd-menu li { list-style: none; }
+  .nav-dd-menu a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px; border-radius: 8px;
+    font-size: 13.5px; font-weight: 500;
+    color: rgba(255,255,255,.7) !important;
+    text-decoration: none; transition: background .12s, color .12s;
+    white-space: nowrap;
+  }
+  .nav-dd-menu a:hover { background: rgba(255,255,255,.08); color: var(--white) !important; }
+  .nav-dd-sep { height: 1px; background: rgba(255,255,255,.08); margin: 4px 6px; }
+  .nav-dd-tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+    color: rgba(255,255,255,.3); margin-left: auto;
+    padding: 2px 6px; background: rgba(255,255,255,.06); border-radius: 4px; flex-shrink: 0;
+  }
+
   /* ───────────────────────────────────────────
      HERO
   ─────────────────────────────────────────── */
@@ -2499,12 +2543,21 @@
 
       <ul>
         <li><a href="#results">How It Works</a></li>
-        <li><a href="#proof">Get Involved</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="framework.html">Our Framework</a></li>
-        <li><a href="panel.html">Trust Panel</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
+        <li class="nav-dropdown">
+          <button class="nav-dd-btn" aria-expanded="false" aria-haspopup="true">
+            Learn More
+            <svg class="nav-dd-chevron" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 11 11" aria-hidden="true"><polyline points="1.5,3.5 5.5,7.5 9.5,3.5"/></svg>
+          </button>
+          <ul class="nav-dd-menu" role="menu">
+            <li><a href="about.html" role="menuitem">About Data Pilots</a></li>
+            <li><a href="panel.html" role="menuitem">Trust Panel</a></li>
+            <li><a href="framework.html" role="menuitem">Our Framework</a></li>
+            <div class="nav-dd-sep" role="separator"></div>
+            <li><a href="#proof" role="menuitem">Get Involved <span class="nav-dd-tag">↓ this page</span></a></li>
+          </ul>
+        </li>
       </ul>
 
       <div class="nav-actions">
@@ -5817,6 +5870,35 @@
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 350);
   }
+
+  // ── Nav dropdown ──────────────────────────────────
+  (function() {
+    var btn = document.querySelector('.nav-dd-btn');
+    var menu = document.querySelector('.nav-dd-menu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      menu.classList.toggle('open', !open);
+    });
+    document.addEventListener('click', function() {
+      btn.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('open');
+      }
+    });
+    menu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('open');
+      });
+    });
+  })();
 
   // ── Mobile snapshot reminder ──────────────────────
   function sendSnapshotReminder() {
