@@ -33,3 +33,9 @@ Thumbs.db
 # Claude internal (dev notes, not for public repo)
 notes/
 .claude/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
