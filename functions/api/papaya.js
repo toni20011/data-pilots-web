@@ -42,20 +42,43 @@ export async function onRequestPost(context) {
   });
 }
 
-// GET /api/papaya?session_id=xxx — poll run status
+// GET /api/papaya?session_id=xxx              — poll run status
+// GET /api/papaya?session_id=xxx&screenshots=1 — fetch screenshot metadata
+// GET /api/papaya?session_id=xxx&report=1      — fetch markdown report
 export async function onRequestGet(context) {
   const { request, env } = context;
   const PAPAYA_API_KEY = env.PAPAYA_API_KEY || 'cck_live_270ac2d1_NUoykoCcU_5ux3cvXRy0enhmysyvTgjX';
 
-  const sessionId = new URL(request.url).searchParams.get('session_id');
+  const params    = new URL(request.url).searchParams;
+  const sessionId = params.get('session_id');
   if (!sessionId) {
     return new Response(JSON.stringify({ error: 'session_id is required' }), { status: 400, headers: { ...CORS, 'Content-Type': 'application/json' } });
   }
 
-  const resp = await fetch(`${PAPAYA_API_BASE}/runs/${sessionId}`, {
-    headers: { 'Authorization': `Bearer ${PAPAYA_API_KEY}` },
-  });
+  const authHeader = { 'Authorization': `Bearer ${PAPAYA_API_KEY}` };
 
+  // Screenshots endpoint
+  if (params.get('screenshots') === '1') {
+    const resp = await fetch(`${PAPAYA_API_BASE}/runs/${sessionId}/screenshots`, { headers: authHeader });
+    const data = await resp.json().catch(() => ([]));
+    return new Response(JSON.stringify(data), {
+      status: resp.ok ? 200 : resp.status,
+      headers: { ...CORS, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Markdown report endpoint
+  if (params.get('report') === '1') {
+    const resp = await fetch(`${PAPAYA_API_BASE}/runs/${sessionId}/report`, { headers: authHeader });
+    const text = await resp.text().catch(() => '');
+    return new Response(text, {
+      status: resp.ok ? 200 : resp.status,
+      headers: { ...CORS, 'Content-Type': 'text/markdown' },
+    });
+  }
+
+  // Default: poll run status
+  const resp = await fetch(`${PAPAYA_API_BASE}/runs/${sessionId}`, { headers: authHeader });
   const data = await resp.json().catch(() => ({}));
   return new Response(JSON.stringify(data), {
     status: resp.ok ? 200 : resp.status,
