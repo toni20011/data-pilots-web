@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Data Pilots | Trust Snapshot for Online Training Businesses &amp; Coaches</title>
-  <meta name="description" content="Find out how trustworthy your business looks to corporate buyers in about 5 minutes. Free trust score for e-learning providers, professional development businesses, and coaches."/>
+  <meta name="description" content="Online training businesses are losing corporate deals silently to trust gaps buyers check before they reply. Data Pilots is the central hub for visibility, coordination, and control across your website and delivery platform. Start free."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
@@ -537,6 +537,50 @@
   /* wizard step panels */
   .wizard-step { transition: opacity .22s ease, transform .22s ease; }
   .wizard-step.hidden { display: none; }
+
+  /* ── Mobile snapshot gate ── */
+  .scan-mobile-gate { display: none; padding: 24px 0 8px; }
+  .scan-mobile-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: rgba(255,255,255,.5); background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1); border-radius: 20px;
+    padding: 5px 12px; margin-bottom: 18px;
+  }
+  .scan-mobile-steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 24px; }
+  .scan-mobile-step {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13.5px; color: rgba(255,255,255,.7); line-height: 1.4;
+  }
+  .scan-mobile-step-num {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(0,200,168,.15); border: 1px solid rgba(0,200,168,.3);
+    color: var(--teal); font-size: 11px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 1px;
+  }
+  .scan-mobile-divider {
+    font-size: 12px; color: rgba(255,255,255,.3); text-align: center;
+    margin: 20px 0 16px; position: relative;
+  }
+  .scan-mobile-divider::before, .scan-mobile-divider::after {
+    content: ''; position: absolute; top: 50%; width: 38%; height: 1px;
+    background: rgba(255,255,255,.08);
+  }
+  .scan-mobile-divider::before { left: 0; }
+  .scan-mobile-divider::after { right: 0; }
+  .scan-mobile-reminder { margin-top: 12px; }
+  .scan-mobile-reminder input {
+    width: 100%; box-sizing: border-box;
+    background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.14);
+    border-radius: var(--r-sm); padding: 12px 14px; font-size: 14px;
+    color: var(--white); font-family: inherit; outline: none; margin-bottom: 8px;
+    transition: border-color .15s;
+  }
+  .scan-mobile-reminder input:focus { border-color: var(--teal); }
+  @media (max-width: 860px) {
+    .scan-mobile-gate { display: block; }
+    #wizProgress, .wizard-step { display: none !important; }
+  }
 
   /* ── Results overlay (real scan results — separate from illustrative section) ── */
   #results-overlay {
@@ -1522,6 +1566,7 @@
     .footer-grid { grid-template-columns: 1fr; }
     .footer-cta-actions { flex-direction: column; align-items: stretch; }
     .footer-cta-actions .btn { justify-content: center; }
+    .nav-actions .btn-ghost { display: none; }
   }
 
   /* ───────────────────────────────────────────
@@ -1654,6 +1699,7 @@
     text-align: left; list-style: none; transition: color .14s;
   }
   .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::marker { content: none; font-size: 0; }
   details.faq-item[open] > .faq-q { color: var(--teal); }
   .faq-q:hover { color: var(--teal); }
   .faq-chevron { flex-shrink: 0; transition: transform .22s var(--ease); color: var(--slate-400); }
@@ -1752,14 +1798,7 @@
     transition: color .15s;
   }
   .faq-q::-webkit-details-marker { display: none; }
-  .faq-q::after {
-    content: "+";
-    font-size: 1.3rem; font-weight: 400; color: var(--teal);
-    flex-shrink: 0; transition: transform .2s var(--ease);
-  }
-  .faq-item[open] .faq-q::after {
-    transform: rotate(45deg);
-  }
+  .faq-q::marker { content: none; font-size: 0; }
   .faq-item[open] .faq-q { color: var(--teal); }
   .faq-a {
     padding: 0 24px 20px;
@@ -2416,35 +2455,6 @@
     <div class="nav-inner">
 
       <a href="/" class="logo">
-        <svg width="38" height="38" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-          <defs>
-            <linearGradient id="nav-lg" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#00F59D"/>
-              <stop offset="50%" stop-color="#00D4C0"/>
-              <stop offset="100%" stop-color="#00AAFF"/>
-            </linearGradient>
-          </defs>
-          <!-- Headset band arc -->
-          <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#nav-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
-          <!-- Left ear cup -->
-          <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
-          <!-- Right ear cup -->
-          <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#nav-lg)"/>
-          <!-- Gradient ring -->
-          <circle cx="100" cy="112" r="76" stroke="url(#nav-lg)" stroke-width="12" fill="none"/>
-          <!-- Face plate — dark fill so background shows, no white blob -->
-          <circle cx="100" cy="112" r="63" fill="#0B1929"/>
-          <!-- Left eye -->
-          <circle cx="78" cy="96" r="12" fill="url(#nav-lg)"/>
-          <!-- Right eye -->
-          <circle cx="122" cy="96" r="12" fill="url(#nav-lg)"/>
-          <!-- Mouth bar -->
-          <rect x="65" y="124" width="70" height="11" rx="5" fill="url(#nav-lg)"/>
-          <!-- Mic arm -->
-          <path d="M 170 135 Q 163 158 148 166" stroke="url(#nav-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
-          <!-- Mic capsule -->
-          <rect x="128" y="162" width="26" height="14" rx="7" fill="url(#nav-lg)"/>
-        </svg>
         <div class="logo-wordmark">DATA PILOTS</div>
       </a>
 
@@ -2453,7 +2463,7 @@
         <li><a href="#proof">Get Involved</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="framework.html">Our Framework</a></li>
-        <li><a href="hub.html">Trust Navigator Hub</a></li>
+        <li><a href="panel.html">Trust Panel</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
@@ -2481,17 +2491,13 @@
           <span>Trust Snapshot · Free</span>
         </div>
 
-        <p class="hero-kicker"><span class="kicker-green">🟢 The goal:</span> your website building trust and driving growth</p>
+        <p class="hero-kicker"><span class="kicker-green">🟢</span> For founders and owners of online training businesses selling to corporate clients</p>
 
         <h1 class="hero-h1">
           Your website is making an impression<br>before you get the chance to.
         </h1>
 
-        <p class="hero-h1-sub">Before a buyer replies to your email, they've already looked you up. What they find — or don't find — shapes how they see you before you've said a word. Most of the time, you never find out why.</p>
-
-        <p class="hero-p">
-          The Trust Snapshot shows you exactly what they see. From there, we walk you through closing those gaps — with clear guidance for everyone who needs to act, and progress you can show buyers.
-        </p>
+        <p class="hero-h1-sub">Before a buyer replies to your email, they've already looked you up. Data Pilots shows you what they find — and gives you everything to take control. Start with a free Trust Snapshot.</p>
 
         <div class="hero-actions">
           <a href="#hero-scan" class="btn btn-teal" style="font-size:16px; padding:16px 32px;">
@@ -2530,6 +2536,58 @@
       <!-- Scan form — multi-step wizard -->
       <div id="hero-scan">
         <div class="scan-card">
+
+          <!-- Mobile gate — shown instead of wizard on small screens -->
+          <div class="scan-mobile-gate">
+            <div class="scan-mobile-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Best completed on desktop
+            </div>
+            <div class="scan-title" style="margin-bottom:6px;">What the Trust Snapshot covers</div>
+            <p style="font-size:13.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:4px;">Our scan visits your live website — the same way a corporate buyer checks you before replying. Five minutes. Here's what you'll go through:</p>
+            <div class="scan-mobile-steps">
+              <div class="scan-mobile-step">
+                <div class="scan-mobile-step-num">1</div>
+                <span><strong style="color:var(--white);">Your website</strong> — we visit your live site and analyse it across four trust pillars</span>
+              </div>
+              <div class="scan-mobile-step">
+                <div class="scan-mobile-step-num">2</div>
+                <span><strong style="color:var(--white);">Your business</strong> — your role and who you sell to, so results are relevant</span>
+              </div>
+              <div class="scan-mobile-step">
+                <div class="scan-mobile-step-num">3</div>
+                <span><strong style="color:var(--white);">Your practices</strong> — AI use and privacy policy status (things we can't see from your site)</span>
+              </div>
+              <div class="scan-mobile-step">
+                <div class="scan-mobile-step-num">4</div>
+                <span><strong style="color:var(--white);">Your confidence</strong> — how you feel about your current trust picture</span>
+              </div>
+              <div class="scan-mobile-step">
+                <div class="scan-mobile-step-num">5</div>
+                <span><strong style="color:var(--white);">Your results</strong> — trust score out of 100 + your top priority fixes, free</span>
+              </div>
+            </div>
+            <div class="scan-mobile-divider">Ready when you're at your desk</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <a href="https://calendly.com/datapilots/20min" class="btn btn-teal" style="justify-content:center;padding:13px 20px;">
+                <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
+                Book a 20-min call instead
+              </a>
+              <button class="btn btn-ghost" style="justify-content:center;padding:12px 20px;width:100%;" onclick="
+                this.style.display='none';
+                document.getElementById('scanMobileReminder').style.display='block';
+                document.getElementById('scanReminderEmail').focus();
+              ">
+                <svg class="icon" width="13" height="13"><use href="#i-mail"/></svg>
+                Send me a desktop reminder
+              </button>
+            </div>
+            <div class="scan-mobile-reminder" id="scanMobileReminder" style="display:none;">
+              <input type="email" id="scanReminderEmail" placeholder="your@email.com" />
+              <button class="btn btn-ghost" style="width:100%;justify-content:center;padding:12px;" onclick="sendSnapshotReminder()">Send reminder to myself</button>
+              <p class="scan-fine">Opens your email app — you send it to yourself.</p>
+            </div>
+          </div>
 
           <!-- Progress indicator -->
           <div class="wizard-progress" id="wizProgress">
@@ -3171,7 +3229,7 @@
         </div>
         <!-- Step 2 -->
         <div style="padding:22px 28px;display:flex;flex-direction:column;gap:6px;background:rgba(16,185,129,.03);">
-          <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(16,185,129,.85);margin-bottom:2px;">Step 2 · Trust Navigator Hub</div>
+          <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(16,185,129,.85);margin-bottom:2px;">Step 2 · Trust Panel</div>
           <div style="font-size:14px;font-weight:700;color:var(--slate-800);">Get to green and stay there</div>
           <div style="font-size:12.5px;color:var(--slate-500);line-height:1.55;">The full audit across your site, learner portal, and client tools. Step-by-step fix guides, a trust score dashboard, and monthly re-scans so you don't slip back.</div>
           <a href="#community-signup" class="btn btn-ghost" style="margin-top:10px;padding:9px 18px;font-size:13px;align-self:flex-start;color:#065F46;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06);">
@@ -3229,10 +3287,10 @@
       <div class="results-kicker">Audit &nbsp;·&nbsp; Assess &nbsp;·&nbsp; Act</div>
       <h2 class="results-h2">
         Trust Snapshot shows you where to start.<br>
-        <span>Trust Navigator Hub gives you the full picture and how to fix it.</span>
+        <span>Trust Panel gives you the full picture and how to fix it.</span>
       </h2>
       <p class="results-sub">
-        Your Trust Snapshot audits your <strong>public-facing website</strong> across four trust areas. No jargon, no 40-page PDFs. Trust Navigator Hub goes deeper: a fuller public site audit, plus your <strong>learner portal, platform, and client-facing tools</strong>. Every finding comes with step-by-step fix guides and a trust proof PDF.
+        Your site scored across four trust areas buyers check — with deeper audits, fix guides, and a trust proof PDF available through the Panel.
       </p>
     </div>
 
@@ -3253,7 +3311,7 @@
         <div class="panel-header">
           <div>
             <div class="panel-title">Trust Snapshot</div>
-            <div id="scanDomain" style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourcoachingbiz.com</div>
+            <div id="scanDomain" style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">yourtrainingco.com</div>
           </div>
           <div class="panel-status status-free">Free</div>
         </div>
@@ -3325,7 +3383,7 @@
                   <li>Whether your terms of service cover your actual services</li>
                 </ul>
                 <div class="p-row-detail-label">Why buyers care</div>
-                <p>Procurement teams look for your privacy policy on day one. If it's missing, out of date, or impossible to find, they flag it before they've finished reading your proposal — sometimes before they've even opened it.</p>
+                <p>Corporate L&amp;D buyers look for your privacy policy on day one — and for training providers specifically, they want to know how you handle learner data. If it's missing, out of date, or silent on your LMS, they flag it before they've finished reading your proposal.</p>
               </div>
             </details>
 
@@ -3378,7 +3436,7 @@
                   <li>Whether your AI disclosures are visible enough for a buyer's internal AI policy to reference</li>
                 </ul>
                 <div class="p-row-detail-label">Why buyers care</div>
-                <p>This is the newest and fastest-growing procurement question. Large companies now have internal AI policies that require suppliers to disclose AI use before a contract can be signed. If your website is silent on it, the answer looks like you're hiding something — even if you're not.</p>
+                <p>This is the newest and fastest-growing procurement question — especially for training providers. Corporate L&amp;D teams now have internal AI policies requiring suppliers to disclose AI use before a contract can be signed. If your site is silent, it looks like you're hiding something, even if you're not.</p>
               </div>
             </details>
 
@@ -3386,7 +3444,7 @@
 
           <div class="free-note">
             <svg class="icon" width="15" height="15"><use href="#i-info"/></svg>
-            <span>This covers your public site. <strong>Trust Navigator Hub</strong> goes further: a deeper public site audit plus your learner portal, platform, and client-facing tools. Every finding includes fix instructions for your developer, legal adviser, and team.</span>
+            <span>This covers your public site — your buyers' first stop. <strong>Trust Panel</strong> goes further: your learner portal, platform, and client-facing tools. Full fix guides for your developer, legal adviser, and team — coordinated in one place.</span>
           </div>
         </div>
       </div>
@@ -3395,10 +3453,10 @@
       <div class="report-panel reveal reveal-delay-2">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Trust Navigator Hub</div>
-            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Trust Navigator Hub</div>
+            <div class="panel-title">Trust Panel</div>
+            <div style="font-size:11.5px;color:var(--slate-400);margin-top:2px;">Full fix roadmap · included in Trust Panel</div>
           </div>
-          <div class="panel-status status-paid">Trust Navigator Hub</div>
+          <div class="panel-status status-paid">Trust Panel</div>
         </div>
         <div class="panel-body">
 
@@ -3407,9 +3465,9 @@
               <svg class="icon" width="15" height="15" style="color:#7C3AED;"><use href="#i-bot"/></svg>
             </div>
             <div class="finding-body">
-              <strong>No AI disclosure on your site</strong>
+              <strong>No AI disclosure on your training site</strong>
               <span class="finding-tag tag-fix-now">Fix This Week</span>
-              <p>You use AI tools in your work but don't mention it anywhere visible. Over half of enterprise L&D buyers now ask about this before signing.</p>
+              <p>You use AI in content creation and learner tools but don't disclose it. Corporate L&amp;D procurement teams now require this before signing — it's the fastest-growing blocker we see.</p>
             </div>
           </div>
 
@@ -3418,10 +3476,10 @@
               <svg class="icon" width="15" height="15" style="color:#059669;"><use href="#i-eye"/></svg>
             </div>
             <div class="finding-body">
-              <strong>Privacy page exists but is hard to find</strong>
+              <strong>Learner data handling not visible to buyers</strong>
               <span class="finding-tag tag-quick-win">Quick Win</span>
               <div class="fw-tags"><span class="fw-tag">US (CCPA)</span><span class="fw-tag">Global (GDPR)</span></div>
-              <p>You have a privacy page but it's buried. Moving the link to your footer takes 10 minutes and noticeably improves your transparency score.</p>
+              <p>Your privacy page doesn't mention your LMS or how learner records are stored. Adding one paragraph removes a common procurement question before it's asked.</p>
             </div>
           </div>
 
@@ -3430,15 +3488,15 @@
               <svg class="icon" width="15" height="15" style="color:#D97706;"><use href="#i-shield"/></svg>
             </div>
             <div class="finding-body">
-              <strong>Missing security headers on contact form</strong>
+              <strong>Security headers missing — flags IT vendor scans</strong>
               <span class="finding-tag tag-review">Review</span>
               <div class="fw-tags"><span class="fw-tag">Certifications (ISO 27001)</span><span class="fw-tag">Audit (SOC 2)</span></div>
-              <p>Your contact form is missing two basic protections. A developer can add these in under an hour. We have step-by-step instructions you can share with them.</p>
+              <p>Corporate IT teams run automated checks on every supplier. Two missing headers are flagging your site. A developer can fix both in under an hour with our step-by-step guide.</p>
             </div>
           </div>
 
           <div class="paid-extras">
-            <p>Trust Navigator also includes: <strong>exportable trust proof PDF</strong> for proposals, monthly re-scans, and task-ready instructions your developer or legal adviser can pick up directly.</p>
+            <p>Trust Panel also includes: <strong>exportable trust proof PDF</strong> for proposals, monthly re-scans, and task-ready instructions your developer or legal adviser can pick up directly.</p>
             <a href="#pricing" class="btn btn-teal" style="padding:9px 16px;font-size:12.5px;flex-shrink:0;">See Pricing</a>
           </div>
 
@@ -3455,7 +3513,7 @@
       <div class="cta-strip-actions">
         <a href="#hero-scan" class="btn btn-green" style="padding:13px 24px;font-size:14.5px;">Take your Trust Snapshot</a>
         <div>
-          <a href="#pricing" class="btn btn-blue" style="padding:12px 20px;font-size:14px;">See Trust Navigator Hub</a>
+          <a href="#pricing" class="btn btn-blue" style="padding:12px 20px;font-size:14px;">See Trust Panel</a>
         </div>
       </div>
     </div>
@@ -3668,7 +3726,7 @@
     <div class="journey-header reveal">
       <div class="journey-kicker">How It Works</div>
       <h2 class="journey-h2">Check. Treat. Strengthen.</h2>
-      <p class="journey-sub">Three steps from "I'm not sure where I stand" to "trust is our edge." One shared view for every stakeholder who needs to act.</p>
+      <p class="journey-sub">From "I'm not sure where I stand" to "trust is our edge" — one shared view for every person, tool, and partner who needs to act.</p>
     </div>
 
     <div class="steps-row reveal">
@@ -3737,18 +3795,15 @@
 <section class="wdp-section" id="why-dp">
   <div class="container">
 
-    <div class="wdp-header reveal" style="margin-bottom:36px;">
+    <div class="wdp-header reveal" style="margin-bottom:24px;">
       <div class="wdp-kicker">Why Data Pilots</div>
-    </div>
-
-    <div class="wdp-thesis reveal">
-      <p class="wdp-thesis-text">Marketing and privacy are not opposing forces — they are the same conversation about trust, told from different seats.</p>
+      <h2 class="wdp-h2" style="font-family:var(--font-display);font-size:clamp(28px,3.2vw,42px);font-weight:400;color:var(--white);line-height:1.2;margin-top:10px;letter-spacing:-.01em;">We've been on both sides.<br>We built the bridge.</h2>
     </div>
 
     <div class="wdp-narrative-grid reveal">
       <div class="wdp-narrative-body">
-        <p>We've spent our careers on both sides of this. Building brands, websites, campaigns — and advising businesses on the privacy and compliance work that sits underneath all of it. Across that arc, the same pattern kept appearing: growth teams moving fast, compliance brought in late, usually to slow things down. Neither side fully trusting the other. Clients paying the price somewhere nobody was watching.</p>
-        <p>Data Pilots exists to close that gap. We give business leaders early visibility into the trust signals their site is already sending — before a missed check becomes a missed deal. Clear steps, written for the right person, and progress you can see and share with everyone who needs to be on the same page.</p>
+        <p>We spent our careers in marketing and privacy compliance — watching growth teams and legal teams work against each other, with clients paying the price somewhere nobody was watching.</p>
+        <p>We built Data Pilots for online training businesses specifically because their mission matters beyond revenue. Every deal lost to a silent trust gap is a team that doesn't get developed, a leader who doesn't grow. Data Pilots removes that barrier.</p>
         <div class="wdp-narrative-links">
           <a href="about.html">Meet the team</a>
           <span>·</span>
@@ -3757,18 +3812,34 @@
       </div>
       <div class="wdp-pattern-box">
         <div class="wdp-pattern-label">What we keep seeing</div>
-        <ul class="wdp-pattern-list">
-          <li>Growth and compliance operating as if in conflict — one moving fast, one brought in to slow things down</li>
-          <li>Buyers running website trust checks before a single conversation has happened</li>
-          <li>Fixable gaps — most taking a day or two — that nobody knew were there</li>
-          <li>Reports that sit unread because they aren't written for the person who actually needs to act</li>
-        </ul>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 14px;">
+            <div style="font-size:18px;margin-bottom:6px;">⚡</div>
+            <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.4;">Growth vs. compliance</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.5;">One moving fast, one brought in to slow things down</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 14px;">
+            <div style="font-size:18px;margin-bottom:6px;">🔍</div>
+            <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.4;">Buyers check first</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.5;">Trust checks happen before any conversation starts</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 14px;">
+            <div style="font-size:18px;margin-bottom:6px;">🔧</div>
+            <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.4;">Fixable gaps</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.5;">Most take a day or two — nobody knew they were there</div>
+          </div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:13px 14px;">
+            <div style="font-size:18px;margin-bottom:6px;">📄</div>
+            <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.4;">Reports that sit unread</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,.38);margin-top:4px;line-height:1.5;">Not written for the person who actually needs to act</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="wdp-statement reveal">
-      <div class="wdp-stmt-label">Our role</div>
-      <p class="wdp-stmt-text">Most compliance tools help you pass the big formal checks:<br>certifications, questionnaires, legal frameworks.<br><em>We help you pass the first one — the one already happening — and build the foundation for everything that follows.</em></p>
+      <div class="wdp-stmt-label">What makes us different</div>
+      <p class="wdp-stmt-text">Other tools give you a report and leave you to figure out the rest.<br><em>Data Pilots coordinates the right people, tools, and AI on the right tasks — so you move from seeing the gaps to closing them.</em></p>
     </div>
 
   </div>
@@ -3861,18 +3932,18 @@
                 <li>Context on why each issue matters to the buyers you're selling to</li>
                 <li>Role-split guidance: what you need to do, what your developer needs to do, what your legal contact should handle</li>
               </ul>
-              <p>Trust Navigator Hub goes further — every finding (not just the top three), a review of your learner portal and client-facing tools, monthly re-scans, and a trust proof PDF for proposals.</p>
+              <p>Trust Panel goes further — every finding (not just the top three), a review of your learner portal and client-facing tools, monthly re-scans, and a trust proof PDF for proposals.</p>
             </div>
           </details>
 
           <details class="faq-item">
             <summary class="faq-q">
-              What's the difference between the free Trust Snapshot and Trust Navigator Hub?
+              What's the difference between the free Trust Snapshot and Trust Panel?
               <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="faq-a">
               <p>The <strong>Trust Snapshot</strong> audits your public-facing website — the first thing buyers see. It covers the signals that get flagged in procurement and gives you a score plus your top three fixes. No account needed, about five minutes.</p>
-              <p><strong>Trust Navigator Hub</strong> runs a deeper public site audit (every finding, not just the top three), then extends the review to your learner portal, platform, and client-facing tools. You also get step-by-step fix guides for your whole team, a trust proof PDF for proposals, a progress dashboard, and monthly re-scans to stay green.</p>
+              <p><strong>Trust Panel</strong> runs a deeper public site audit (every finding, not just the top three), then extends the review to your learner portal, platform, and client-facing tools. You also get step-by-step fix guides for your whole team, a trust proof PDF for proposals, a progress dashboard, and monthly re-scans to stay green.</p>
             </div>
           </details>
 
@@ -3882,7 +3953,7 @@
               <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="faq-a">
-              <p>Yes — and that's one of the most common uses. Trust Navigator Hub includes a trust proof PDF designed to go straight into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously, before they've even asked the question.</p>
+              <p>Yes — and that's one of the most common uses. Trust Panel includes a trust proof PDF designed to go straight into proposals and procurement responses. It shows buyers at a glance that you take data and privacy seriously, before they've even asked the question.</p>
             </div>
           </details>
 
@@ -3892,7 +3963,7 @@
               <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </summary>
             <div class="faq-a">
-              <p>Guests are people you bring into your Trust Navigator Hub dashboard without needing a paid seat — your developer, a legal advisor, a contractor, an accountant. They can view findings and act on fix guides relevant to their role. Unlimited means exactly that: no per-seat charges for the people you need to loop in.</p>
+              <p>Guests are people you bring into your Trust Panel dashboard without needing a paid seat — your developer, a legal advisor, a contractor, an accountant. They can view findings and act on fix guides relevant to their role. Unlimited means exactly that: no per-seat charges for the people you need to loop in.</p>
             </div>
           </details>
 
@@ -3953,8 +4024,8 @@
 
     <div class="pricing-header reveal">
       <div class="pricing-kicker">Access</div>
-      <h2 class="pricing-h2">Start with Community.<br>Add the Hub when ready.</h2>
-      <p class="pricing-sub">Community is free and always stays with you, whether or not you ever upgrade. Trust Navigator Hub sits on top, adding deeper audits, fix guides, team coordination, and a dashboard to track progress and stay green.</p>
+      <h2 class="pricing-h2">Start with Community.<br>Add the Panel when ready.</h2>
+      <p class="pricing-sub">Community is free, always. Add the Panel when you're ready to go deeper.</p>
     </div>
 
     <div class="plans-grid" style="grid-template-columns: 1fr 1.6fr;">
@@ -3964,7 +4035,7 @@
         <div class="plan-tier">Community</div>
         <div style="font-size:30px;font-weight:900;color:var(--slate-800);line-height:1;margin-bottom:2px;">Free</div>
         <div style="font-size:11.5px;color:var(--slate-400);margin-bottom:16px;">always included. never taken away.</div>
-        <p class="plan-tagline">Run your Trust Snapshot, save your results, access guides and resources, and stay connected as we build. Yours whether or not you ever upgrade to the Hub.</p>
+        <p class="plan-tagline">Run your Trust Snapshot, save your results, access guides and resources, and stay connected as we build. Yours whether or not you ever upgrade to the Panel.</p>
         <ul class="plan-feats">
           <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Free Trust Snapshot — see your top trust risks</li>
           <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Save and revisit your results</li>
@@ -3979,10 +4050,10 @@
         <p class="plan-foot">Run a Trust Snapshot first. No account needed to try it.</p>
       </div>
 
-      <!-- Trust Navigator Hub -->
+      <!-- Trust Panel -->
       <div class="plan pro reveal reveal-delay-2">
         <div class="plan-badge">Pricing confirmed at launch — join Community to access early rates</div>
-        <div class="plan-tier">Trust Navigator Hub</div>
+        <div class="plan-tier">Trust Panel</div>
         <p class="plan-tagline" style="margin-top:6px;margin-bottom:20px;">The full picture across your public site, learner portal, platform, and client-facing tools. Step-by-step fix guides for your whole team. A dashboard to track progress and stay green. Contractors, advisors, and third parties included at no extra cost.</p>
 
         <!-- Tier preview — tap any card to expand -->
@@ -4085,10 +4156,10 @@
     <div class="proof-top reveal">
       <div>
         <div class="proof-kicker">Get involved early</div>
-        <h2 class="proof-h2">Start in Community.<br>Get early access to the Hub.</h2>
+        <h2 class="proof-h2">Start in Community.<br>Get early access to the Panel.</h2>
       </div>
       <p class="proof-right">
-        Join Community free. Save your Snapshot results and stay connected as Trust Navigator Hub develops. From there, two paths to early Hub access: the Early Adopter rate for those ready to upgrade at launch, and Founding Pilots for those who want to help shape what we're building.
+        Join Community free. Save your Snapshot results and stay connected as Trust Panel develops. From there, two paths to early Panel access: the Early Adopter rate for those ready to upgrade at launch, and Founding Pilots for those who want to help shape what we're building.
       </p>
     </div>
 
@@ -4115,7 +4186,7 @@
 
     <!-- Step 2 label -->
     <div style="text-align:center;margin-bottom:16px;">
-      <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.6);">Step 2 — from Community, choose your path to early Hub access</span>
+      <span style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.6);">Step 2 — from Community, choose your path to early Panel access</span>
     </div>
 
     <div class="testi-featured early-access-grid reveal">
@@ -4131,7 +4202,7 @@
           <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px;">confirmed before launch for Community members</div>
         </div>
         <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
-          For Community members ready to upgrade when Trust Navigator Hub launches. A limited-time discounted rate, available before public launch and not again once it closes.
+          For Community members ready to upgrade when Trust Panel launches. A limited-time discounted rate, available before public launch and not again once it closes.
         </p>
         <a href="mailto:team@datapilots.tech?subject=Early Adopter Interest" class="btn btn-ghost" style="font-size:14px;padding:12px 20px;justify-content:center;">
           Express interest as a Community member
@@ -4150,7 +4221,7 @@
           <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px;">during the program period</div>
         </div>
         <p style="font-size:14.5px;color:rgba(255,255,255,.75);line-height:1.7;flex:1;">
-          For those who want to help shape Trust Navigator alongside us: whether you're a potential customer or a specialist who works with businesses like ours. Full Hub access at no cost, in exchange for structured feedback and active participation. Founding Pilots are featured on the Data Pilots site.
+          For those who want to help shape Trust Navigator alongside us: whether you're a potential customer or a specialist who works with businesses like ours. Full Panel access at no cost, in exchange for structured feedback and active participation. Founding Pilots are featured on the Data Pilots site.
         </p>
         <a href="mailto:team@datapilots.tech?subject=Founding Pilots Application" class="btn btn-teal" style="font-size:14px;padding:12px 20px;justify-content:center;">
           Apply to be a Founding Pilot
@@ -4198,7 +4269,7 @@
       <div style="text-align:center;max-width:520px;margin:0 auto 36px;">
         <div class="proof-kicker" style="margin-bottom:10px;">Get started</div>
         <h3 style="font-size:clamp(22px,2.8vw,32px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;">Join Community — free, 30 seconds</h3>
-        <p style="font-size:14.5px;color:rgba(255,255,255,.5);line-height:1.7;">Start with a free Trust Snapshot. Join Community to save your results and stay connected. Tick below if you're also interested in early Hub access.</p>
+        <p style="font-size:14.5px;color:rgba(255,255,255,.5);line-height:1.7;">Save your results, access guides, and shape what we build next.</p>
       </div>
 
       <form id="communityForm" style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:14px;">
@@ -4218,7 +4289,7 @@
             <input type="checkbox" id="joinEarlyAdopter" style="margin-top:2px;accent-color:var(--teal);width:15px;height:15px;flex-shrink:0;cursor:pointer;"/>
             <div>
               <div style="font-size:13.5px;font-weight:600;color:var(--white);">Early Adopter rate</div>
-              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Discounted Hub access at launch — limited time, Community members only</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Discounted Trust Panel access at launch — limited time, Community members only</div>
             </div>
           </label>
 
@@ -4226,7 +4297,7 @@
             <input type="checkbox" id="joinFoundingPilots" style="margin-top:2px;accent-color:var(--teal);width:15px;height:15px;flex-shrink:0;cursor:pointer;"/>
             <div>
               <div style="font-size:13.5px;font-weight:600;color:var(--white);">Founding Pilots program</div>
-              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Help shape Trust Navigator — free Hub access in exchange for structured feedback. Application required.</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:1px;">Help shape Trust Panel — free access in exchange for structured feedback. Application required.</div>
             </div>
           </label>
         </div>
@@ -4340,31 +4411,12 @@
 
         <div>
           <a href="/" class="footer-logo">
-            <svg width="30" height="30" viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="ft-lg" x1="0" y1="100" x2="200" y2="100" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stop-color="#00F59D"/>
-                  <stop offset="50%" stop-color="#00D4C0"/>
-                  <stop offset="100%" stop-color="#00AAFF"/>
-                </linearGradient>
-              </defs>
-              <path d="M 24 102 A 76 76 0 0 1 176 102" stroke="url(#ft-lg)" stroke-width="16" stroke-linecap="round" fill="none"/>
-              <rect x="2" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
-              <rect x="170" y="84" width="28" height="50" rx="10" fill="url(#ft-lg)"/>
-              <circle cx="100" cy="112" r="76" stroke="url(#ft-lg)" stroke-width="12" fill="none"/>
-              <circle cx="100" cy="112" r="63" fill="#0B1929"/>
-              <circle cx="78" cy="96" r="12" fill="url(#ft-lg)"/>
-              <circle cx="122" cy="96" r="12" fill="url(#ft-lg)"/>
-              <rect x="65" y="124" width="70" height="11" rx="5" fill="url(#ft-lg)"/>
-              <path d="M 170 135 Q 163 158 148 166" stroke="url(#ft-lg)" stroke-width="9" stroke-linecap="round" fill="none"/>
-              <rect x="128" y="162" width="26" height="14" rx="7" fill="url(#ft-lg)"/>
-            </svg>
             <div class="logo-wordmark" style="font-size:14px;">DATA PILOTS</div>
           </a>
-          <p class="footer-blurb">Helping businesses like yours show up as trustworthy, so the best work wins the deal.</p>
+          <p class="footer-blurb">Helping online training businesses show up as trustworthy, so the best work wins the deal.</p>
           <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07);">
             <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:6px;">Mission</p>
-            <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:12px;">Empower small businesses with confidence. No legal team required.</p>
+            <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:12px;">Empower online training businesses to win corporate deals — no legal team required.</p>
             <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:6px;">Vision</p>
             <p style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.6;">The best businesses should win on the quality of their work, not compliance department size.</p>
           </div>
@@ -5297,8 +5349,8 @@
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
               Site walkthrough complete — California visitor, reject-all
-              &nbsp;·&nbsp;<a href="hub.html"
-                style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Navigator Hub</a>
+              &nbsp;·&nbsp;<a href="panel.html"
+                style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Panel</a>
             </div>
           </div>`;
       } else {
@@ -5551,8 +5603,8 @@
                 style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
               <span style="color:rgba(255,255,255,.6);">
                 Site walkthrough complete — California visitor, reject-all
-                · <a href="hub.html"
-                  style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Navigator Hub</a>
+                · <a href="panel.html"
+                  style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Panel</a>
               </span>`;
           }
         })
@@ -5566,8 +5618,8 @@
                 style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
               <span style="color:rgba(255,255,255,.5);">
                 Site walkthrough complete
-                · <a href="hub.html"
-                  style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Navigator Hub</a>
+                · <a href="panel.html"
+                  style="color:var(--teal);text-decoration:underline;">deeper analysis in Trust Panel</a>
               </span>`;
           }
         });
@@ -5680,6 +5732,22 @@
       const target = document.getElementById('community-signup');
       if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 350);
+  }
+
+  // ── Mobile snapshot reminder ──────────────────────
+  function sendSnapshotReminder() {
+    var email = document.getElementById('scanReminderEmail').value.trim();
+    if (!email) { document.getElementById('scanReminderEmail').focus(); return; }
+    var subj = encodeURIComponent('Your Trust Snapshot reminder');
+    var body = encodeURIComponent(
+      'Hi,\n\nJust a reminder to take your free Trust Snapshot when you\'re back at your desk.\n\n' +
+      'Take it here: https://datapilots.tech/#hero-scan\n\n' +
+      'Five minutes. Free. No account needed.\n\n\u2014 Data Pilots'
+    );
+    window.location.href = 'mailto:' + email + '?subject=' + subj + '&body=' + body;
+    document.getElementById('scanMobileReminder').innerHTML =
+      '<p style="text-align:center;font-size:13px;color:var(--teal);padding:12px 0;">' +
+      '\u2713 Reminder ready \u2014 check your email app to send it to yourself.</p>';
   }
 
   // ── Community signup form ─────────────────────────
@@ -5864,7 +5932,7 @@
       <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:24px;">
         <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px;">Keep the momentum</div>
         <div class="ro-upgrade-title" style="margin-bottom:8px;">Save your results and start fixing</div>
-        <p class="ro-upgrade-sub" style="margin-bottom:18px;">Your results disappear when you close this window. Join Community free to save them, access early resources, and stay connected as Trust Navigator Hub launches. Free, no card, 30 seconds.</p>
+        <p class="ro-upgrade-sub" style="margin-bottom:18px;">Your results disappear when you close this window. Join Community free to save them, access early resources, and stay connected as Trust Panel launches. Free, no card, 30 seconds.</p>
         <button onclick="joinCommunityFromResults()" class="btn btn-teal" style="padding:13px 28px;font-size:15px;font-weight:700;">
           Save my results — join Community free
         </button>
@@ -5874,11 +5942,11 @@
       <div style="text-align:center;">
         <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-bottom:10px;">Ready to go further?</div>
         <p style="font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:16px;max-width:380px;margin-left:auto;margin-right:auto;">
-          Trust Navigator Hub turns these findings into a full fix roadmap — with deeper audits, team-ready instructions, and monthly progress tracking.
+          Trust Panel turns these findings into a full fix roadmap — with deeper audits, team-ready instructions, and monthly progress tracking.
         </p>
         <div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
-          <a href="hub.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">
-            See what's coming in Trust Navigator Hub →
+          <a href="panel.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">
+            See what's coming in Trust Panel →
           </a>
           <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" class="btn btn-white" style="padding:10px 20px;font-size:13px;">
             <svg class="icon" width="13" height="13"><use href="#i-clock"/></svg>
