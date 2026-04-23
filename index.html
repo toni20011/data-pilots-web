@@ -4844,16 +4844,63 @@
     _autoAdvanceScanSteps();
     _autoAdvanceTabs();
 
-    // Start Papaya run async + enforce minimum 14s wait so guided tabs play through
-    _scanPromise = Promise.all([
-      startPapayaRun(url),
-      new Promise(resolve => setTimeout(resolve, 14000))
-    ]).then(([papayaRun]) => {
-      const results = { ...baseResults };
-      if (papayaRun?.session_id) results.papaya_session_id = papayaRun.session_id;
+    // Start Papaya run, poll until complete, then enable the Results button.
+    // Minimum 14 s enforced regardless so the guided modal tabs play through.
+    _scanPromise = (async () => {
+      const results  = { ...baseResults };
+      const minWait  = new Promise(r => setTimeout(r, 14000));
+
+      const papayaRun = await startPapayaRun(url);
+      const sessionId = papayaRun?.session_id;
+
+      if (!sessionId) {
+        await minWait;
+        _markScanReady(results);
+        return results;
+      }
+
+      results.papaya_session_id = sessionId;
+
+      // Poll until Papaya reports completed (max 3 min)
+      const POLL_MS   = 8000;
+      const MAX_MS    = 3 * 60 * 1000;
+      const startTime = Date.now();
+      const papayaMsgs = [
+        'Visiting your site as a California user…',
+        'Simulating reject-all cookie interaction…',
+        'Recording consent flow and trackers…',
+        'Analysing privacy signals…',
+        'Wrapping up site walkthrough…',
+      ];
+      let msgIdx = 0;
+      const advanceMsg = () => {
+        const el = document.getElementById('modalScanMsg');
+        if (el && msgIdx < papayaMsgs.length) el.textContent = papayaMsgs[msgIdx++];
+      };
+
+      let papayaDone = false;
+      while (!papayaDone && Date.now() - startTime < MAX_MS) {
+        await new Promise(r => setTimeout(r, POLL_MS));
+        advanceMsg();
+        try {
+          const s = await fetch(`/api/papaya?session_id=${sessionId}`).then(r => r.json());
+          if (s.status === 'completed') papayaDone = true;
+        } catch(e) { /* keep polling */ }
+      }
+
+      // Pre-fetch best screenshot so results overlay can show it immediately
+      try {
+        const shots = await fetch(`/api/papaya?session_id=${sessionId}&screenshots=1`).then(r => r.json());
+        const order = { after_interaction: 0, final: 1, cookie_banner: 2, initial: 3 };
+        const shot  = (Array.isArray(shots) ? shots : [])
+          .sort((a, b) => (order[a.type] ?? 9) - (order[b.type] ?? 9))[0];
+        if (shot) results.papaya_screenshot = shot;
+      } catch(e) { /* no screenshot — results show without it */ }
+
+      await minWait; // ensure minimum UX time even if Papaya was very fast
       _markScanReady(results);
       return results;
-    });
+    })();
   }
 
   async function submitModal() {
@@ -5119,16 +5166,48 @@
       }
     }
 
-    // Papaya strip (if live walkthrough still running)
-    document.getElementById('ro-papaya-area').innerHTML = data.papaya_session_id ? `
-      <div id="papaya-strip" style="display:flex;align-items:center;gap:10px;
-        background:rgba(0,200,168,.07);border:1px solid rgba(0,200,168,.18);
-        border-radius:8px;padding:10px 14px;margin-top:14px;
-        font-size:12px;color:rgba(255,255,255,.55);">
-        <div class="modal-spinner" style="width:13px;height:13px;flex-shrink:0;"></div>
-        <span id="papaya-strip-msg">Site walkthrough running — simulating California visitor, reject-all cookies…</span>
-      </div>
-      <div id="papaya-screenshot" style="display:none;margin-top:4px;"></div>` : '';
+    // Papaya area — show immediately if screenshot is pre-loaded, else fall back to live poll
+    const papayaArea = document.getElementById('ro-papaya-area');
+    if (data.papaya_session_id) {
+      const sessionId = data.papaya_session_id;
+      const shot      = data.papaya_screenshot;
+      const reportUrl = `https://papaya-consent-check-be11a0846ed5.herokuapp.com/results/${sessionId}`;
+
+      if (shot && (shot.url || shot.public_url)) {
+        // Walkthrough already completed — show screenshot instantly
+        const imgUrl = shot.url || shot.public_url;
+        papayaArea.innerHTML = `
+          <div style="margin-top:14px;border-radius:8px;overflow:hidden;border:1px solid rgba(0,200,168,.18);">
+            <img src="${imgUrl}" alt="${shot.label || 'Consent banner screenshot'}"
+              style="width:100%;display:block;max-height:220px;object-fit:cover;object-position:top;"
+              loading="lazy">
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 12px;
+              background:rgba(16,185,129,.06);font-size:12px;color:rgba(255,255,255,.55);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Site walkthrough complete — California visitor, reject-all
+              &nbsp;·&nbsp;<a href="${reportUrl}" target="_blank" rel="noopener"
+                style="color:var(--teal);text-decoration:underline;">view full report</a>
+            </div>
+          </div>`;
+      } else {
+        // Papaya timed out or screenshot unavailable — fall back to live polling
+        papayaArea.innerHTML = `
+          <div id="papaya-strip" style="display:flex;align-items:center;gap:10px;
+            background:rgba(0,200,168,.07);border:1px solid rgba(0,200,168,.18);
+            border-radius:8px;padding:10px 14px;margin-top:14px;
+            font-size:12px;color:rgba(255,255,255,.55);">
+            <div class="modal-spinner" style="width:13px;height:13px;flex-shrink:0;"></div>
+            <span id="papaya-strip-msg">Site walkthrough running — simulating California visitor, reject-all cookies…</span>
+          </div>
+          <div id="papaya-screenshot" style="display:none;margin-top:4px;"></div>`;
+        pollPapayaFindings(sessionId);
+      }
+    } else {
+      papayaArea.innerHTML = '';
+    }
 
     // Show overlay, lock scroll
     overlay.style.display = 'block';
@@ -5144,9 +5223,6 @@
         el.style.width = (el.dataset.w || 0) + '%';
       });
     }, 50);
-
-    // Papaya live polling
-    if (data.papaya_session_id) pollPapayaFindings(data.papaya_session_id);
 
     setTimeout(() => showSavePrompt(data), 1400);
   }
