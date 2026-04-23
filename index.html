@@ -4672,30 +4672,30 @@
         title: 'No privacy policy — your biggest trust gap right now',
         detail: 'Over 70% of B2B buyers check for a privacy policy before signing. Missing one is the most common trust-killer we find — and one of the easiest to fix.',
         tag: 'FIX THIS WEEK',
-        action_self: 'Use a free generator like Termly or Iubenda to create a basic policy this week — takes about 30 minutes. Publish it at /privacy on your site.',
-        action_dp: 'Trust Navigator reviews your specific tools, client types, and jurisdiction so your policy actually covers what it needs to — not just a generic template.' });
+        action_self: 'A free generator like Termly or Iubenda can give you a starting-point policy in about 30 minutes. Publishing something is better than nothing — treat it as a first draft to be properly reviewed.',
+        action_dp: 'Trust Navigator helps you map your tools, client types, and jurisdiction so you have a clearer picture of what a complete policy for your situation should address. Our network includes privacy professionals who can take it from there.' });
     } else if (answers.F5 === 'old_unsure') {
       findings.push({ id: 'stale_policy', pillar: 'transparency', status: 'warn',
         title: 'Your privacy policy may be out of date',
         detail: 'A stale or incomplete policy can raise more questions than having none at all. A focused review of your current tools, data practices, and third parties is usually enough.',
         tag: 'QUICK WIN',
-        action_self: 'List every tool that touches client data (CRM, email, forms, analytics) and check your policy names them. If any are missing, add a short paragraph for each.',
-        action_dp: 'Trust Navigator maps your full tool stack against your policy and flags exact gaps — no guesswork about what regulators and procurement teams look for.' });
+        action_self: 'Start by listing every tool that touches client data — CRM, email, forms, analytics — and check your policy mentions each one. Any gaps you find make a useful brief for a privacy professional.',
+        action_dp: 'Trust Navigator helps identify where your policy and your actual tool use may diverge, giving you a clearer picture before working with a legal or compliance adviser.' });
     }
     if (answers.F3 === 'processes_data') {
       findings.push({ id: 'ai_data', pillar: 'ai_trust', status: 'fail',
         title: 'Client data may be entering AI tools without a clear policy',
         detail: 'Without a stated policy — and ideally enterprise-tier tools with data-protection settings — this is the most common AI risk procurement teams flag.',
         tag: 'FIX THIS WEEK',
-        action_self: 'Write a one-paragraph AI use statement: which tools you use, what data they can access, and how you prevent client data from being used as training input. Add it to your privacy page.',
-        action_dp: 'Trust Navigator gives you a legal-ready AI disclosure template tailored to your exact tools, plus checks whether your current tool settings actually match your stated policy.' });
+        action_self: 'A short AI use statement on your privacy page is a reasonable first step: which tools you use, what data they can access, and your general approach to client data. A privacy professional can help you get the specifics right for your situation.',
+        action_dp: 'Trust Navigator helps surface where your AI tool use may need clearer disclosure. Our network includes privacy advisers who can review the detail and help you land on wording that works for your clients and contracts.' });
     } else if (answers.F3 === 'client_facing' || answers.F3 === 'own_drafts') {
       findings.push({ id: 'ai_disclose', pillar: 'ai_trust', status: 'warn',
         title: 'You use AI — but buyers may not be able to tell from your site',
         detail: 'Enterprise buyers increasingly ask about AI before signing. A short, clear note on your services or privacy page answers the question before it becomes a procurement blocker.',
         tag: 'QUICK WIN',
-        action_self: 'Add a brief note to your services or privacy page — e.g. "We use AI tools for internal drafts. Client data is never used as AI input." One sentence is enough to start.',
-        action_dp: 'Trust Navigator provides exact wording tuned to your tools and buyer profile, and verifies your disclosure appears where buyers actually look during vendor review.' });
+        action_self: 'A brief note on your services or privacy page is a reasonable first step — e.g. "We use AI writing tools for internal work. Client data is not used as AI input." For enterprise buyers, having a professional review the wording is worthwhile.',
+        action_dp: 'Trust Navigator helps you understand where buyers typically look for this kind of disclosure and what they expect to find. Our network includes advisers who can review your specific wording and contracts.' });
     }
     // Trust Gap
     const f6 = parseInt(answers.F6) || 3;
@@ -5188,7 +5188,8 @@
     const findings = data.free_findings || [];
     const titleEl  = document.getElementById('ro-findings-title');
     titleEl.innerHTML = `Your Results &nbsp;·&nbsp; <span style="color:rgba(255,255,255,.35)">${data.total_issues || findings.length} areas to address</span>`;
-    document.getElementById('ro-findings-list').innerHTML = findings.map(f => {
+    const findingsListEl = document.getElementById('ro-findings-list');
+    findingsListEl.innerHTML = findings.map(f => {
       const tc = TAG_COLOR[f.tag] || '#888';
       const fwTags = PILLAR_FW_TAGS[f.pillar] || [];
       const fwHTML = fwTags.length
@@ -5197,11 +5198,11 @@
         <div class="ro-finding-actions">
           ${f.action_self ? `<div class="ro-action ro-action-self">
             <svg class="ro-action-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span><strong style="color:rgba(255,255,255,.75);">Do it yourself:</strong> ${f.action_self}</span>
+            <span><strong style="color:rgba(255,255,255,.75);">A place to start:</strong> ${f.action_self}</span>
           </div>` : ''}
           ${f.action_dp ? `<div class="ro-action ro-action-dp">
             <svg class="ro-action-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <span><strong style="color:var(--teal);">With Data Pilots:</strong> ${f.action_dp}</span>
+            <span><strong style="color:var(--teal);">How we can help:</strong> ${f.action_dp}</span>
           </div>` : ''}
         </div>` : '';
       return `<div class="ro-finding">
@@ -5214,6 +5215,15 @@
         ${actionsHTML}
       </div>`;
     }).join('');
+    // Disclaimer — appended once after all findings
+    if (findings.length) {
+      findingsListEl.insertAdjacentHTML('beforeend', `
+        <p style="font-size:11px;color:rgba(255,255,255,.28);line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);">
+          Starting points above are general in nature and not legal, compliance, or professional advice.
+          Every business situation is different — for guidance specific to yours, speak with a qualified privacy or legal professional.
+          Our network includes advisers who can help; <a href="https://calendly.com/toni-datapilots/trust-check-in" target="_blank" rel="noopener" style="color:rgba(255,255,255,.4);text-decoration:underline;">book a call</a> to find out more.
+        </p>`);
+    }
 
     // ── Trust Gap insight ──────────────────────────────────────────────────
     const tgEl = document.getElementById('ro-trust-gap');
