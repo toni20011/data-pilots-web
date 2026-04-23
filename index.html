@@ -628,6 +628,38 @@
   .ro-method-tier.free { background: rgba(0,200,168,.15); color: var(--teal); }
   .ro-method-tier.paid { background: rgba(255,255,255,.06); color: rgba(255,255,255,.55); }
 
+  /* Answer echo strip */
+  .ro-answers-echo { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07); border-radius: 10px; padding: 11px 14px; margin-bottom: 24px; }
+  .ro-answers-echo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.3); margin-bottom: 8px; }
+  .ro-answer-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .ro-answer-chip { font-size: 11.5px; color: rgba(255,255,255,.6); background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 5px; padding: 2px 9px; }
+
+  /* Pillar "why it matters" */
+  .ro-p-why { font-size: 11px; color: rgba(255,255,255,.35); margin-top: 2px; font-style: italic; }
+
+  /* Finding action steps */
+  .ro-finding-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.06); display: flex; flex-direction: column; gap: 9px; }
+  .ro-action { display: flex; gap: 9px; align-items: flex-start; font-size: 12px; line-height: 1.55; }
+  .ro-action-icon { flex-shrink: 0; margin-top: 2px; }
+  .ro-action-self { color: rgba(255,255,255,.68); }
+  .ro-action-dp { color: rgba(0,200,168,.85); }
+
+  /* Hub teaser */
+  .ro-hub-teaser { margin-bottom: 28px; border: 1px solid rgba(139,92,246,.22); border-radius: 14px; overflow: hidden; }
+  .ro-hub-head { background: rgba(139,92,246,.08); padding: 13px 17px; border-bottom: 1px solid rgba(139,92,246,.13); }
+  .ro-hub-kicker { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(139,92,246,.75); margin-bottom: 3px; }
+  .ro-hub-title { font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,.85); }
+  .ro-hub-sub { font-size: 12px; color: rgba(255,255,255,.42); margin-top: 4px; line-height: 1.5; }
+  .ro-hub-locked-list { padding: 12px 17px; display: flex; flex-direction: column; gap: 8px; }
+  .ro-hub-locked { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 8px; padding: 9px 12px; }
+  .ro-hub-lock-icon { flex-shrink: 0; color: rgba(139,92,246,.45); }
+  .ro-hub-locked-body { flex: 1; min-width: 0; }
+  .ro-hub-locked-cat { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.28); margin-bottom: 2px; }
+  .ro-hub-locked-title { font-size: 12px; color: rgba(255,255,255,.25); filter: blur(3.5px); user-select: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ro-hub-locked-bar { width: 52px; height: 4px; background: rgba(139,92,246,.15); border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+  .ro-hub-cta { padding: 12px 17px; border-top: 1px solid rgba(139,92,246,.1); background: rgba(139,92,246,.04); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .ro-hub-cta-text { font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.4; }
+
   /* scan modal overlay */
   .scan-modal {
     position: fixed; inset: 0; z-index: 9999;
@@ -4634,23 +4666,31 @@
       findings.push({ id: 'no_policy', pillar: 'transparency', status: 'fail',
         title: 'No privacy policy — your biggest trust gap right now',
         detail: 'Over 70% of B2B buyers check for a privacy policy before signing. Missing one is the most common trust-killer we find — and one of the easiest to fix.',
-        tag: 'FIX THIS WEEK' });
+        tag: 'FIX THIS WEEK',
+        action_self: 'Use a free generator like Termly or Iubenda to create a basic policy this week — takes about 30 minutes. Publish it at /privacy on your site.',
+        action_dp: 'Trust Navigator reviews your specific tools, client types, and jurisdiction so your policy actually covers what it needs to — not just a generic template.' });
     } else if (answers.F5 === 'old_unsure') {
       findings.push({ id: 'stale_policy', pillar: 'transparency', status: 'warn',
         title: 'Your privacy policy may be out of date',
         detail: 'A stale or incomplete policy can raise more questions than having none at all. A focused review of your current tools, data practices, and third parties is usually enough.',
-        tag: 'QUICK WIN' });
+        tag: 'QUICK WIN',
+        action_self: 'List every tool that touches client data (CRM, email, forms, analytics) and check your policy names them. If any are missing, add a short paragraph for each.',
+        action_dp: 'Trust Navigator maps your full tool stack against your policy and flags exact gaps — no guesswork about what regulators and procurement teams look for.' });
     }
     if (answers.F3 === 'processes_data') {
       findings.push({ id: 'ai_data', pillar: 'ai_trust', status: 'fail',
         title: 'Client data may be entering AI tools without a clear policy',
         detail: 'Without a stated policy — and ideally enterprise-tier tools with data-protection settings — this is the most common AI risk procurement teams flag.',
-        tag: 'FIX THIS WEEK' });
+        tag: 'FIX THIS WEEK',
+        action_self: 'Write a one-paragraph AI use statement: which tools you use, what data they can access, and how you prevent client data from being used as training input. Add it to your privacy page.',
+        action_dp: 'Trust Navigator gives you a legal-ready AI disclosure template tailored to your exact tools, plus checks whether your current tool settings actually match your stated policy.' });
     } else if (answers.F3 === 'client_facing' || answers.F3 === 'own_drafts') {
       findings.push({ id: 'ai_disclose', pillar: 'ai_trust', status: 'warn',
         title: 'You use AI — but buyers may not be able to tell from your site',
         detail: 'Enterprise buyers increasingly ask about AI before signing. A short, clear note on your services or privacy page answers the question before it becomes a procurement blocker.',
-        tag: 'QUICK WIN' });
+        tag: 'QUICK WIN',
+        action_self: 'Add a brief note to your services or privacy page — e.g. "We use AI tools for internal drafts. Client data is never used as AI input." One sentence is enough to start.',
+        action_dp: 'Trust Navigator provides exact wording tuned to your tools and buyer profile, and verifies your disclosure appears where buyers actually look during vendor review.' });
     }
     // Trust Gap
     const f6 = parseInt(answers.F6) || 3;
@@ -4681,6 +4721,7 @@
       trust_gap:          trustGap,
       compliance_context: CC[(answers.F10 || 'unsure').toLowerCase()] || CC.unsure,
       papaya_session_id:  null,
+      answers:            answers,
     };
   }
 
@@ -5082,6 +5123,26 @@
         <span>Your results are shown only to you. Nothing is stored on our servers unless you choose to save them.</span>`;
     }
 
+    // Answer echo strip — show what this report was based on
+    const echoEl = document.getElementById('ro-answer-echo');
+    if (echoEl) {
+      const A = data.answers || {};
+      const F1_LABELS = { elearning: 'E-learning provider', coach: 'Coach / consultant', training: 'Training company', other: 'Business owner' };
+      const F2_LABELS = { consumer: 'Consumer clients', b2b_sme: 'SME clients', b2b_enterprise: 'Enterprise / corporate', government: 'Government / public sector' };
+      const F5_LABELS = { legal_current: 'Policy professionally reviewed', self_recent: 'Self-written policy', old_unsure: 'Policy may be outdated', none: 'No policy yet' };
+      const F3_LABELS = { no: 'No AI tools', own_drafts: 'AI for internal drafts', client_facing: 'AI in client-facing work', processes_data: 'AI processes client data', unsure: 'AI use unclear' };
+      const chips = [];
+      if (A.F1 && F1_LABELS[A.F1]) chips.push(F1_LABELS[A.F1]);
+      const f2 = Array.isArray(A.F2) ? A.F2 : [];
+      f2.forEach(v => { if (F2_LABELS[v]) chips.push(F2_LABELS[v]); });
+      if (A.F5 && F5_LABELS[A.F5]) chips.push(F5_LABELS[A.F5]);
+      if (A.F3 && F3_LABELS[A.F3]) chips.push(F3_LABELS[A.F3]);
+      echoEl.style.display = chips.length ? '' : 'none';
+      echoEl.innerHTML = `
+        <div class="ro-answers-echo-label">This report is based on</div>
+        <div class="ro-answer-chips">${chips.map(c => `<span class="ro-answer-chip">${c}</span>`).join('')}</div>`;
+    }
+
     // Score ring
     const ring = document.getElementById('ro-ringFill');
     const circumference = 2 * Math.PI * 49;
@@ -5094,10 +5155,10 @@
 
     // Pillar rows
     const PILLAR_CONFIG = [
-      { key:'ux',           label:'User Experience',    icon:'i-users',  color:'#4A7FD4', bg:'rgba(44,90,160,.15)',   grad:'linear-gradient(90deg,#2C5AA0,#4A7FD4)', fwTags:[] },
-      { key:'transparency', label:'Transparency',       icon:'i-eye',    color:'#10B981', bg:'rgba(16,185,129,.12)',  grad:'linear-gradient(90deg,#10B981,#34D399)', fwTags:['US (CCPA)','Global (GDPR)'] },
-      { key:'safety',       label:'Safety & Security',  icon:'i-shield', color:'#F59E0B', bg:'rgba(245,158,11,.12)', grad:'linear-gradient(90deg,#F59E0B,#FBBF24)', fwTags:['Certifications (ISO 27001)','Audit (SOC 2)'] },
-      { key:'ai_trust',     label:'AI Trust',           icon:'i-bot',    color:'#8B5CF6', bg:'rgba(139,92,246,.12)', grad:'linear-gradient(90deg,#8B5CF6,#A78BFA)', fwTags:[] },
+      { key:'ux',           label:'User Experience',    icon:'i-users',  color:'#4A7FD4', bg:'rgba(44,90,160,.15)',   grad:'linear-gradient(90deg,#2C5AA0,#4A7FD4)', fwTags:[], why:'The first impression a buyer forms — before reading a word of your content.' },
+      { key:'transparency', label:'Transparency',       icon:'i-eye',    color:'#10B981', bg:'rgba(16,185,129,.12)',  grad:'linear-gradient(90deg,#10B981,#34D399)', fwTags:['US (CCPA)','Global (GDPR)'],           why:'Procurement teams check this before approving you as a vendor.' },
+      { key:'safety',       label:'Safety & Security',  icon:'i-shield', color:'#F59E0B', bg:'rgba(245,158,11,.12)', grad:'linear-gradient(90deg,#F59E0B,#FBBF24)', fwTags:['Certifications (ISO 27001)','Audit (SOC 2)'], why:'Enterprise and government clients run security checks before signing.' },
+      { key:'ai_trust',     label:'AI Trust',           icon:'i-bot',    color:'#8B5CF6', bg:'rgba(139,92,246,.12)', grad:'linear-gradient(90deg,#8B5CF6,#A78BFA)', fwTags:[], why:'A growing procurement filter — buyers now ask about AI use before contracting.' },
     ];
     document.getElementById('ro-pillars').innerHTML = PILLAR_CONFIG.map(p => {
       const score = data.pillars?.[p.key]?.score ?? 0;
@@ -5110,6 +5171,7 @@
         <div>
           <div class="ro-p-name">${p.label}</div>
           ${fwHTML}
+          <div class="ro-p-why">${p.why}</div>
           <div class="ro-p-track"><div class="ro-p-fill" style="width:0%;background:${p.grad}" data-w="${score}"></div></div>
         </div>
         <div class="ro-p-score" style="color:${p.color}">${score}</div>
@@ -5126,6 +5188,17 @@
       const fwTags = PILLAR_FW_TAGS[f.pillar] || [];
       const fwHTML = fwTags.length
         ? `<div class="ro-fw-tags">${fwTags.map(t=>`<span class="ro-fw-tag">${t}</span>`).join('')}</div>` : '';
+      const actionsHTML = (f.action_self || f.action_dp) ? `
+        <div class="ro-finding-actions">
+          ${f.action_self ? `<div class="ro-action ro-action-self">
+            <svg class="ro-action-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span><strong style="color:rgba(255,255,255,.75);">Do it yourself:</strong> ${f.action_self}</span>
+          </div>` : ''}
+          ${f.action_dp ? `<div class="ro-action ro-action-dp">
+            <svg class="ro-action-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span><strong style="color:var(--teal);">With Data Pilots:</strong> ${f.action_dp}</span>
+          </div>` : ''}
+        </div>` : '';
       return `<div class="ro-finding">
         <div class="ro-finding-header">
           <div class="ro-finding-title">${f.title}</div>
@@ -5133,6 +5206,7 @@
         </div>
         ${fwHTML}
         ${f.detail ? `<p class="ro-finding-detail">${f.detail}</p>` : ''}
+        ${actionsHTML}
       </div>`;
     }).join('');
 
@@ -5164,6 +5238,54 @@
       } else {
         ccEl.style.display = 'none';
       }
+    }
+
+    // Hub teaser — contextual locked deeper-insight cards
+    const hubEl = document.getElementById('ro-hub-teaser');
+    if (hubEl) {
+      const A = data.answers || {};
+      const f2 = Array.isArray(A.F2) ? A.F2 : [];
+      const lockedItems = [
+        { cat: 'Consent & cookies', title: 'Full cookie audit — names, purposes, and consent timing for every tracker' },
+        { cat: 'Data flow', title: 'Third-party tracker inventory with jurisdiction risk flags' },
+        { cat: 'Data transfer', title: 'Cross-border data transfer mapping and SCCs gap check' },
+      ];
+      if (f2.includes('b2b_enterprise') || f2.includes('government')) {
+        lockedItems.push({ cat: 'Procurement', title: 'Vendor security questionnaire gap analysis — common blockers before you get asked' });
+      }
+      if (A.F3 && A.F3 !== 'no') {
+        lockedItems.push({ cat: 'AI governance', title: 'AI tool data handling audit — what each tool can access and what your policy must say' });
+      }
+      if (A.F5 === 'none' || A.F5 === 'old_unsure') {
+        lockedItems.push({ cat: 'Legal gap', title: 'Privacy policy completeness review against your actual tool stack and client base' });
+      }
+      if (A.F4 === 'crm' || A.F4 === 'multiple') {
+        lockedItems.push({ cat: 'Tool stack', title: 'CRM and platform data flow audit — subprocessors, retention, and DPA requirements' });
+      }
+      const lockSVG = `<svg class="ro-hub-lock-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+      hubEl.innerHTML = `
+        <div class="ro-hub-head">
+          <div class="ro-hub-kicker">Trust Navigator Hub</div>
+          <div class="ro-hub-title">What a full audit would find here</div>
+          <div class="ro-hub-sub">Your free snapshot covers the trust signals visible on your public site. The full audit goes deeper — across your site, tools, and client-facing systems.</div>
+        </div>
+        <div class="ro-hub-locked-list">
+          ${lockedItems.slice(0, 5).map(item => `
+          <div class="ro-hub-locked">
+            ${lockSVG}
+            <div class="ro-hub-locked-body">
+              <div class="ro-hub-locked-cat">${item.cat}</div>
+              <div class="ro-hub-locked-title">${item.title}</div>
+            </div>
+            <div class="ro-hub-locked-bar"></div>
+          </div>`).join('')}
+        </div>
+        <div class="ro-hub-cta">
+          <div class="ro-hub-cta-text">Full fix guides written for you, your developer, and your legal adviser — one shared roadmap.</div>
+          <button onclick="joinCommunityFromResults()" class="btn btn-ghost" style="padding:8px 16px;font-size:12.5px;white-space:nowrap;">
+            Get early access →
+          </button>
+        </div>`;
     }
 
     // Papaya area — show immediately if screenshot is pre-loaded, else fall back to live poll
@@ -5663,6 +5785,9 @@
       <span>Your results are shown only to you. Nothing is stored on our servers unless you choose to save them.</span>
     </div>
 
+    <!-- Answer echo — populated by JS -->
+    <div id="ro-answer-echo" class="ro-answers-echo" style="display:none;"></div>
+
     <div class="ro-pillars" id="ro-pillars"><!-- populated by JS --></div>
 
     <!-- Trust Gap insight — hidden by default, shown by JS when fired -->
@@ -5682,6 +5807,9 @@
       background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
       border-radius:10px;padding:14px 16px;margin-bottom:22px;">
     </div>
+
+    <!-- Hub teaser — populated by JS -->
+    <div id="ro-hub-teaser" class="ro-hub-teaser"></div>
 
     <!-- Method strip: Check → Treat → Strengthen -->
     <div class="ro-method">
