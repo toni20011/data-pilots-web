@@ -106,6 +106,16 @@
   .feature-title { font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,.88); margin-bottom: 6px; }
   .feature-detail { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.6; }
 
+  /* DIAL TOGGLE */
+  .dial-toggle { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+  .dial-toggle-btn { font-family: inherit; font-size: 12px; font-weight: 600; padding: 7px 15px; border-radius: 99px; border: 1px solid rgba(255,255,255,.12); background: transparent; color: rgba(255,255,255,.45); cursor: pointer; transition: all .2s; }
+  .dial-toggle-btn:hover { color: rgba(255,255,255,.75); border-color: rgba(255,255,255,.25); }
+  .dial-toggle-btn.active[data-view="full"] { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); color: var(--white); }
+  .dial-toggle-btn.active[data-view="cx"]  { background: rgba(0,200,168,.1);   border-color: rgba(0,200,168,.45);   color: #00C8A8; }
+  .dial-toggle-btn.active[data-view="dt"]  { background: rgba(139,92,246,.1);  border-color: rgba(139,92,246,.45);  color: #A78BFA; }
+  .dial-toggle-btn.active[data-view="ds"]  { background: rgba(74,127,212,.1);  border-color: rgba(74,127,212,.45);  color: #4A7FD4; }
+  .dial-toggle-btn.active[data-view="ai"]  { background: rgba(245,158,11,.1);  border-color: rgba(245,158,11,.45);  color: #F59E0B; }
+
   /* WHO IT'S FOR */
   .icp-section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.015); }
   .icp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 44px; }
@@ -205,66 +215,29 @@
   </div>
 </section>
 
-<!-- 6 INSTRUMENTS DIAL -->
+<!-- 6 ZONES DIAL -->
 <section class="dial-section">
   <div class="container">
-    <div class="reveal" style="margin-bottom:44px;">
-      <div class="section-kicker">The 6 instruments</div>
-      <h2 class="section-h2">One panel. Six dimensions.<br>One clear picture of where you stand.</h2>
-      <p class="section-sub">The Snapshot shows you what buyers see. Trust Panel gives you everything to act on it — and the confidence to grow.</p>
+    <div class="reveal" style="margin-bottom:36px;">
+      <div class="section-kicker">The 6 zones</div>
+      <h2 class="section-h2">Full picture — or zoomed in<br>to what matters right now.</h2>
+      <p class="section-sub">The Trust Panel always works across the same six zones. Use Full View for your complete trust picture, or choose a focus area to see exactly what each zone means for that part of your business.</p>
     </div>
-    <div class="dial-layout">
 
+    <div class="dial-toggle reveal">
+      <button class="dial-toggle-btn active" data-view="full">Full View</button>
+      <button class="dial-toggle-btn" data-view="cx">Customer Experience</button>
+      <button class="dial-toggle-btn" data-view="dt">Disclosure &amp; Transparency</button>
+      <button class="dial-toggle-btn" data-view="ds">Data Security &amp; Safety</button>
+      <button class="dial-toggle-btn" data-view="ai">Responsible AI</button>
+    </div>
+
+    <div class="dial-layout">
       <div class="dial-visual reveal">
         <div id="trust-dial-panel"></div>
         <div id="trust-dial-panel-hover" class="dial-hover-label"></div>
       </div>
-
-      <div class="dial-instruments reveal reveal-delay-1">
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#00C8A8;">1</div>
-          <div>
-            <div class="dial-instr-name">Visibility</div>
-            <div class="dial-instr-dual"><strong>See what buyers check</strong> — and see what's blocking your reach</div>
-          </div>
-        </div>
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#00AFCC;">2</div>
-          <div>
-            <div class="dial-instr-name">Translation</div>
-            <div class="dial-instr-dual"><strong>Understand the findings</strong> — and what they mean for your growth</div>
-          </div>
-        </div>
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#4A7FD4;">3</div>
-          <div>
-            <div class="dial-instr-name">Decision Making</div>
-            <div class="dial-instr-dual"><strong>Prioritise what's urgent</strong> — and get back to the work faster</div>
-          </div>
-        </div>
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#8B5CF6;">4</div>
-          <div>
-            <div class="dial-instr-name">Coordination</div>
-            <div class="dial-instr-dual"><strong>Right people on the right tasks</strong> — free yourself to focus on delivering</div>
-          </div>
-        </div>
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#10B981;">5</div>
-          <div>
-            <div class="dial-instr-name">Action</div>
-            <div class="dial-instr-dual"><strong>Close the gaps buyers flag</strong> — open doors to more organisations</div>
-          </div>
-        </div>
-        <div class="dial-instr-row">
-          <div class="dial-instr-num" style="background:#F59E0B;">6</div>
-          <div>
-            <div class="dial-instr-name">Progress</div>
-            <div class="dial-instr-dual"><strong>Track and show compliance</strong> — build trust that earns lasting relationships</div>
-          </div>
-        </div>
-      </div>
-
+      <div class="dial-instruments reveal reveal-delay-1" id="trust-dial-instr-list"></div>
     </div>
   </div>
 </section>
@@ -546,16 +519,54 @@
   revealEls.forEach(el => obs.observe(el));
 </script>
 <script>
-/* Trust Panel — 6-instrument journey dial */
+/* Trust Panel — 6-zone dial with Full View / Focus View */
 (function(){
-  var INSTR=[
-    {n:1,name:'Visibility',      color:'#00C8A8',desc:'See what buyers check — and what\'s blocking your reach'},
-    {n:2,name:'Translation',     color:'#00AFCC',desc:'Understand the findings — and what they mean for your growth'},
-    {n:3,name:'Decision Making', color:'#4A7FD4',desc:'Prioritise what\'s urgent — get back to the work faster'},
-    {n:4,name:'Coordination',    color:'#8B5CF6',desc:'Right people on the right tasks — free yourself to focus on delivering'},
-    {n:5,name:'Action',          color:'#10B981',desc:'Close the gaps buyers flag — open doors to more organisations'},
-    {n:6,name:'Progress',        color:'#F59E0B',desc:'Track and show compliance — build trust that earns lasting relationships'},
-  ];
+  var ZONE_COLORS=['#00C8A8','#00AFCC','#4A7FD4','#8B5CF6','#10B981','#F59E0B'];
+  var ZONE_NAMES=['Visibility','Translation','Decision Making','Coordination','Action','Progress'];
+
+  var VIEWS={
+    full:{label:'Full View',color:null,abbr:'6 zones',descs:[
+      'What buyers find across your full presence — site, tools, policies, and platform',
+      'What all findings mean for your ability to win and keep corporate clients',
+      'What to fix first, based on impact on your next deal',
+      'Who handles what — you, your developer, your legal contact',
+      'The specific fixes across every area',
+      'How far you\'ve come, what\'s still open, what to show buyers'
+    ]},
+    cx:{label:'Customer Experience',color:'#00C8A8',abbr:'CX',descs:[
+      'What buyers see when they arrive on your site — from first impression to consent prompt',
+      'Which experience gaps are actually affecting buyer confidence and trust',
+      'Which fixes will have the most impact on your next corporate deal',
+      'What you direct vs what your developer or designer handles',
+      'The specific changes that make buyers feel confident, not cautious',
+      'Your experience score improving — with evidence to share'
+    ]},
+    dt:{label:'Disclosure & Transparency',color:'#8B5CF6',abbr:'D&T',descs:[
+      'What your policies and disclosures actually say to someone reading them right now',
+      'Which compliance gaps matter most for corporate procurement',
+      'What to update first — before the next vendor questionnaire arrives',
+      'What goes to your legal adviser vs what you can address yourself',
+      'The policy and disclosure updates that close the gaps buyers flag',
+      'Your compliance standing documented and shareable'
+    ]},
+    ds:{label:'Data Security & Safety',color:'#4A7FD4',abbr:'DSS',descs:[
+      'What your data practices look like to a buyer\'s IT or security team',
+      'What your current setup means for enterprise client data obligations',
+      'Which security gaps are most urgent given the deals you\'re pursuing',
+      'What needs your developer, your DPO, or a specialist partner',
+      'The data practice changes that satisfy procurement security reviews',
+      'Your security posture improving — with an audit trail to prove it'
+    ]},
+    ai:{label:'Responsible AI',color:'#F59E0B',abbr:'AI',descs:[
+      'Which AI tools in your stack touch client data — and what that looks like to buyers',
+      'What your AI usage means for enterprise obligations and disclosure',
+      'Which AI risks to address first and what to say in the meantime',
+      'What to ask your tool providers vs what to disclose on your site yourself',
+      'The AI governance steps that answer procurement questions before they\'re asked',
+      'Your AI governance documented — for the clients who will ask'
+    ]}
+  };
+
   function xy(cx,cy,r,d){var a=(d-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];}
   function arcPath(cx,cy,ro,ri,a1,a2){
     var s=xy(cx,cy,ro,a1),e=xy(cx,cy,ro,a2),si=xy(cx,cy,ri,a2),ei=xy(cx,cy,ri,a1),lg=a2-a1>180?1:0;
@@ -563,71 +574,136 @@
           +' L'+si[0].toFixed(1)+','+si[1].toFixed(1)+' A'+ri+','+ri+' 0 '+lg+',0 '+ei[0].toFixed(1)+','+ei[1].toFixed(1)+'Z';
   }
   function svgEl(tag){return document.createElementNS('http://www.w3.org/2000/svg',tag);}
-  function addTxt(svg,x,y,content,sz,col,wt,ls){
-    var t=svgEl('text');
-    t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');
-    t.setAttribute('dominant-baseline','central');t.setAttribute('fill',col);
-    t.setAttribute('font-size',sz);t.setAttribute('font-weight',wt||'800');
+  function makeTxt(x,y,content,sz,col,wt,ls){
+    var t=svgEl('text');t.setAttribute('x',x);t.setAttribute('y',y);
+    t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');
+    t.setAttribute('fill',col);t.setAttribute('font-size',sz);t.setAttribute('font-weight',wt||'800');
     if(ls)t.setAttribute('letter-spacing',ls);
     t.setAttribute('font-family',"'Inter',system-ui,sans-serif");
-    t.setAttribute('pointer-events','none');t.textContent=content;svg.appendChild(t);
+    t.setAttribute('pointer-events','none');t.textContent=content;return t;
   }
 
   var el=document.getElementById('trust-dial-panel');if(!el)return;
+  var instrList=document.getElementById('trust-dial-instr-list');
   var cx=140,cy=140,ro=112,ri=56;
+
   var svg=svgEl('svg');
   svg.setAttribute('viewBox','0 0 280 280');svg.setAttribute('class','dial-svg');
-  svg.setAttribute('role','img');svg.setAttribute('aria-label','Trust Panel 6-instrument journey dial');
+  svg.setAttribute('role','img');svg.setAttribute('aria-label','Trust Panel 6-zone dial');
 
+  /* outer focus ring */
+  var outerRing=svgEl('circle');
+  outerRing.setAttribute('cx',cx);outerRing.setAttribute('cy',cy);outerRing.setAttribute('r',ro+7);
+  outerRing.setAttribute('fill','none');outerRing.setAttribute('stroke','transparent');
+  outerRing.setAttribute('stroke-width','2.5');outerRing.setAttribute('stroke-dasharray','5 3');
+  outerRing.style.transition='stroke .3s, opacity .3s';svg.appendChild(outerRing);
+
+  /* bg track */
   var bg=svgEl('circle');bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);
   bg.setAttribute('r',(ro+ri)/2);bg.setAttribute('fill','none');
   bg.setAttribute('stroke','rgba(255,255,255,0.06)');bg.setAttribute('stroke-width',ro-ri);
   svg.appendChild(bg);
 
+  /* segments */
   var paths=[];
-  var rows=document.querySelectorAll('.dial-instr-row');
-
-  INSTR.forEach(function(inst,i){
-    var a1=i*60,a2=a1+57,mid=a1+28.5;
+  ZONE_NAMES.forEach(function(name,i){
+    var color=ZONE_COLORS[i],a1=i*60,a2=a1+57,mid=a1+28.5;
     var g=svgEl('g');g.style.cursor='pointer';
     var path=svgEl('path');
     path.setAttribute('d',arcPath(cx,cy,ro,ri,a1,a2));
-    path.setAttribute('fill',inst.color);path.setAttribute('class','dial-seg');
+    path.setAttribute('fill',color);path.setAttribute('class','dial-seg');
     path.style.transformOrigin=cx+'px '+cy+'px';
     path.style.opacity='0';path.style.transform='scale(0.5)';
     g.appendChild(path);paths.push(path);
-
     var mp=xy(cx,cy,(ro+ri)/2,mid);
     var numT=svgEl('text');
     numT.setAttribute('x',mp[0].toFixed(1));numT.setAttribute('y',mp[1].toFixed(1));
     numT.setAttribute('text-anchor','middle');numT.setAttribute('dominant-baseline','central');
     numT.setAttribute('fill','rgba(255,255,255,0.92)');numT.setAttribute('font-size','14');
     numT.setAttribute('font-weight','800');numT.setAttribute('pointer-events','none');
-    numT.setAttribute('font-family',"'Inter',system-ui,sans-serif");numT.textContent=inst.n;
+    numT.setAttribute('font-family',"'Inter',system-ui,sans-serif");numT.textContent=i+1;
     g.appendChild(numT);
-
     g.addEventListener('mouseenter',function(){
-      path.style.filter='brightness(1.18) drop-shadow(0 0 10px '+inst.color+')';
+      path.style.filter='brightness(1.18) drop-shadow(0 0 10px '+color+')';
       var hd=document.getElementById('trust-dial-panel-hover');
-      if(hd){hd.innerHTML='<strong style="color:'+inst.color+'">'+inst.n+'. '+inst.name+'</strong> — '+inst.desc;hd.style.opacity='1';}
-      rows.forEach(function(r,j){r.style.opacity=j===i?'1':'0.35';});
+      if(hd){hd.innerHTML='<strong style="color:'+color+'">'+(i+1)+'. '+name+'</strong>';hd.style.opacity='1';}
+      var rows=instrList?instrList.querySelectorAll('.dial-instr-row'):[];
+      Array.prototype.forEach.call(rows,function(r,j){r.style.opacity=j===i?'1':'0.35';});
     });
     g.addEventListener('mouseleave',function(){
       path.style.filter='';
       var hd=document.getElementById('trust-dial-panel-hover');if(hd)hd.style.opacity='0';
-      rows.forEach(function(r){r.style.opacity='1';});
+      var rows=instrList?instrList.querySelectorAll('.dial-instr-row'):[];
+      Array.prototype.forEach.call(rows,function(r){r.style.opacity='1';});
     });
     svg.appendChild(g);
   });
 
+  /* centre circle */
   var cc=svgEl('circle');cc.setAttribute('cx',cx);cc.setAttribute('cy',cy);cc.setAttribute('r',ri-5);
-  cc.setAttribute('fill','#0B1929');svg.appendChild(cc);
-  addTxt(svg,cx,cy-8,'TRUST','11','rgba(255,255,255,0.9)','800','0.04em');
-  addTxt(svg,cx,cy+5,'PANEL','11','rgba(255,255,255,0.9)','800','0.04em');
-  addTxt(svg,cx,cy+17,'6 instruments','7.5','#00C8A8','600','0.02em');
+  cc.setAttribute('fill','#0B1929');cc.style.transition='fill .3s';svg.appendChild(cc);
+
+  /* centre text lines */
+  var ct1=makeTxt(cx,cy-8,'TRUST','11','rgba(255,255,255,0.9)','800','0.04em');svg.appendChild(ct1);
+  var ct2=makeTxt(cx,cy+5,'PANEL','11','rgba(255,255,255,0.9)','800','0.04em');svg.appendChild(ct2);
+  var ct3=makeTxt(cx,cy+17,'6 zones','7.5','#00C8A8','600','0.02em');svg.appendChild(ct3);
 
   el.appendChild(svg);
 
+  /* render zone list */
+  function renderList(vk){
+    var v=VIEWS[vk];if(!instrList)return;
+    instrList.innerHTML='';
+    ZONE_NAMES.forEach(function(name,i){
+      var row=document.createElement('div');row.className='dial-instr-row';
+      row.innerHTML='<div class="dial-instr-num" style="background:'+ZONE_COLORS[i]+';">'+(i+1)+'</div>'
+        +'<div><div class="dial-instr-name">'+name+'</div>'
+        +'<div class="dial-instr-dual">'+v.descs[i]+'</div></div>';
+      instrList.appendChild(row);
+      row.addEventListener('mouseenter',function(){
+        paths.forEach(function(p,j){p.style.filter=j===i?'brightness(1.18) drop-shadow(0 0 10px '+ZONE_COLORS[i]+')':'';});
+        var rows=instrList.querySelectorAll('.dial-instr-row');
+        Array.prototype.forEach.call(rows,function(r,j){r.style.opacity=j===i?'1':'0.35';});
+      });
+      row.addEventListener('mouseleave',function(){
+        paths.forEach(function(p){p.style.filter='';});
+        var rows=instrList.querySelectorAll('.dial-instr-row');
+        Array.prototype.forEach.call(rows,function(r){r.style.opacity='1';});
+      });
+    });
+  }
+
+  /* switch view */
+  function switchView(vk){
+    var v=VIEWS[vk],col=v.color;
+    outerRing.setAttribute('stroke',col||'transparent');
+    if(col){
+      var r=parseInt(col.slice(1,3),16),g2=parseInt(col.slice(3,5),16),b=parseInt(col.slice(5,7),16);
+      cc.setAttribute('fill','rgba('+r+','+g2+','+b+',0.12)');
+      ct1.setAttribute('fill',col);ct1.textContent='FOCUS';
+      ct2.setAttribute('fill',col);ct2.textContent='VIEW';
+      ct3.setAttribute('fill',col);ct3.setAttribute('font-size','7');ct3.textContent=v.abbr;
+    } else {
+      cc.setAttribute('fill','#0B1929');
+      ct1.setAttribute('fill','rgba(255,255,255,0.9)');ct1.textContent='TRUST';
+      ct2.setAttribute('fill','rgba(255,255,255,0.9)');ct2.textContent='PANEL';
+      ct3.setAttribute('fill','#00C8A8');ct3.setAttribute('font-size','7.5');ct3.textContent='6 zones';
+    }
+    renderList(vk);
+  }
+
+  /* toggle buttons */
+  var btns=document.querySelectorAll('.dial-toggle-btn');
+  btns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      btns.forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');switchView(btn.getAttribute('data-view'));
+    });
+  });
+
+  renderList('full');
+
+  /* scroll-in animation */
   var obs2=new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
       if(entry.isIntersecting){
@@ -642,19 +718,6 @@
     });
   },{threshold:0.15});
   obs2.observe(svg);
-
-  rows.forEach(function(row,i){
-    row.addEventListener('mouseenter',function(){
-      paths.forEach(function(p,j){
-        p.style.filter=j===i?('brightness(1.18) drop-shadow(0 0 10px '+INSTR[i].color+')'):'';
-      });
-      rows.forEach(function(r,j){r.style.opacity=j===i?'1':'0.35';});
-    });
-    row.addEventListener('mouseleave',function(){
-      paths.forEach(function(p){p.style.filter='';});
-      rows.forEach(function(r){r.style.opacity='1';});
-    });
-  });
 })();
 </script>
 
