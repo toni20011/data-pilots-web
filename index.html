@@ -1125,6 +1125,13 @@
   .inst-pill-purple { background: rgba(139,92,246,.1); color: #7C3AED; }
   .inst-pill-blue { background: rgba(59,130,246,.1); color: #2563EB; }
   .inst-pill-amber { background: rgba(245,158,11,.1); color: #D97706; }
+  /* Compact trust dial */
+  .trust-dial-compact-wrap { padding: 4px 0 8px; }
+  .dial-seg-compact { cursor: pointer; transition: filter .2s; }
+  .dial-compact-hover { font-size: 10.5px; line-height: 1.45; min-height: 24px; transition: opacity .2s; opacity: 0; text-align: center; margin-top: 6px; color: var(--slate-600); }
+  .dial-compact-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px; margin-top: 10px; }
+  .dial-compact-legend-item { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: var(--slate-600); }
+  .dial-compact-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
   /* CTA strip */
   .cta-strip {
@@ -3459,6 +3466,78 @@
   </div>
 </section>
 
+<!-- ════════════ HOW IT WORKS (teaser) ════════════ -->
+<section id="journey">
+  <div class="container">
+
+    <div class="journey-header reveal">
+      <div class="journey-kicker">How It Works</div>
+      <h2 class="journey-h2">Check. Treat. Strengthen.</h2>
+      <p class="journey-sub">From "I'm not sure where I stand" to "trust is our edge" — one shared view for every person, tool, and partner who needs to act.</p>
+    </div>
+
+    <div class="steps-row reveal">
+
+      <!-- Step 1: Check -->
+      <div class="step">
+        <div class="step-icon" style="background:rgba(0,200,168,.12);border:1.5px solid rgba(0,200,168,.2);">
+          <svg class="icon" width="24" height="24" style="color:var(--teal);"><use href="#i-search"/></svg>
+          <div class="step-num">1</div>
+        </div>
+        <div class="step-name">Check</div>
+        <div class="step-desc">Enter your URL, answer a few short questions. Get a plain-English trust score across four pillars in about 5 minutes. No account needed.</div>
+      </div>
+
+      <div class="step-arrow">
+        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
+          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
+          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
+          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
+        </svg>
+      </div>
+
+      <!-- Step 2: Treat -->
+      <div class="step">
+        <div class="step-icon" style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.2);">
+          <svg class="icon" width="24" height="24" style="color:var(--green);"><use href="#i-zap"/></svg>
+          <div class="step-num" style="background:var(--green);">2</div>
+        </div>
+        <div class="step-name">Treat</div>
+        <div class="step-desc">Every finding comes with plain-language guidance for your business owner, your developer, and your compliance contact. One shared roadmap. Every person has their part.</div>
+      </div>
+
+      <div class="step-arrow">
+        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
+          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
+          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
+          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
+        </svg>
+      </div>
+
+      <!-- Step 3: Strengthen -->
+      <div class="step">
+        <div class="step-icon" style="background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.2);">
+          <svg class="icon" width="24" height="24" style="color:#8B5CF6;"><use href="#i-trend"/></svg>
+          <div class="step-num" style="background:#8B5CF6;">3</div>
+        </div>
+        <div class="step-name">Strengthen</div>
+        <div class="step-desc">Export a trust proof PDF. Re-scan monthly. Track your progress across all four pillars and show buyers a picture of where you stand — not just a claim.</div>
+      </div>
+
+    </div>
+
+    <div class="reveal" style="text-align:center; margin-top:36px;">
+      <a href="framework.html" class="btn btn-ghost" style="font-size:14px; padding:12px 24px;">
+        See how our checks work
+        <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
 <!-- ════════════ VALUE STORY ════════════ -->
 <section id="value-story" class="vs-section">
   <div class="container">
@@ -3657,78 +3736,6 @@
     </div><!-- /vs-display -->
 </div><!-- /hidden placeholder -->
 
-<!-- ════════════ HOW IT WORKS (teaser) ════════════ -->
-<section id="journey">
-  <div class="container">
-
-    <div class="journey-header reveal">
-      <div class="journey-kicker">How It Works</div>
-      <h2 class="journey-h2">Check. Treat. Strengthen.</h2>
-      <p class="journey-sub">From "I'm not sure where I stand" to "trust is our edge" — one shared view for every person, tool, and partner who needs to act.</p>
-    </div>
-
-    <div class="steps-row reveal">
-
-      <!-- Step 1: Check -->
-      <div class="step">
-        <div class="step-icon" style="background:rgba(0,200,168,.12);border:1.5px solid rgba(0,200,168,.2);">
-          <svg class="icon" width="24" height="24" style="color:var(--teal);"><use href="#i-search"/></svg>
-          <div class="step-num">1</div>
-        </div>
-        <div class="step-name">Check</div>
-        <div class="step-desc">Enter your URL, answer a few short questions. Get a plain-English trust score across four pillars in about 5 minutes. No account needed.</div>
-      </div>
-
-      <div class="step-arrow">
-        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
-          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
-          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
-          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
-        </svg>
-      </div>
-
-      <!-- Step 2: Treat -->
-      <div class="step">
-        <div class="step-icon" style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.2);">
-          <svg class="icon" width="24" height="24" style="color:var(--green);"><use href="#i-zap"/></svg>
-          <div class="step-num" style="background:var(--green);">2</div>
-        </div>
-        <div class="step-name">Treat</div>
-        <div class="step-desc">Every finding comes with plain-language guidance for your business owner, your developer, and your compliance contact. One shared roadmap. Every person has their part.</div>
-      </div>
-
-      <div class="step-arrow">
-        <svg width="40" height="16" viewBox="0 0 40 16" fill="none">
-          <line x1="0" y1="8" x2="32" y2="8" stroke="currentColor" stroke-width="1.5"/>
-          <polyline points="26 3 32 8 26 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="6" cy="8" r="1.5" fill="currentColor" opacity=".4"/>
-          <circle cx="14" cy="8" r="1.5" fill="currentColor" opacity=".3"/>
-        </svg>
-      </div>
-
-      <!-- Step 3: Strengthen -->
-      <div class="step">
-        <div class="step-icon" style="background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.2);">
-          <svg class="icon" width="24" height="24" style="color:#8B5CF6;"><use href="#i-trend"/></svg>
-          <div class="step-num" style="background:#8B5CF6;">3</div>
-        </div>
-        <div class="step-name">Strengthen</div>
-        <div class="step-desc">Export a trust proof PDF. Re-scan monthly. Track your progress across all four pillars and show buyers a picture of where you stand — not just a claim.</div>
-      </div>
-
-    </div>
-
-    <div class="reveal" style="text-align:center; margin-top:36px;">
-      <a href="framework.html" class="btn btn-ghost" style="font-size:14px; padding:12px 24px;">
-        See how our checks work
-        <svg class="icon" width="14" height="14"><use href="#i-arrow-r"/></svg>
-      </a>
-    </div>
-
-  </div>
-</section>
-
 <!-- ════════════ WHY DATA PILOTS ════════════ -->
 <section class="wdp-section" id="why-dp">
   <div class="container">
@@ -3779,6 +3786,137 @@
       <div class="wdp-stmt-label">What makes us different</div>
       <p class="wdp-stmt-text">Every other tool shows you what's wrong and leaves you there.<br><em>Data Pilots gets your developer, your legal adviser, and your tools working on the right things — until it's actually fixed.</em></p>
     </div>
+
+  </div>
+</section>
+
+<!-- ════════════ PRICING ════════════ -->
+<section id="pricing">
+  <div class="container">
+
+    <div class="pricing-header reveal">
+      <div class="pricing-kicker">Access</div>
+      <h2 class="pricing-h2">Start with Community.<br>Add the Panel when ready.</h2>
+      <p class="pricing-sub">Community is free, always. Add the Panel when you're ready to go deeper.</p>
+    </div>
+
+    <div class="plans-grid" style="grid-template-columns: 1fr 1.6fr;">
+
+      <!-- Community (free, always) -->
+      <div class="plan reveal reveal-delay-1">
+        <div class="plan-tier">Community</div>
+        <div style="font-size:30px;font-weight:900;color:var(--slate-800);line-height:1;margin-bottom:2px;">Free</div>
+        <div style="font-size:11.5px;color:var(--slate-400);margin-bottom:16px;">always included. never taken away.</div>
+        <p class="plan-tagline">Run your Trust Snapshot, save your results, access guides and resources, and stay connected as we build. Yours whether or not you ever upgrade to the Panel.</p>
+        <ul class="plan-feats">
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Free Trust Snapshot — see your top trust risks</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Save and revisit your results</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Resource hub — practical guides for online training, e-learning, and coaching businesses</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Community updates, events, and newsletter</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Help shape what we build</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No card, no commitment</li>
+        </ul>
+        <a href="#community-signup" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
+          Join Community free
+        </a>
+        <p class="plan-foot">Run a Trust Snapshot first. No account needed to try it.</p>
+      </div>
+
+      <!-- Trust Panel -->
+      <div class="plan pro reveal reveal-delay-2">
+        <div class="plan-badge">Pricing confirmed at launch — join Community to access early rates</div>
+        <div class="plan-tier">Trust Panel</div>
+        <p class="plan-tagline" style="margin-top:6px;margin-bottom:20px;">The full picture across your public site, learner portal, platform, and client-facing tools. Step-by-step fix guides for your whole team. A dashboard to track progress and stay green. Contractors, advisors, and third parties included at no extra cost.</p>
+
+        <!-- Tier preview — tap any card to expand -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+
+          <!-- Solo -->
+          <details class="tier-card" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
+            <summary>
+              <div class="tier-card-hd">
+                <div style="font-size:13px;font-weight:800;color:var(--white);">Solo</div>
+                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Independent coaches, consultants, and course creators. You carry it yourself.</div>
+              <div style="font-size:11px;font-style:italic;color:rgba(255,255,255,.45);">Tap to see if this fits →</div>
+            </summary>
+            <div class="tier-card-body">
+              <ul>
+                <li>You're selling, delivering, and handling trust questions on your own</li>
+                <li>Clients or platforms are starting to ask about your data practices</li>
+                <li>You want a clear picture of where you stand and what to fix — without needing a lawyer or developer to translate it</li>
+              </ul>
+              <div class="tier-hook">"If a client asked how you handle their data today, would you have a clear answer?"</div>
+            </div>
+          </details>
+
+          <!-- Team -->
+          <details class="tier-card" style="background:rgba(0,200,168,.1);border:1px solid rgba(0,200,168,.3);border-radius:10px;padding:14px 12px;">
+            <summary>
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);margin-bottom:4px;">Most popular</div>
+              <div class="tier-card-hd">
+                <div style="font-size:13px;font-weight:800;color:var(--teal);">Team</div>
+                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(0,200,168,.6)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Small training businesses. You lead; your internal team acts on findings.</div>
+              <div style="font-size:11px;font-style:italic;color:rgba(0,200,168,.6);">Tap to see if this fits →</div>
+            </summary>
+            <div class="tier-card-body">
+              <ul>
+                <li>You have a small team — 2 to 15 people — but everyone's wearing multiple hats</li>
+                <li>You're approaching or already working with corporate or enterprise clients</li>
+                <li>You need fix guides written for three audiences — you, your developer, and your legal advisor — so everyone knows their role</li>
+              </ul>
+              <div class="tier-hook">"The next big client is probably running a vendor check. This is how you pass it."</div>
+            </div>
+          </details>
+
+          <!-- Advanced -->
+          <details class="tier-card" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
+            <summary>
+              <div class="tier-card-hd">
+                <div style="font-size:13px;font-weight:800;color:var(--white);">Advanced</div>
+                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Established platforms and training vendors. Actions flow across teams and specialists.</div>
+              <div style="font-size:11px;font-style:italic;color:rgba(255,255,255,.45);">Tap to see if this fits →</div>
+            </summary>
+            <div class="tier-card-body">
+              <ul>
+                <li>You have enterprise or government clients, procurement reviews, and RFPs to navigate</li>
+                <li>Multiple products — a main site, learner portal, CRM, third-party integrations — all need to pass scrutiny</li>
+                <li>You need monthly re-scans to stay green and trust proof documents ready for proposals on demand</li>
+              </ul>
+              <div class="tier-hook">"One trust gap can stall a major deal. This closes the gaps before procurement finds them."</div>
+            </div>
+          </details>
+
+        </div>
+
+        <ul class="plan-feats" style="margin-bottom:24px;">
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Community, plus:</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Full audit — every finding, not just the top 3</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Learner portal and platform review</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> CRM and client-facing tools — full client journey covered</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Step-by-step fix guides for owner, developer, and legal</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF for proposals and procurement</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust dashboard and monthly re-scan to track progress</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> AI quick win suggestions powered by Papaya</li>
+          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Unlimited Guests — contractors and advisors included, no extra seats</li>
+        </ul>
+        <a href="#community-signup" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
+          Join Community to access early pricing
+        </a>
+        <p class="plan-foot">Join Community free first. Early Adopter rate available to Community members before launch.</p>
+      </div>
+
+    </div>
+
+    <p class="pricing-foot">
+      Questions about which tier fits your team?
+      <a href="mailto:team@datapilots.tech">Get in touch</a>
+    </p>
 
   </div>
 </section>
@@ -3953,137 +4091,6 @@
       </div>
 
     </div>
-  </div>
-</section>
-
-<!-- ════════════ PRICING ════════════ -->
-<section id="pricing">
-  <div class="container">
-
-    <div class="pricing-header reveal">
-      <div class="pricing-kicker">Access</div>
-      <h2 class="pricing-h2">Start with Community.<br>Add the Panel when ready.</h2>
-      <p class="pricing-sub">Community is free, always. Add the Panel when you're ready to go deeper.</p>
-    </div>
-
-    <div class="plans-grid" style="grid-template-columns: 1fr 1.6fr;">
-
-      <!-- Community (free, always) -->
-      <div class="plan reveal reveal-delay-1">
-        <div class="plan-tier">Community</div>
-        <div style="font-size:30px;font-weight:900;color:var(--slate-800);line-height:1;margin-bottom:2px;">Free</div>
-        <div style="font-size:11.5px;color:var(--slate-400);margin-bottom:16px;">always included. never taken away.</div>
-        <p class="plan-tagline">Run your Trust Snapshot, save your results, access guides and resources, and stay connected as we build. Yours whether or not you ever upgrade to the Panel.</p>
-        <ul class="plan-feats">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Free Trust Snapshot — see your top trust risks</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Save and revisit your results</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Resource hub — practical guides for online training, e-learning, and coaching businesses</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Community updates, events, and newsletter</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> Help shape what we build</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--green);"><use href="#i-check"/></svg> No card, no commitment</li>
-        </ul>
-        <a href="#community-signup" class="btn btn-green" style="width:100%;justify-content:center;padding:14px;font-size:15px;">
-          Join Community free
-        </a>
-        <p class="plan-foot">Run a Trust Snapshot first. No account needed to try it.</p>
-      </div>
-
-      <!-- Trust Panel -->
-      <div class="plan pro reveal reveal-delay-2">
-        <div class="plan-badge">Pricing confirmed at launch — join Community to access early rates</div>
-        <div class="plan-tier">Trust Panel</div>
-        <p class="plan-tagline" style="margin-top:6px;margin-bottom:20px;">The full picture across your public site, learner portal, platform, and client-facing tools. Step-by-step fix guides for your whole team. A dashboard to track progress and stay green. Contractors, advisors, and third parties included at no extra cost.</p>
-
-        <!-- Tier preview — tap any card to expand -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
-
-          <!-- Solo -->
-          <details class="tier-card" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
-            <summary>
-              <div class="tier-card-hd">
-                <div style="font-size:13px;font-weight:800;color:var(--white);">Solo</div>
-                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Independent coaches, consultants, and course creators. You carry it yourself.</div>
-              <div style="font-size:11px;font-style:italic;color:rgba(255,255,255,.45);">Tap to see if this fits →</div>
-            </summary>
-            <div class="tier-card-body">
-              <ul>
-                <li>You're selling, delivering, and handling trust questions on your own</li>
-                <li>Clients or platforms are starting to ask about your data practices</li>
-                <li>You want a clear picture of where you stand and what to fix — without needing a lawyer or developer to translate it</li>
-              </ul>
-              <div class="tier-hook">"If a client asked how you handle their data today, would you have a clear answer?"</div>
-            </div>
-          </details>
-
-          <!-- Team -->
-          <details class="tier-card" style="background:rgba(0,200,168,.1);border:1px solid rgba(0,200,168,.3);border-radius:10px;padding:14px 12px;">
-            <summary>
-              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);margin-bottom:4px;">Most popular</div>
-              <div class="tier-card-hd">
-                <div style="font-size:13px;font-weight:800;color:var(--teal);">Team</div>
-                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(0,200,168,.6)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Small training businesses. You lead; your internal team acts on findings.</div>
-              <div style="font-size:11px;font-style:italic;color:rgba(0,200,168,.6);">Tap to see if this fits →</div>
-            </summary>
-            <div class="tier-card-body">
-              <ul>
-                <li>You have a small team — 2 to 15 people — but everyone's wearing multiple hats</li>
-                <li>You're approaching or already working with corporate or enterprise clients</li>
-                <li>You need fix guides written for three audiences — you, your developer, and your legal advisor — so everyone knows their role</li>
-              </ul>
-              <div class="tier-hook">"The next big client is probably running a vendor check. This is how you pass it."</div>
-            </div>
-          </details>
-
-          <!-- Advanced -->
-          <details class="tier-card" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 12px;">
-            <summary>
-              <div class="tier-card-hd">
-                <div style="font-size:13px;font-weight:800;color:var(--white);">Advanced</div>
-                <svg class="ex-chevron" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-              </div>
-              <div style="font-size:11px;color:rgba(255,255,255,.45);line-height:1.55;margin:8px 0 10px;">Established platforms and training vendors. Actions flow across teams and specialists.</div>
-              <div style="font-size:11px;font-style:italic;color:rgba(255,255,255,.45);">Tap to see if this fits →</div>
-            </summary>
-            <div class="tier-card-body">
-              <ul>
-                <li>You have enterprise or government clients, procurement reviews, and RFPs to navigate</li>
-                <li>Multiple products — a main site, learner portal, CRM, third-party integrations — all need to pass scrutiny</li>
-                <li>You need monthly re-scans to stay green and trust proof documents ready for proposals on demand</li>
-              </ul>
-              <div class="tier-hook">"One trust gap can stall a major deal. This closes the gaps before procurement finds them."</div>
-            </div>
-          </details>
-
-        </div>
-
-        <ul class="plan-feats" style="margin-bottom:24px;">
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Everything in Community, plus:</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Full audit — every finding, not just the top 3</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Learner portal and platform review</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> CRM and client-facing tools — full client journey covered</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Step-by-step fix guides for owner, developer, and legal</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust proof PDF for proposals and procurement</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Trust dashboard and monthly re-scan to track progress</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> AI quick win suggestions powered by Papaya</li>
-          <li><svg class="icon chk" width="15" height="15" style="color:var(--teal);"><use href="#i-check"/></svg> Unlimited Guests — contractors and advisors included, no extra seats</li>
-        </ul>
-        <a href="#community-signup" class="btn btn-teal" style="width:100%;justify-content:center;padding:15px;font-size:15px;">
-          Join Community to access early pricing
-        </a>
-        <p class="plan-foot">Join Community free first. Early Adopter rate available to Community members before launch.</p>
-      </div>
-
-    </div>
-
-    <p class="pricing-foot">
-      Questions about which tier fits your team?
-      <a href="mailto:team@datapilots.tech">Get in touch</a>
-    </p>
-
   </div>
 </section>
 
