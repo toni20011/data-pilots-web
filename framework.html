@@ -7,7 +7,7 @@
   <meta name="description" content="Data Pilots translates plain business language into expert and legal frameworks. See the three layers behind every trust check."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
   <style>
   :root {
     --navy:       #0B1929;
@@ -29,6 +29,7 @@
     --white:      #FFFFFF;
     --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
     --ease: cubic-bezier(.4,0,.2,1);
+    --font-display: 'DM Serif Display', Georgia, serif;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -91,7 +92,7 @@
   /* INTRO EXPLAINER */
   .intro-section { padding: 72px 0 60px; background: var(--white); border-bottom: 1px solid var(--slate-200); }
   .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-  .intro-h2 { font-size: clamp(22px, 2.8vw, 34px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--slate-800); margin-bottom: 16px; }
+  .intro-h2 { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 34px); font-weight: 400; letter-spacing: -.01em; line-height: 1.15; color: var(--slate-800); margin-bottom: 16px; }
   .intro-body { font-size: 15.5px; color: var(--slate-600); line-height: 1.8; }
   .intro-body p + p { margin-top: 14px; }
   .analogy-box {
@@ -112,7 +113,7 @@
   .layers-section { padding: 80px 0; background: var(--slate-50); }
   .layers-header { text-align: center; margin-bottom: 60px; }
   .layers-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
-  .layers-h2 { font-size: clamp(24px, 3vw, 40px); font-weight: 900; letter-spacing: -.025em; line-height: 1.1; color: var(--slate-800); margin-bottom: 12px; }
+  .layers-h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 40px); font-weight: 400; letter-spacing: -.01em; line-height: 1.1; color: var(--slate-800); margin-bottom: 12px; }
   .layers-sub { font-size: 16px; color: var(--slate-600); max-width: 520px; margin: 0 auto; line-height: 1.7; }
 
   /* Layer stack */
@@ -183,7 +184,7 @@
   .pillars-section { padding: 72px 0 80px; background: var(--white); }
   .pillars-header { max-width: 560px; margin-bottom: 48px; }
   .pillars-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
-  .pillars-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.02em; line-height: 1.1; color: var(--slate-800); margin-bottom: 10px; }
+  .pillars-h2 { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 36px); font-weight: 400; letter-spacing: -.01em; line-height: 1.1; color: var(--slate-800); margin-bottom: 10px; }
   .pillars-sub { font-size: 15.5px; color: var(--slate-600); line-height: 1.7; }
 
   /* Pillar tabs */
@@ -231,7 +232,7 @@
   .papaya-section { padding: 72px 0; background: var(--slate-50); }
   .papaya-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
   .papaya-kicker { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin-bottom: 12px; }
-  .papaya-h2 { font-size: clamp(22px, 2.8vw, 36px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; color: var(--slate-800); margin-bottom: 14px; }
+  .papaya-h2 { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 36px); font-weight: 400; letter-spacing: -.01em; line-height: 1.15; color: var(--slate-800); margin-bottom: 14px; }
   .papaya-body { font-size: 15px; color: var(--slate-600); line-height: 1.8; margin-bottom: 24px; }
   .papaya-body p + p { margin-top: 12px; }
   .papaya-card {

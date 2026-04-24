@@ -7,7 +7,7 @@
   <meta name="description" content="Why Toni Dumas built Data Pilots — a career on both sides of the trust problem, and what she kept seeing."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
   <style>
   :root {
     --navy: #0B1929; --navy-mid: #112238; --navy-soft: #1A3350;
@@ -18,6 +18,7 @@
     --white: #FFFFFF;
     --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
     --ease: cubic-bezier(.4,0,.2,1);
+    --font-display: 'DM Serif Display', Georgia, serif;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -55,13 +56,13 @@
   /* STORY BODY */
   .story-section { padding: 80px 0; background: var(--white); }
   .story-grid { display: grid; grid-template-columns: 1fr 320px; gap: 72px; align-items: start; }
-  .story-body h2 { font-size: clamp(20px, 2.5vw, 28px); font-weight: 900; letter-spacing: -.02em; color: var(--slate-800); margin-bottom: 20px; line-height: 1.2; }
+  .story-body h2 { font-family: var(--font-display); font-size: clamp(20px, 2.5vw, 28px); font-weight: 400; letter-spacing: -.01em; color: var(--slate-800); margin-bottom: 20px; line-height: 1.2; }
   .story-body p { font-size: 16px; color: var(--slate-600); line-height: 1.85; margin-bottom: 18px; }
   .story-body p:last-child { margin-bottom: 0; }
 
   /* Pull quote */
   .pull-quote { border-left: 3px solid var(--teal); padding: 4px 0 4px 24px; margin: 32px 0; }
-  .pull-quote p { font-size: 18px; font-weight: 500; color: var(--slate-800); line-height: 1.6; letter-spacing: -.01em; font-style: italic; margin-bottom: 0; }
+  .pull-quote p { font-family: var(--font-display); font-size: 18px; font-weight: 400; color: var(--slate-800); line-height: 1.6; letter-spacing: -.01em; font-style: italic; margin-bottom: 0; }
 
   /* Section break */
   .story-break { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--teal); margin: 48px 0 20px; padding-top: 48px; border-top: 1px solid var(--slate-200); }
@@ -89,7 +90,7 @@
   .founder-cta { background: linear-gradient(145deg, var(--navy), var(--navy-mid)); padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
   .founder-cta::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(0,200,168,.1) 1px, transparent 1px); background-size: 28px 28px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%); pointer-events: none; }
   .founder-cta-inner { position: relative; z-index: 1; }
-  .founder-cta h2 { font-size: clamp(24px, 3vw, 40px); font-weight: 900; color: var(--white); letter-spacing: -.02em; margin-bottom: 14px; }
+  .founder-cta h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 40px); font-weight: 400; color: var(--white); letter-spacing: -.01em; margin-bottom: 14px; }
   .founder-cta p { font-size: 16px; color: rgba(255,255,255,.62); line-height: 1.7; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
   .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
