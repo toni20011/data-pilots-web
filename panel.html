@@ -142,6 +142,22 @@
   .btn-white { padding: 12px 22px; font-size: 13.5px; font-weight: 600; background: rgba(255,255,255,.1); color: var(--white); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r-sm); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 7px; transition: all .17s var(--ease); }
   .btn-white:hover { background: rgba(255,255,255,.16); }
 
+  /* ── Trust Dial ── */
+  .dial-section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .dial-layout { display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: center; }
+  @media (max-width: 740px) { .dial-layout { grid-template-columns: 1fr; gap: 36px; } .dial-visual { max-width: 260px; margin: 0 auto; } }
+  .dial-svg { display: block; width: 100%; }
+  .dial-seg { cursor: pointer; transition: filter .2s; }
+  .dial-hover-label { font-size: 12px; line-height: 1.5; min-height: 32px; transition: opacity .2s; opacity: 0; color: rgba(255,255,255,.65); text-align: center; margin-top: 10px; }
+  .dial-instruments { display: flex; flex-direction: column; }
+  .dial-instr-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,.06); transition: opacity .2s, background .15s; border-radius: 8px; cursor: default; }
+  .dial-instr-row:last-child { border-bottom: none; }
+  .dial-instr-row:hover { background: rgba(255,255,255,.03); }
+  .dial-instr-num { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--navy); margin-top: 1px; }
+  .dial-instr-name { font-size: 13.5px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 3px; }
+  .dial-instr-dual { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.45; }
+  .dial-instr-dual strong { color: rgba(255,255,255,.65); font-weight: 500; }
+
   /* FOOTER */
   footer { border-top: 1px solid rgba(255,255,255,.06); padding: 32px 0; }
   .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
@@ -188,6 +204,70 @@
           Book a 20-min call
         </a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 INSTRUMENTS DIAL -->
+<section class="dial-section">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:44px;">
+      <div class="section-kicker">The 6 instruments</div>
+      <h2 class="section-h2">One panel. Six dimensions.<br>One clear picture of where you stand.</h2>
+      <p class="section-sub">The Snapshot shows you what buyers see. Trust Panel gives you everything to act on it — and the confidence to grow.</p>
+    </div>
+    <div class="dial-layout">
+
+      <div class="dial-visual reveal">
+        <div id="trust-dial-panel"></div>
+        <div id="trust-dial-panel-hover" class="dial-hover-label"></div>
+      </div>
+
+      <div class="dial-instruments reveal reveal-delay-1">
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#00C8A8;">1</div>
+          <div>
+            <div class="dial-instr-name">Visibility</div>
+            <div class="dial-instr-dual"><strong>See what buyers check</strong> — and see what's blocking your reach</div>
+          </div>
+        </div>
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#00AFCC;">2</div>
+          <div>
+            <div class="dial-instr-name">Translation</div>
+            <div class="dial-instr-dual"><strong>Understand the findings</strong> — and what they mean for your growth</div>
+          </div>
+        </div>
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#4A7FD4;">3</div>
+          <div>
+            <div class="dial-instr-name">Decision Making</div>
+            <div class="dial-instr-dual"><strong>Prioritise what's urgent</strong> — and get back to the work faster</div>
+          </div>
+        </div>
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#8B5CF6;">4</div>
+          <div>
+            <div class="dial-instr-name">Coordination</div>
+            <div class="dial-instr-dual"><strong>Right people on the right tasks</strong> — free yourself to focus on delivering</div>
+          </div>
+        </div>
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#10B981;">5</div>
+          <div>
+            <div class="dial-instr-name">Action</div>
+            <div class="dial-instr-dual"><strong>Close the gaps buyers flag</strong> — open doors to more organisations</div>
+          </div>
+        </div>
+        <div class="dial-instr-row">
+          <div class="dial-instr-num" style="background:#F59E0B;">6</div>
+          <div>
+            <div class="dial-instr-name">Progress</div>
+            <div class="dial-instr-dual"><strong>Track and show compliance</strong> — build trust that earns lasting relationships</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -491,6 +571,118 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.08 });
   revealEls.forEach(el => obs.observe(el));
+</script>
+<script>
+/* Trust Panel — 6-instrument journey dial */
+(function(){
+  var INSTR=[
+    {n:1,name:'Visibility',      color:'#00C8A8',desc:'See what buyers check — and what\'s blocking your reach'},
+    {n:2,name:'Translation',     color:'#00AFCC',desc:'Understand the findings — and what they mean for your growth'},
+    {n:3,name:'Decision Making', color:'#4A7FD4',desc:'Prioritise what\'s urgent — get back to the work faster'},
+    {n:4,name:'Coordination',    color:'#8B5CF6',desc:'Right people on the right tasks — free yourself to focus on delivering'},
+    {n:5,name:'Action',          color:'#10B981',desc:'Close the gaps buyers flag — open doors to more organisations'},
+    {n:6,name:'Progress',        color:'#F59E0B',desc:'Track and show compliance — build trust that earns lasting relationships'},
+  ];
+  function xy(cx,cy,r,d){var a=(d-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+  function arcPath(cx,cy,ro,ri,a1,a2){
+    var s=xy(cx,cy,ro,a1),e=xy(cx,cy,ro,a2),si=xy(cx,cy,ri,a2),ei=xy(cx,cy,ri,a1),lg=a2-a1>180?1:0;
+    return'M'+s[0].toFixed(1)+','+s[1].toFixed(1)+' A'+ro+','+ro+' 0 '+lg+',1 '+e[0].toFixed(1)+','+e[1].toFixed(1)
+          +' L'+si[0].toFixed(1)+','+si[1].toFixed(1)+' A'+ri+','+ri+' 0 '+lg+',0 '+ei[0].toFixed(1)+','+ei[1].toFixed(1)+'Z';
+  }
+  function svgEl(tag){return document.createElementNS('http://www.w3.org/2000/svg',tag);}
+  function addTxt(svg,x,y,content,sz,col,wt,ls){
+    var t=svgEl('text');
+    t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');
+    t.setAttribute('dominant-baseline','central');t.setAttribute('fill',col);
+    t.setAttribute('font-size',sz);t.setAttribute('font-weight',wt||'800');
+    if(ls)t.setAttribute('letter-spacing',ls);
+    t.setAttribute('font-family',"'Inter',system-ui,sans-serif");
+    t.setAttribute('pointer-events','none');t.textContent=content;svg.appendChild(t);
+  }
+
+  var el=document.getElementById('trust-dial-panel');if(!el)return;
+  var cx=140,cy=140,ro=112,ri=56;
+  var svg=svgEl('svg');
+  svg.setAttribute('viewBox','0 0 280 280');svg.setAttribute('class','dial-svg');
+  svg.setAttribute('role','img');svg.setAttribute('aria-label','Trust Panel 6-instrument journey dial');
+
+  var bg=svgEl('circle');bg.setAttribute('cx',cx);bg.setAttribute('cy',cy);
+  bg.setAttribute('r',(ro+ri)/2);bg.setAttribute('fill','none');
+  bg.setAttribute('stroke','rgba(255,255,255,0.06)');bg.setAttribute('stroke-width',ro-ri);
+  svg.appendChild(bg);
+
+  var paths=[];
+  var rows=document.querySelectorAll('.dial-instr-row');
+
+  INSTR.forEach(function(inst,i){
+    var a1=i*60,a2=a1+57,mid=a1+28.5;
+    var g=svgEl('g');g.style.cursor='pointer';
+    var path=svgEl('path');
+    path.setAttribute('d',arcPath(cx,cy,ro,ri,a1,a2));
+    path.setAttribute('fill',inst.color);path.setAttribute('class','dial-seg');
+    path.style.transformOrigin=cx+'px '+cy+'px';
+    path.style.opacity='0';path.style.transform='scale(0.5)';
+    g.appendChild(path);paths.push(path);
+
+    var mp=xy(cx,cy,(ro+ri)/2,mid);
+    var numT=svgEl('text');
+    numT.setAttribute('x',mp[0].toFixed(1));numT.setAttribute('y',mp[1].toFixed(1));
+    numT.setAttribute('text-anchor','middle');numT.setAttribute('dominant-baseline','central');
+    numT.setAttribute('fill','rgba(255,255,255,0.92)');numT.setAttribute('font-size','14');
+    numT.setAttribute('font-weight','800');numT.setAttribute('pointer-events','none');
+    numT.setAttribute('font-family',"'Inter',system-ui,sans-serif");numT.textContent=inst.n;
+    g.appendChild(numT);
+
+    g.addEventListener('mouseenter',function(){
+      path.style.filter='brightness(1.18) drop-shadow(0 0 10px '+inst.color+')';
+      var hd=document.getElementById('trust-dial-panel-hover');
+      if(hd){hd.innerHTML='<strong style="color:'+inst.color+'">'+inst.n+'. '+inst.name+'</strong> — '+inst.desc;hd.style.opacity='1';}
+      rows.forEach(function(r,j){r.style.opacity=j===i?'1':'0.35';});
+    });
+    g.addEventListener('mouseleave',function(){
+      path.style.filter='';
+      var hd=document.getElementById('trust-dial-panel-hover');if(hd)hd.style.opacity='0';
+      rows.forEach(function(r){r.style.opacity='1';});
+    });
+    svg.appendChild(g);
+  });
+
+  var cc=svgEl('circle');cc.setAttribute('cx',cx);cc.setAttribute('cy',cy);cc.setAttribute('r',ri-5);
+  cc.setAttribute('fill','#0B1929');svg.appendChild(cc);
+  addTxt(svg,cx,cy-8,'TRUST','11','rgba(255,255,255,0.9)','800','0.04em');
+  addTxt(svg,cx,cy+5,'PANEL','11','rgba(255,255,255,0.9)','800','0.04em');
+  addTxt(svg,cx,cy+17,'6 instruments','7.5','#00C8A8','600','0.02em');
+
+  el.appendChild(svg);
+
+  var obs2=new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        paths.forEach(function(p,i){
+          setTimeout(function(){
+            p.style.transition='opacity 0.4s ease, transform 0.55s cubic-bezier(.34,1.56,.64,1)';
+            p.style.opacity='1';p.style.transform='scale(1)';
+          },i*90);
+        });
+        obs2.disconnect();
+      }
+    });
+  },{threshold:0.15});
+  obs2.observe(svg);
+
+  rows.forEach(function(row,i){
+    row.addEventListener('mouseenter',function(){
+      paths.forEach(function(p,j){
+        p.style.filter=j===i?('brightness(1.18) drop-shadow(0 0 10px '+INSTR[i].color+')'):'';
+      });
+      rows.forEach(function(r,j){r.style.opacity=j===i?'1':'0.35';});
+    });
+    row.addEventListener('mouseleave',function(){
+      paths.forEach(function(p){p.style.filter='';});
+      rows.forEach(function(r){r.style.opacity='1';});
+    });
+  });
+})();
 </script>
 
 </body>
