@@ -7,7 +7,7 @@
   <meta name="description" content="The trust and compliance landscape for B2B services and L&D companies — our partners, trust-forward brands, and the tools shaping how businesses build credibility with enterprise clients."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
 
   <style>
   /* ─── TOKENS (same as main site) ─── */
@@ -31,6 +31,7 @@
     --white:      #FFFFFF;
     --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
     --ease: cubic-bezier(.4,0,.2,1);
+    --font-display: 'DM Serif Display', Georgia, serif;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -114,8 +115,9 @@
     letter-spacing: .1em; color: var(--teal); margin-bottom: 10px;
   }
   .te-h2 {
+    font-family: var(--font-display);
     font-size: clamp(1.5rem, 2.8vw, 2rem);
-    font-weight: 800; line-height: 1.2; letter-spacing: -.02em;
+    font-weight: 400; line-height: 1.2; letter-spacing: -.01em;
   }
   .te-h2.dark { color: var(--white); }
   .te-h2.light { color: var(--slate-800); }
@@ -231,7 +233,7 @@
     border-top: 1px solid rgba(255,255,255,.07);
     text-align: center;
   }
-  .te-cta-h2 { font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 800; color: var(--white); margin-bottom: 14px; }
+  .te-cta-h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 2.8vw, 2rem); font-weight: 400; color: var(--white); letter-spacing: -.01em; margin-bottom: 14px; }
   .te-cta-sub { font-size: 16px; color: rgba(255,255,255,.6); max-width: 480px; margin: 0 auto 32px; line-height: 1.7; }
   .te-cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 
