@@ -4898,12 +4898,18 @@
   }
 
   // ── Papaya proxy call (POST /api/papaya — Cloudflare Pages Function) ───────
-  async function startPapayaRun(url) {
+  // state: 'US-CA' for US default, 'EU-FR' for EU/France default
+  function _papayaState(f10) {
+    const EU = { europe: true, global: true };
+    return EU[f10] ? 'EU-FR' : 'US-CA';
+  }
+
+  async function startPapayaRun(url, state) {
     try {
       const resp = await fetch('/api/papaya', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, state: state || 'US-CA' }),
       });
       if (!resp.ok) return null;
       return await resp.json();
@@ -5064,7 +5070,7 @@
       const results  = { ...baseResults };
       const minWait  = new Promise(r => setTimeout(r, 14000));
 
-      const papayaRun = await startPapayaRun(url);
+      const papayaRun = await startPapayaRun(url, _papayaState(_scanAnswers.F10));
       const sessionId = papayaRun?.session_id;
 
       if (!sessionId) {

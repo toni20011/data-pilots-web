@@ -36,10 +36,14 @@ async function handlePapaya(request, env) {
     const siteUrl = (body.url || '').trim();
     if (!siteUrl) return json({ error: 'url is required' }, 400);
 
+    // state: 'US-CA' (California) or 'EU-FR' (France) — determined by F10 client geography answer
+    const VALID_STATES = new Set(['US-CA', 'EU-FR']);
+    const state = VALID_STATES.has(body.state) ? body.state : 'US-CA';
+
     const resp = await fetch(`${PAPAYA_API_BASE}/runs`, {
       method: 'POST',
       headers: { ...auth, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: siteUrl, task: 'reject_all', state: 'US-CA', wait_for_debug_url_seconds: 2 }),
+      body: JSON.stringify({ url: siteUrl, task: 'reject_all', state, wait_for_debug_url_seconds: 2 }),
     });
     const data = await resp.json().catch(() => ({}));
     return json(data, resp.ok ? 200 : resp.status);
