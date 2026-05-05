@@ -4906,10 +4906,12 @@
 
   async function startPapayaRun(url, state) {
     try {
+      // Ensure URL has a protocol before sending
+      const normUrl = /^https?:\/\//i.test(url) ? url : 'https://' + url;
       const resp = await fetch('/api/papaya', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, state: state || 'US-CA' }),
+        body: JSON.stringify({ url: normUrl, state: state || 'US-CA' }),
       });
       if (!resp.ok) return null;
       return await resp.json();

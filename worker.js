@@ -33,17 +33,32 @@ async function handlePapaya(request, env) {
     try { body = await request.json(); } catch {
       return json({ error: 'Invalid JSON' }, 400);
     }
-    const siteUrl = (body.url || '').trim();
-    if (!siteUrl) return json({ error: 'url is required' }, 400);
 
-    // state: 'US-CA' (California) or 'EU-FR' (France) — determined by F10 client geography answer
+    // Normalise URL — add https:// if no protocol supplied
+    let siteUrl = (body.url || '').trim();
+    if (!siteUrl) return json({ error: 'url is required' }, 400);
+    if (!/^https?:\/\//i.test(siteUrl)) siteUrl = 'https://' + siteUrl;
+
+    // Validate the URL is well-formed before sending to Papaya
+    try { new URL(siteUrl); } catch {
+      return json({ error: 'Invalid URL' }, 400);
+    }
+
+    // state: 'US-CA' (California) or 'EU-FR' (France) — set by F10 client geography answer
+    // us / unsure → US-CA   |   europe / global → EU-FR
     const VALID_STATES = new Set(['US-CA', 'EU-FR']);
     const state = VALID_STATES.has(body.state) ? body.state : 'US-CA';
 
+    const papayaBody = {
+      url:   siteUrl,
+      task:  'reject_all',
+      state: state,
+    };
+
     const resp = await fetch(`${PAPAYA_API_BASE}/runs`, {
-      method: 'POST',
+      method:  'POST',
       headers: { ...auth, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: siteUrl, task: 'reject_all', state, wait_for_debug_url_seconds: 2 }),
+      body:    JSON.stringify(papayaBody),
     });
     const data = await resp.json().catch(() => ({}));
     return json(data, resp.ok ? 200 : resp.status);
