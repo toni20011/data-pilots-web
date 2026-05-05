@@ -1,22 +1,25 @@
 # 07b — Trust Snapshot Questionnaire: Questions, Answers & Scoring
 
-This document is the **master reference** for the 5-step questionnaire in the Free Trust Snapshot wizard. Any changes to question wording, answer options, scoring weights, or findings logic should be updated here first, then reflected in `index.html`.
+This document is the **master reference** for the Trust Snapshot wizard. Any changes to question wording, answer options, scoring weights, or findings logic should be updated here first, then reflected in `index.html`.
 
 ---
 
 ## Overview
 
-The questionnaire has 5 steps collecting 11 data fields (F1–F11). Answers are used to:
+The wizard has a **URL gateway** followed by **5 questionnaire steps** collecting 11 data fields (F1–F11). Answers are used to:
 1. Personalise the Trust Score (weight the 4 pillars by buyer segment)
 2. Generate specific findings (plain-language issues with fix guides)
 3. Provide compliance context (jurisdiction-appropriate framing)
 4. Identify a "trust gap" (mismatch between self-assessed confidence and actual score)
+5. Prioritise findings output by declared concern area (F8)
 
 Answers stay in the browser — nothing is sent until the scan runs.
 
+**Future intent:** The URL gateway should trigger a background Papaya session so the live site scan runs while the user completes the questionnaire, reducing overall wait time. See `TODO` comment in `wizNext(0)` in `index.html`.
+
 ---
 
-## Step 1 — Your Website
+## URL Gateway — Your Website
 
 | Field | Type | Question |
 |---|---|---|
@@ -24,7 +27,56 @@ Answers stay in the browser — nothing is sent until the scan runs.
 
 **Validation:** Must be at least 5 characters. Error state shakes the input and highlights red.
 
+**Step behaviour:** Progress dots are hidden until the URL is entered. After validation, dots appear and Step 1 begins.
+
 **Scoring impact:** None directly — the URL is passed to the scanner.
+
+---
+
+## Step 1 — Your Visitors & Target Clients
+
+### F9 — Special data types (multi-select)
+**Question:** Does your work involve any of these? _(tick all that apply)_
+
+| Value | Label |
+|---|---|
+| `children` | Children or under-18s |
+| `health` | Health, mental health, or clinical information |
+| `financial` | Financial account or payment data |
+| `other_regulated` | Other specially regulated data |
+| `none` | None of these |
+
+`none` is mutually exclusive — selecting it deselects others, and selecting any other deselects `none`.
+
+**Scoring impact:** None currently — flags higher-risk data categories for future enhanced findings.
+
+---
+
+### F10 — Client geography
+**Question:** Where are most of your clients and learners based?
+
+| Value | Label | Compliance context applied |
+|---|---|---|
+| `europe` | Primarily Europe (UK and EU) | UK GDPR / EU GDPR + PECR — lawful basis, rights, third-party tools |
+| `us` | Primarily United States | CCPA/CPRA — right to know, right to delete, opt-out of sale |
+| `global` | Global / multiple regions | EU GDPR as baseline + US state laws |
+| `unsure` | I'm not sure | EU GDPR as strictest baseline (default) |
+
+**Scoring impact:** Selects the **compliance context block** shown in results output — no effect on numeric score.
+
+---
+
+### F11 — Revenue (approximate)
+**Question:** Roughly what's your annual business revenue? (USD)
+
+| Value | Label |
+|---|---|
+| `lt1m` | Under $1M |
+| `1m_25m` | $1M – $25M |
+| `gt25m` | Over $25M |
+| `withheld` | Prefer not to say |
+
+**Scoring impact:** None currently — contextual segmentation for future use.
 
 ---
 
@@ -150,64 +202,20 @@ Scale: 1 (Not at all) → 5 (Very confident)
 
 ---
 
-### F8 — Priority to fix
-**Question:** If you could fix one thing before your next proposal or sales call, what would it be?
+## Step 5 — Your Priorities
 
-| Value | Label |
-|---|---|
-| `ux` | How professional the site looks and feels (User Experience) |
-| `transparency` | Being clearer about my data practices (Transparency) |
-| `safety` | Adding missing security basics (Safety & Security) |
-| `ai_trust` | Being clearer about my AI use (AI Trust) |
+### F8 — Priority concern (multi-select)
+**Question:** Which of these best describes your main concern? _(tick all that apply)_
 
-**Scoring impact:** Contextual only — used for prioritising findings in output.
-
----
-
-## Step 5 — Your Clients
-
-### F9 — Special data types (multi-select)
-**Question:** Does your work involve any of these? _(tick all that apply)_
-
-| Value | Label |
-|---|---|
-| `children` | Children or under-18s |
-| `health` | Health, mental health, or clinical information |
-| `financial` | Financial account or payment data |
-| `other_regulated` | Other specially regulated data |
-| `none` | None of these |
-
-`none` is mutually exclusive — selecting it deselects others, and selecting any other deselects `none`.
-
-**Scoring impact:** None currently — flags higher-risk data categories for future enhanced findings.
-
----
-
-### F10 — Client geography
-**Question:** Where are most of your clients based?
-
-| Value | Label | Compliance context applied |
+| Value | Label | Focus area |
 |---|---|---|
-| `europe` | Primarily Europe (UK and EU) | UK GDPR / EU GDPR + PECR — lawful basis, rights, third-party tools |
-| `us` | Primarily United States | CCPA/CPRA — right to know, right to delete, opt-out of sale |
-| `global` | Global / multiple regions | EU GDPR as baseline + US state laws |
-| `unsure` | I'm not sure | EU GDPR as strictest baseline (default) |
+| `first_impression` | Making a trustworthy first impression on visitors | UX pillar |
+| `corporate_trust` | Demonstrating trust to corporate buyers and procurement teams | Transparency + Safety pillars |
+| `avoid_compliance` | Avoiding mistakes that could trigger non-compliance | Safety + AI Trust pillars |
 
-**Scoring impact:** Selects the **compliance context block** shown in results output — no effect on numeric score.
+**Scoring impact:** Contextual only — used to prioritise and frame findings output. No direct effect on pillar scores.
 
----
-
-### F11 — Revenue (approximate)
-**Question:** Roughly what's your annual business revenue? (USD)
-
-| Value | Label |
-|---|---|
-| `lt1m` | Under $1M |
-| `1m_25m` | $1M – $25M |
-| `gt25m` | Over $25M |
-| `withheld` | Prefer not to say |
-
-**Scoring impact:** None currently — contextual segmentation for future use.
+**Note:** F8 was previously a single-select "fix priority" question (ux/transparency/safety/ai_trust). Updated May 2026 to outcome-focused multi-select with three buyer-journey options.
 
 ---
 
@@ -273,3 +281,5 @@ Up to 3 findings shown in the free Snapshot. Additional findings gated behind Tr
 - **F9 (special data)** — no findings triggered yet. What enhanced findings should special data categories unlock?
 - **F11 (revenue)** — no scoring impact yet. Is this retained for segmentation, or should it be removed?
 - **Weighting review** — are the F2 buyer segment weights calibrated correctly? Particularly AI Trust for enterprise (30%) vs consumer (15%).
+- **F8 (priorities)** — multi-select, contextual only. Should selections influence pillar weighting or findings ordering? e.g. `corporate_trust` selection could boost Transparency/Safety weight.
+- **Background Papaya scan** — URL gateway should fire a Papaya session immediately so the live site scan runs while the user completes the questionnaire. Needs implementation in `wizNext(0)`.
