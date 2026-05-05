@@ -4585,9 +4585,10 @@
   }
 
   // ── Multi-step wizard ───────────────────────
-  let _scanPromise = null; // holds scan result or promise
-  let _scanAnswers  = {};  // F1–F11 collected as user progresses
-  let _editMode     = false; // true when editing a step from the review screen
+  let _scanPromise    = null;  // holds scan result or promise
+  let _scanAnswers    = {};    // F1–F11 collected as user progresses
+  let _editMode       = false; // true when editing a step from the review screen
+  let _bgPapayaPromise = null; // background Papaya session fired at step 1
 
   function wizNext(fromStep) {
     if (fromStep === 0) {
@@ -4601,8 +4602,9 @@
         setTimeout(() => { row.style.borderColor = ''; row.style.animation = ''; }, 1600);
         return;
       }
-      // TODO: fire background Papaya session here so scan runs while user fills in steps
       if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
+      // Fire Papaya background scan now — runs while user completes steps 1–5
+      _bgPapayaPromise = startPapayaRun(url);
       showStep(1);
       return;
     }
@@ -5058,13 +5060,14 @@
     _autoAdvanceScanSteps();
     _autoAdvanceTabs();
 
-    // Start Papaya run, poll until complete, then enable the Results button.
+    // Use the background Papaya session started at step 1 (or fall back to a fresh call).
     // Minimum 14 s enforced regardless so the guided modal tabs play through.
     _scanPromise = (async () => {
       const results  = { ...baseResults };
       const minWait  = new Promise(r => setTimeout(r, 14000));
 
-      const papayaRun = await startPapayaRun(url);
+      const papayaRun = _bgPapayaPromise ? await _bgPapayaPromise : await startPapayaRun(url);
+      _bgPapayaPromise = null; // clear so a re-run starts fresh
       const sessionId = papayaRun?.session_id;
 
       if (!sessionId) {
