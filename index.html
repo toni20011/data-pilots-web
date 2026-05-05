@@ -615,9 +615,22 @@
     border: 1.5px solid rgba(255,255,255,.15); transition: all .2s;
   }
   .wp-step.active { background: var(--teal); color: var(--navy); border-color: var(--teal); }
-  .wp-step.done { background: rgba(0,200,168,.2); color: var(--teal); border-color: rgba(0,200,168,.35); }
+  .wp-step.done { background: rgba(0,200,168,.2); color: var(--teal); border-color: rgba(0,200,168,.35); cursor: pointer; }
+  .wp-step.done:hover { background: rgba(0,200,168,.35); border-color: var(--teal); }
   .wp-line { flex: 1; height: 1.5px; background: rgba(255,255,255,.1); margin: 0 6px; }
   .wp-line.done { background: rgba(0,200,168,.35); }
+
+  /* ── Review screen ── */
+  .review-section { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: var(--r-md); padding: 12px 14px; margin-bottom: 8px; }
+  .review-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .review-section-title { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: rgba(255,255,255,.4); }
+  .review-edit-btn { background: none; border: none; font-size: 11.5px; font-weight: 600; color: var(--teal); cursor: pointer; padding: 2px 0; font-family: inherit; opacity: .85; }
+  .review-edit-btn:hover { opacity: 1; }
+  .review-row { display: flex; gap: 10px; font-size: 12.5px; line-height: 1.5; }
+  .review-row + .review-row { margin-top: 5px; }
+  .review-row-label { color: rgba(255,255,255,.4); flex-shrink: 0; min-width: 110px; }
+  .review-row-value { color: rgba(255,255,255,.85); font-weight: 500; }
+  .review-row-value.unanswered { color: rgba(255,255,255,.3); font-style: italic; font-weight: 400; }
 
   /* wizard step panels */
   .wizard-step { transition: opacity .22s ease, transform .22s ease; }
@@ -2733,15 +2746,15 @@
 
           <!-- Progress indicator -->
           <div class="wizard-progress" id="wizProgress">
-            <div class="wp-step active" id="wpDot1">1</div>
+            <div class="wp-step active" id="wpDot1" onclick="wizGoTo(1)" title="Your website">1</div>
             <div class="wp-line" id="wpLine1"></div>
-            <div class="wp-step" id="wpDot2">2</div>
+            <div class="wp-step" id="wpDot2" onclick="wizGoTo(2)" title="Your business">2</div>
             <div class="wp-line" id="wpLine2"></div>
-            <div class="wp-step" id="wpDot3">3</div>
+            <div class="wp-step" id="wpDot3" onclick="wizGoTo(3)" title="Your practices">3</div>
             <div class="wp-line" id="wpLine3"></div>
-            <div class="wp-step" id="wpDot4">4</div>
+            <div class="wp-step" id="wpDot4" onclick="wizGoTo(4)" title="Your confidence">4</div>
             <div class="wp-line" id="wpLine4"></div>
-            <div class="wp-step" id="wpDot5">5</div>
+            <div class="wp-step" id="wpDot5" onclick="wizGoTo(5)" title="Your clients">5</div>
           </div>
 
           <!-- Step 1: Website URL -->
@@ -2903,9 +2916,21 @@
               </div>
             </div>
 
-            <button class="scan-go" id="scanBtn" style="margin-top:20px;" onclick="startScanAndModal()">
+            <button class="scan-go" id="scanBtn" style="margin-top:20px;" onclick="wizNext(5)">
+              Review my answers →
+            </button>
+            <p class="scan-fine">You'll be able to check everything before we scan</p>
+          </div>
+
+          <!-- Step 6: Review -->
+          <div class="wizard-step hidden" id="wiz-step-6">
+            <button class="step-back" onclick="wizBack(6)">← Back</button>
+            <div class="scan-step" style="margin-top:6px;">Review — almost there</div>
+            <div class="scan-title" style="margin-bottom:16px;">Everything look right?</div>
+            <div id="review-content"></div>
+            <button class="scan-go" style="margin-top:16px;" onclick="startScanAndModal()">
               <svg class="icon" width="15" height="15"><use href="#i-play"/></svg>
-              View My Trust Snapshot
+              Run My Trust Snapshot
             </button>
             <p class="scan-fine">Scan takes about 30–60 seconds · No account needed</p>
           </div>
@@ -4552,6 +4577,7 @@
   // ── Multi-step wizard ───────────────────────
   let _scanPromise = null; // holds scan result or promise
   let _scanAnswers  = {};  // F1–F11 collected as user progresses
+  let _editMode     = false; // true when editing a step from the review screen
 
   function wizNext(fromStep) {
     if (fromStep === 1) {
@@ -4564,50 +4590,153 @@
         setTimeout(() => { row.style.borderColor = ''; row.style.animation = ''; }, 1600);
         return;
       }
+      if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
       showStep(2);
       return;
     }
     if (fromStep === 2) {
       _scanAnswers.F1 = _getRadio('f1');
       _scanAnswers.F2 = _getChecks('f2');
+      if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
       showStep(3); return;
     }
     if (fromStep === 3) {
       _scanAnswers.F3 = _getRadio('f3');
       _scanAnswers.F5 = _getRadio('f5');
+      if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
       showStep(4); return;
     }
     if (fromStep === 4) {
       _scanAnswers.F6 = _getRadio('f6') ? parseInt(_getRadio('f6')) : null;
       _scanAnswers.F7 = _getRadio('f7');
       _scanAnswers.F8 = _getRadio('f8');
+      if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
       showStep(5); return;
+    }
+    if (fromStep === 5) {
+      _scanAnswers.F9  = _getChecks('f9');
+      _scanAnswers.F10 = _getRadio('f10');
+      _scanAnswers.F11 = _getRadio('f11');
+      buildReview();
+      showStep(6); return;
     }
   }
 
   function wizBack(fromStep) {
+    _editMode = false;
+    if (fromStep === 6) { showStep(5); return; }
     const prev = fromStep - 1;
     if (prev >= 1) showStep(prev);
   }
 
+  function wizGoTo(n) {
+    // Allow jumping to any completed or active step (not future steps)
+    const dot = document.getElementById('wpDot' + n);
+    if (!dot) return;
+    if (dot.classList.contains('done') || dot.classList.contains('active')) {
+      _editMode = false;
+      showStep(n);
+    }
+  }
+
   function showStep(n) {
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 6; i++) {
       const el = document.getElementById('wiz-step-' + i);
       if (el) el.classList.toggle('hidden', i !== n);
     }
-    // Update progress dots
+    // Update progress dots (dots 1–5; step 6 = all done)
     for (let i = 1; i <= 5; i++) {
       const dot = document.getElementById('wpDot' + i);
       if (!dot) continue;
       dot.classList.remove('active', 'done');
-      if (i < n) dot.classList.add('done');
-      else if (i === n) dot.classList.add('active');
+      if (n === 6) {
+        dot.classList.add('done');
+      } else if (i < n) {
+        dot.classList.add('done');
+      } else if (i === n) {
+        dot.classList.add('active');
+      }
       const line = document.getElementById('wpLine' + i);
-      if (line) line.classList.toggle('done', i < n);
+      if (line) line.classList.toggle('done', n === 6 || i < n);
     }
-    // Scroll scan card into view on mobile
+    // Scroll scan card into view
     const card = document.querySelector('.scan-card');
     if (card && n > 1) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ── Review screen ────────────────────────────
+  const _REVIEW_LABELS = {
+    f1:  { coach:'Independent coach / consultant', small_team:'Small L&D team or training provider', agency:'Multi-person consultancy or agency', other:'Other' },
+    f2:  { consumer:'Consumers (individuals)', b2b_sme:'B2B — SMEs and mid-sized', b2b_enterprise:'B2B — enterprise', government:'Government / public sector', other:'Other or not sure' },
+    f3:  { no:'No AI use', own_drafts:'AI for own drafts only', client_facing:'AI in client-facing content', processes_data:'AI processes client / learner data', unsure:'Not sure' },
+    f5:  { legal_current:'Reviewed by a legal professional', self_recent:'Self-written / template, reviewed recently', old_unsure:'Have one but it\'s old or uncertain', none:'No privacy policy' },
+    f7:  { yes_multiple:'Yes, multiple times', yes_once:'Yes, once', not_noticed:'Not that I\'ve noticed', dont_know:'I don\'t know' },
+    f8:  { ux:'Site UX and professionalism', transparency:'Data practices transparency', safety:'Security basics', ai_trust:'AI use disclosure' },
+    f9:  { children:'Children or under-18s', health:'Health / clinical info', financial:'Financial / payment data', other_regulated:'Other regulated data', none:'None of these' },
+    f10: { us:'Primarily United States', europe:'Primarily Europe (UK / EU)', global:'Global / multiple regions', unsure:'Not sure' },
+    f11: { lt1m:'Under $1M', '1m_25m':'$1M – $25M', gt25m:'Over $25M', withheld:'Prefer not to say' },
+  };
+
+  function _rVal(val, map) {
+    if (!val) return null;
+    if (Array.isArray(val)) return val.map(v => map[v] || v).join(', ') || null;
+    return map[val] || val;
+  }
+
+  function buildReview() {
+    const url = document.getElementById('scanUrl').value.trim();
+    const a = _scanAnswers;
+    const L = _REVIEW_LABELS;
+
+    const sections = [
+      { step: 1, title: 'Your website', rows: [
+        { label: 'URL', val: url || null }
+      ]},
+      { step: 2, title: 'Your business', rows: [
+        { label: 'Your role',  val: _rVal(a.F1, L.f1) },
+        { label: 'Sells to',   val: _rVal(a.F2, L.f2) }
+      ]},
+      { step: 3, title: 'Your practices', rows: [
+        { label: 'AI use',          val: _rVal(a.F3, L.f3) },
+        { label: 'Privacy policy',  val: _rVal(a.F5, L.f5) }
+      ]},
+      { step: 4, title: 'Your confidence', rows: [
+        { label: 'Confidence',   val: a.F6 ? a.F6 + ' / 5' : null },
+        { label: 'Buyer questions', val: _rVal(a.F7, L.f7) },
+        { label: 'Priority fix', val: _rVal(a.F8, L.f8) }
+      ]},
+      { step: 5, title: 'Your clients', rows: [
+        { label: 'Special data',     val: _rVal(a.F9, L.f9) },
+        { label: 'Client location',  val: _rVal(a.F10, L.f10) },
+        { label: 'Revenue (approx)', val: _rVal(a.F11, L.f11) }
+      ]}
+    ];
+
+    const html = sections.map(s => `
+      <div class="review-section">
+        <div class="review-section-header">
+          <span class="review-section-title">${s.title}</span>
+          <button class="review-edit-btn" onclick="reviewEdit(${s.step})">Edit</button>
+        </div>
+        ${s.rows.map(r => `
+          <div class="review-row">
+            <span class="review-row-label">${r.label}</span>
+            <span class="review-row-value${r.val ? '' : ' unanswered'}">${r.val || 'Not answered'}</span>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+
+    document.getElementById('review-content').innerHTML = html;
+  }
+
+  function reviewEdit(step) {
+    _editMode = true;
+    showStep(step);
+    // Change the Next button label to indicate it returns to review
+    const nextBtn = document.querySelector('#wiz-step-' + step + ' .scan-go, #wiz-step-' + step + ' .url-scan-btn');
+    if (nextBtn && step === 1) nextBtn.textContent = 'Save & back to review →';
+    if (nextBtn && step > 1) nextBtn.innerHTML = 'Save & back to review →';
   }
 
   // ── Answer helpers ───────────────────────────
@@ -4856,10 +4985,10 @@
   function startScanAndModal() {
     const url = document.getElementById('scanUrl').value.trim();
     if (!url) return;
-
-    _scanAnswers.F9  = _getChecks('f9');
-    _scanAnswers.F10 = _getRadio('f10');
-    _scanAnswers.F11 = _getRadio('f11');
+    // F9/F10/F11 already collected in wizNext(5); ensure fallback for direct calls
+    if (!_scanAnswers.F9)  _scanAnswers.F9  = _getChecks('f9');
+    if (!_scanAnswers.F10) _scanAnswers.F10 = _getRadio('f10');
+    if (!_scanAnswers.F11) _scanAnswers.F11 = _getRadio('f11');
 
     const btn = document.getElementById('modalBtn');
     btn.disabled = true;
