@@ -4603,8 +4603,6 @@
         return;
       }
       if (_editMode) { _editMode = false; buildReview(); showStep(6); return; }
-      // Fire Papaya background scan now — runs while user completes steps 1–5
-      _bgPapayaPromise = startPapayaRun(url);
       showStep(1);
       return;
     }
@@ -5066,8 +5064,7 @@
       const results  = { ...baseResults };
       const minWait  = new Promise(r => setTimeout(r, 14000));
 
-      const papayaRun = _bgPapayaPromise ? await _bgPapayaPromise : await startPapayaRun(url);
-      _bgPapayaPromise = null; // clear so a re-run starts fresh
+      const papayaRun = await startPapayaRun(url);
       const sessionId = papayaRun?.session_id;
 
       if (!sessionId) {
